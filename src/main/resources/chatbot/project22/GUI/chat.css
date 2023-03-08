@@ -1,0 +1,53 @@
+.chat_bubble {
+    -fx-background-color: #a9df80;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-background-radius: 20;
+    -fx-max-width: 300px;
+    -fx-padding: 10px;
+    -fx-alignment:CENTER-RIGHT;
+    
+}
+
+
+.chat_bubble2 {
+    -fx-background-color: #cc4949;
+    -fx-background-radius: 20;
+    -fx-max-width: 300px;
+    -fx-padding: 10px;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+    -fx-alignment:CENTER-LEFT;
+}
+
+.chat_area {
+    -fx-background-color: #8d99d1;
+}
+
+.chat_input {
+    -fx-pref-height: 40px;
+    -fx-background-color: #dfb0b0;
+    -fx-padding: 5px;
+    
+}
+
+.send_button {
+    -fx-pref-height: 40px;
+    -fx-pref-width: 60px;
+    -fx-background-color: #b9f7f0;
+    -fx-text-fill: white;
+}
+
+.sender_indicator {
+    -fx-background-color: #DCF8C6;
+    -fx-shape: "M 0 0 L 10 10 L 0 20 Z";
+    -fx-padding: 5px;
+}
+
+.receiver_indicator {
+    -fx-background-color: #FFFFFF;
+    -fx-shape: "M 10 0 L 0 10 L 10 20 Z";
+    -fx-padding: 5px;
+}
