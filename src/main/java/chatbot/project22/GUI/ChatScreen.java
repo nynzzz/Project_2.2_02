@@ -131,15 +131,16 @@ public class ChatScreen extends Application{
 
         // Time count
 
-        HBox h = new HBox();
-        h.setSpacing(5);
-        h.setPadding(new Insets(10, 10, 10, 10));
+        //HBox h = new HBox();
+        VBox v = new VBox();
+        v.setSpacing(5);
+        v.setPadding(new Insets(10, 10, 10, 10));
 
         count1.setFont(new Font("Times New Roman",20));
         count2.setFont(new Font("Times New Roman",20));
 
-        h.getChildren().addAll(count1,count2,start,stop,refresh);
-        h.setAlignment(Pos.TOP_RIGHT);
+        v.getChildren().addAll(count1,count2,start,stop,refresh);
+        v.setAlignment(Pos.TOP_RIGHT);
 
         AtomicInteger time = new AtomicInteger(-1);
         //Scene scene = new Scene(h,500,400);
@@ -177,12 +178,21 @@ public class ChatScreen extends Application{
             time.set(-1);
             count2.setText("");
             messageArea = new VBox();
+            messageText=null;
+            message = null;
+            //scrollPane = null;
+            txt.clear();
+
         });
 
         count1.textProperty().bind(t.messageProperty());
-        //primaryStage.setTitle("Count time");
-        //primaryStage.setScene(scene);
-        //primaryStage.show();
+
+        count1.setTranslateX(610); 
+        count2.setTranslateX(610); 
+        start.setTranslateX(610);   
+        stop.setTranslateX(610); 
+        refresh.setTranslateX(610); 
+        
         
 
         Group parent = new Group();
@@ -193,7 +203,7 @@ public class ChatScreen extends Application{
         parent.getChildren().add(txt);
         parent.getChildren().add(send);
 
-        parent.getChildren().add(h);
+        parent.getChildren().add(v);
 
         Scene scene1 = new Scene(parent, 700, 400);
         scene1.getStylesheets().add(ChatScreen.class.getResource("chat.css").toExternalForm());
