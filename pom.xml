@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>chatbot</groupId>
 	<artifactId>project2-2</artifactId>
@@ -22,27 +20,6 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>17.0.1</version>
 		</dependency>
-	<!--	<dependency>
-			<groupId>org.jiprolog</groupId>
-			<artifactId>jiprolog1</artifactId>
-			<version>4.1.7.1</version>
-			<scope>system</scope>
-			<systemPath>/Users/ppch/eclipse-workspace/Project_2.2_02/JIProlog/sdk/lib/jiprolog-4.1.7.1.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.jiprolog</groupId>
-			<artifactId>jiprolog2</artifactId>
-			<version>4.2.1.1</version>
-			<scope>system</scope>
-			<systemPath>/Users/ppch/eclipse-workspace/Project_2.2_02/JIProlog/sdk/lib/jiprolog-4.2.1.1.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>org.jiprolog</groupId>
-			<artifactId>jiprolog3</artifactId>
-			<version>4.1.6.1</version>
-			<scope>system</scope>
-			<systemPath>/Users/ppch/eclipse-workspace/Project_2.2_02/JIProlog/sdk/lib/jiprolog-4.1.6.1.jar</systemPath>
-		</dependency>-->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -55,15 +32,19 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--AIML-->
+		<!--AIML--> 
 		<dependency>
 			<groupId>com.google</groupId>
 			<artifactId>Ab</artifactId>
 			<version>0.0.4.3</version>
-			<scope>system</scope>
-			<systemPath>/Users/ppch/eclipse-workspace/Project_2.2_02/lib/Ab.jar</systemPath>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<id>local-repo</id>
+			<url>file://${basedir}/lib</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>

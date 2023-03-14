@@ -178,8 +178,8 @@ public class ChatScreen extends Application{
             time.set(-1);
             count2.setText("");
             messageArea = new VBox();
-            messageText=null;
-            message = null;
+//            messageText=null;
+//            message = null;
             //scrollPane = null;
             txt.clear();
 
