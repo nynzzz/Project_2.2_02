@@ -1,0 +1,4 @@
+On the <ROAD> the speed limit is <*>
+<ROAD> a15: 130
+<ROAD> a79: 100
+<ROAD> a2: 120

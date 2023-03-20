@@ -1,0 +1,4 @@
+Food: On <DAY> I will eat <*>
+Drink: On <DAY> I will drink <*>
+Schedule: On <DAY> at <TIME> I will have <*>
+SpeedLimit: On the <ROAD> the speed limit is <*>

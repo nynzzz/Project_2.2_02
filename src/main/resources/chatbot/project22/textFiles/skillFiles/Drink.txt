@@ -1,0 +1,4 @@
+On <DAY> you will drink <*>.
+<DAY> monday: cola
+<DAY> tuesday: fanta
+<DAY> wednesday: water

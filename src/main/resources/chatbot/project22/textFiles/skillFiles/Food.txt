@@ -1,0 +1,8 @@
+On <DAY> you will eat <*>.
+<DAY> wednesday: spaghetti
+<DAY> thursday: pizza
+<DAY> friday: curry
+<DAY> saturday: chinese
+<DAY> sunday: pancakes with butter
+<DAY> tuesday: bread
+<DAY> monday: pizza

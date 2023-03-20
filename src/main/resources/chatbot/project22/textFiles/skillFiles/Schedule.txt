@@ -1,0 +1,6 @@
+On <DAY> at <TIME> you will have <*>.
+<DAY> monday <TIME> 9: mathematical modelling
+<DAY> monday <TIME> 11: theoretical computer science
+<DAY> tuesday <TIME> 9: HCI
+<DAY> tuesday <TIME> 11: calculus
+<DAY> tuesday <TIME> 15: mathematical modelling

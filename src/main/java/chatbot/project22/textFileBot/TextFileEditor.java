@@ -1,0 +1,67 @@
+package chatbot.project22.textFileBot;
+
+import javax.swing.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class TextFileEditor {
+
+    public TextFileEditor() {}
+
+    /**
+     * This method is used to read a file
+     * @param pathName is the name of the path the file is located at
+     * @return a list that contains every sentence that is in that file
+     */
+    public ArrayList<String> readFile(String pathName) {
+        ArrayList<String> output = new ArrayList<>();
+        File file = new File(pathName);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNextLine())
+                output.add(scanner.nextLine());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return output;
+    }
+
+    /**
+     * This method is used to add 1 sentence to any text file
+     * @param fileName is the name of the path where the file is located at
+     * @param sentence is the sentence that will get added to the file
+     */
+    public void addLineToFile(String fileName, String sentence) {
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+            String content = stringBuilder.toString();
+            content += sentence;
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(content);
+            bufferedWriter.close();
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void rewriteFile(String fileName, String content) {
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(content);
+            bufferedWriter.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

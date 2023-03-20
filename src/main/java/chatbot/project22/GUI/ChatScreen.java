@@ -1,5 +1,6 @@
 package chatbot.project22.GUI;
 
+import chatbot.project22.textFileBot.Bot;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -37,8 +38,10 @@ public class ChatScreen extends Application{
     private Button stop = new Button("Stop");
     private Button refresh = new Button("Refresh");
 
+    private Bot textFileBot;
 
     public ChatScreen() {
+        this.textFileBot = new Bot();
 
         box.getStyleClass().add("chatbox");
 
@@ -90,7 +93,7 @@ public class ChatScreen extends Application{
                 messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 messageBox.setPadding(new Insets(5, 5, 5, 320));
         
-                String responseText = "Thanks for your message!";
+                String responseText = textFileBot.generateResponse(messageText);
                 Text responseMessage = new Text(responseText);
                 responseMessage.setFont(Font.font(messageFont, messageFontSize));
                 responseMessage.setTextAlignment(TextAlignment.CENTER);
