@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -13,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -22,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import javax.swing.event.ChangeListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatScreen extends Application{
@@ -57,8 +61,9 @@ public class ChatScreen extends Application{
         messageArea.setSpacing(10);
         ScrollPane scrollPane = new ScrollPane(messageArea);
         scrollPane.setPrefSize(610, 360);
-
+        scrollPane.vvalueProperty().bind(messageArea.heightProperty());
         txt.setPromptText("Type a message...");
+
 
         Button send = new Button();
         send.setText("SEND");
@@ -73,8 +78,8 @@ public class ChatScreen extends Application{
                 Text message = new Text(messageText);
                 message.setFont(Font.font(messageFont, messageFontSize));
                 message.setTextAlignment(TextAlignment.CENTER);
-                message.setWrappingWidth(250);
-        
+                message.setWrappingWidth(450);
+
                 HBox chatBubble = new HBox();
                 chatBubble.getChildren().add(message);
                 chatBubble.setPadding(new Insets(10));
@@ -91,13 +96,13 @@ public class ChatScreen extends Application{
         
                 VBox messageBox = new VBox(senderBox, messageContainer);
                 messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                messageBox.setPadding(new Insets(5, 5, 5, 320));
+                messageBox.setPadding(new Insets(5, 5, 5, 130));
         
                 String responseText = textFileBot.generateResponse(messageText);
                 Text responseMessage = new Text(responseText);
                 responseMessage.setFont(Font.font(messageFont, messageFontSize));
                 responseMessage.setTextAlignment(TextAlignment.CENTER);
-                responseMessage.setWrappingWidth(250);
+                responseMessage.setWrappingWidth(450);
         
                 HBox responseBubble = new HBox();
                 responseBubble.getChildren().add(responseMessage);
@@ -122,6 +127,9 @@ public class ChatScreen extends Application{
                 txt.clear();
             }
         });
+
+
+
         HBox messageInputBox = new HBox(txt, send);
         messageInputBox.setSpacing(10);
         messageInputBox.setAlignment(Pos.CENTER);
@@ -186,6 +194,67 @@ public class ChatScreen extends Application{
             //scrollPane = null;
             txt.clear();
 
+        });
+
+        txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.ENTER) {
+                    String messageText = txt.getText().trim();
+                    if (!messageText.isEmpty()) {
+                        Text message = new Text(messageText);
+                        message.setFont(Font.font(messageFont, messageFontSize));
+                        message.setTextAlignment(TextAlignment.CENTER);
+                        message.setWrappingWidth(450);
+
+                        HBox chatBubble = new HBox();
+                        chatBubble.getChildren().add(message);
+                        chatBubble.setPadding(new Insets(10));
+                        chatBubble.getStyleClass().add("chat_bubble");
+                        chatBubble.setAlignment(Pos.BASELINE_RIGHT);
+
+                        StackPane messageContainer = new StackPane(chatBubble);
+                        messageContainer.setAlignment(Pos.BASELINE_RIGHT);
+
+
+                        HBox senderBox = new HBox();
+                        senderBox.setAlignment(Pos.BASELINE_RIGHT);
+                        senderBox.setPadding(new Insets(0, 10, 0, 0));
+
+                        VBox messageBox = new VBox(senderBox, messageContainer);
+                        messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        messageBox.setPadding(new Insets(5, 5, 5, 130));
+
+                        String responseText = textFileBot.generateResponse(messageText);
+                        Text responseMessage = new Text(responseText);
+                        responseMessage.setFont(Font.font(messageFont, messageFontSize));
+                        responseMessage.setTextAlignment(TextAlignment.CENTER);
+                        responseMessage.setWrappingWidth(250);
+
+                        HBox responseBubble = new HBox();
+                        responseBubble.getChildren().add(responseMessage);
+                        responseBubble.setPadding(new Insets(10));
+                        responseBubble.getStyleClass().add("chat_bubble2");
+
+                        StackPane responseContainer = new StackPane(responseBubble);
+                        responseContainer.setAlignment(Pos.BASELINE_LEFT);
+
+
+
+                        HBox receiverBox = new HBox();
+                        receiverBox.setPadding(new Insets(0, 0, 0, 10));
+
+                        VBox responseBox = new VBox(receiverBox, responseContainer);
+                        responseBox.setAlignment(Pos.BASELINE_LEFT);
+                        responseBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                        responseBox.setPadding(new Insets(5, 50, 5, 5));
+
+                        messageArea.getChildren().addAll(messageBox, responseBox);
+                        messageArea.layout();
+                        txt.clear();
+                    }}
+
+            }
         });
 
         count1.textProperty().bind(t.messageProperty());

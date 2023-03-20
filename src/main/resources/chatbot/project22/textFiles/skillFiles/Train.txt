@@ -1,0 +1,2 @@
+The train to <CITY> leaves at <*>
+<CITY> heerlen: 11

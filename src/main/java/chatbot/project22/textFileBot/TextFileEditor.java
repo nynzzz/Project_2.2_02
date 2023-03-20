@@ -64,4 +64,20 @@ public class TextFileEditor {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean createNewSkillFile(String path, String answer) {
+        File newFile = new File(path);
+        try {
+            if (newFile.createNewFile()) {
+                addLineToFile(path, answer);
+                return true;
+            }
+            else {
+                System.out.println("File already exists");
+                return false;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

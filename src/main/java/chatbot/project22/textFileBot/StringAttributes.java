@@ -27,6 +27,13 @@ public class StringAttributes {
                 return false;
             }
         }
+        if (!template.isEmpty()) {
+            if (question.contains(template.strip())) {
+                question = question.replace(template, "*");
+            }
+            else
+                return false;
+        }
         question = question.substring(1);
         input.setSlotValues(new ArrayList<>(Arrays.stream(question.split("\\*")).toList()));
         return true;

@@ -22,11 +22,17 @@ public class UserCommand {
 
     public String tempAction;
 
+    public boolean newSkill;
+
+    public ArrayList<String> newSkillInformation;
+
     /**
      * empty constructor for the UserCommand class
      */
     public UserCommand(){
         this.changingAction = false;
+        this.newSkill = false;
+        this.newSkillInformation = new ArrayList<>();
     }
 
     /**
@@ -41,6 +47,7 @@ public class UserCommand {
         if (isQuestion)
             this.command = input.substring(0, input.length()- 1);
         this.changingAction = false;
+        this.newSkillInformation = new ArrayList<>();
     }
 
 
