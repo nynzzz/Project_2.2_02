@@ -16,13 +16,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import javax.swing.event.ChangeListener;
@@ -41,6 +37,8 @@ public class ChatScreen extends Application{
     private Button start = new Button("Start");
     private Button stop = new Button("Stop");
     private Button refresh = new Button("Refresh");
+    private Button backStartScreen = new Button("Restart");
+
 
     private Bot textFileBot;
 
@@ -63,6 +61,7 @@ public class ChatScreen extends Application{
         scrollPane.setPrefSize(610, 360);
         scrollPane.vvalueProperty().bind(messageArea.heightProperty());
         txt.setPromptText("Type a message...");
+
 
 
         Button send = new Button();
@@ -137,20 +136,24 @@ public class ChatScreen extends Application{
         VBox root = new VBox(scrollPane, messageInputBox);
         root.setSpacing(10);
         root.setPadding(new Insets(10));
-        root.getChildren().add(send);
+        root.getChildren().addAll(send,backStartScreen);
 
+        backStartScreen.setOnAction(e->{
+            stage.close();
+            StartScreen ss = new StartScreen();
+        });
 
         // Time count
 
         //HBox h = new HBox();
         VBox v = new VBox();
-        v.setSpacing(5);
+        v.setSpacing(10);
         v.setPadding(new Insets(10, 10, 10, 10));
 
         count1.setFont(new Font("Times New Roman",20));
         count2.setFont(new Font("Times New Roman",20));
 
-        v.getChildren().addAll(count1,count2,start,stop,refresh);
+        v.getChildren().addAll(count1,count2,start,stop,refresh,backStartScreen);
         v.setAlignment(Pos.TOP_RIGHT);
 
         AtomicInteger time = new AtomicInteger(-1);
@@ -262,10 +265,15 @@ public class ChatScreen extends Application{
         count1.setTranslateX(610); 
         count2.setTranslateX(610); 
         start.setTranslateX(610);   
-        stop.setTranslateX(610); 
-        refresh.setTranslateX(610); 
-        
-        
+        stop.setTranslateX(610);
+        refresh.setTranslateX(610);
+        backStartScreen.setTranslateX(610);
+
+        //Background color
+        Color colorBack =  Color.rgb(240,248,255);
+        BackgroundFill backgroundFill = new BackgroundFill(colorBack, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+
 
         Group parent = new Group();
 
@@ -276,8 +284,8 @@ public class ChatScreen extends Application{
         parent.getChildren().add(send);
 
         parent.getChildren().add(v);
-
         Scene scene1 = new Scene(parent, 700, 400);
+        scene1.setFill(colorBack);
         scene1.getStylesheets().add(ChatScreen.class.getResource("chat.css").toExternalForm());
         stage.setScene(scene1);
 

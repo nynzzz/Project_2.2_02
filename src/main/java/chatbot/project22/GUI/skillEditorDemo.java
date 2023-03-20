@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -37,12 +38,14 @@ public class skillEditorDemo extends Application {
     Label label0 ,labelTodo;
     public static  Label labelAnswer;
     VBox layout0,layout1,layout2,layout3, layout4;
-    Button ManageS,addS,help,back1,back2,back3,back4,test,ask,save;
+    Button ManageS,addS,help,back1,back2,back3,back4,test,ask,save, backStartScreen;
     Color color0;
     TextArea query,insertQuery;
 
-    @Override
-    public void start(Stage stage) throws IOException {
+    //@Override
+
+    public skillEditorDemo(){
+        stage = new Stage();
         query = new TextArea("What is the course on Tuesday 11 ?");
         query.setPrefSize(88,18);
 
@@ -74,27 +77,30 @@ public class skillEditorDemo extends Application {
         back2 = new Button("Back");
         back3 = new Button("Back");
         back4 = new Button("Back");
+        backStartScreen = new Button("Restart");
 
-        ManageS.setPrefSize(150, 35);
+        ManageS.setPrefSize(180, 35);
         addS.setPrefSize(150, 35);
         test.setPrefSize(150, 35);
-        ManageS.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        addS.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        help.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        test.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        ask.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        save.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
+        ManageS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        addS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        help.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        test.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
+        ask.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        save.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
 
 
-        back1.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        back2.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        back3.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        back4.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 12));
-        label0.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 30));
-        labelAnswer.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.REGULAR, 16));
+        back1.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        back2.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        back3.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        back4.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+        backStartScreen.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
+
+        label0.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        labelAnswer.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 16));
 
 
-        ManageS.setTranslateX(130);
+        ManageS.setTranslateX(116);
         addS.setTranslateX(130);
         test.setTranslateX(130);
         ManageS.setTranslateY(200);
@@ -105,10 +111,13 @@ public class skillEditorDemo extends Application {
 
 
         label0.setTranslateX(130);
-        label0.setTranslateY(-10);
+        label0.setTranslateY(-50);
+
+        backStartScreen.setTranslateX(330);
+        backStartScreen.setTranslateY(-210);
 
         save.setOnAction(e ->{
-            addSkill(path,insertQuery.getText());
+            //addSkill(path,insertQuery.getText());
         });
 
         ask.setOnAction(e ->{
@@ -125,13 +134,13 @@ public class skillEditorDemo extends Application {
                 }
             }
             String[] wordsNum = strNum.split("[\\s']");
-      //      for(int j=0; j< wordsNum.length;j++) {
-                    time = wordsNum[0];
+            //      for(int j=0; j< wordsNum.length;j++) {
+            time = wordsNum[0];
 
 
-      //      }
+            //      }
 
-            readSchedule(path,day,time);
+       //     readSchedule(path,day,time);
         });
 
         ManageS.setOnAction(e ->{
@@ -159,13 +168,18 @@ public class skillEditorDemo extends Application {
         back4.setOnAction(e ->{
             stage.setScene(scene0);
         });
-        layout0.getChildren().addAll(ManageS,addS,test,label0);
+
+        backStartScreen.setOnAction(e->{
+            stage.close();
+            StartScreen ss = new StartScreen();
+        });
+        layout0.getChildren().addAll(ManageS,addS,test,label0,backStartScreen);
         layout1.getChildren().addAll(back1);
         layout2.getChildren().addAll(back2,insertQuery,save);
         layout3.getChildren().addAll(back3);
         layout4.getChildren().addAll(back4,query,ask,labelAnswer);
 
-        color0 =  Color.rgb(53,81,92);
+        color0 =  Color.rgb(240,248,255);
         BackgroundFill backgroundFill = new BackgroundFill(color0, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
         layout0.setBackground(background);
@@ -187,6 +201,8 @@ public class skillEditorDemo extends Application {
         stage.setTitle("Skill Editor");
         stage.setScene(scene0);
         stage.show();
+    }
+    public void start(Stage stage) throws IOException {
     }
     private static void readSchedule(String path,String day, String time){
         try {
@@ -221,7 +237,7 @@ public class skillEditorDemo extends Application {
         catch (Exception e) {}
 
     }
-        static String path = "src/main/resources/chatbot/project22/textFiles/skillFiles/Schedule.txt";
+     //   static String path = "/Users/zijiandong/Documents/GitHub/Project_2.2_Group02/GUI/demo11/src/main/resources/com/example/demo11/schedule.txt";
 
     public static void main(String[] args) {
      //   readSchedule(path,"Tuesday", "11");
