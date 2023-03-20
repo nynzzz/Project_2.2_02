@@ -31,8 +31,27 @@ public class StartScreen extends Application{
 
         b.setTranslateX(200);
         b.setTranslateY(200);
-        b.setPrefHeight(60);
-        b.setPrefWidth(150);
+        b.setPrefHeight(40);
+        b.setPrefWidth(120);
+
+        // connect to skillEditor interface
+        Button skillEditor = new Button("Skill Editor");
+        skillEditor.setStyle("-fx-font-size:20");
+        skillEditor.setFont(new Font(20));
+
+        skillEditor.setTranslateX(200);
+        skillEditor.setTranslateY(280);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
+
+        skillEditor.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent e) {
+                primaryStage.close();
+                skillEditorDemo se= new skillEditorDemo();
+
+            }
+        });
 
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -62,7 +81,7 @@ public class StartScreen extends Application{
         //Creating a Group object
         Group root = new Group(imageView);
         root.getChildren().add(b);
-
+        root.getChildren().add(skillEditor);
         //Creating a scene object
         Scene scene=new Scene(root);
 

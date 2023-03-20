@@ -41,8 +41,10 @@ public class skillEditorDemo extends Application {
     Color color0;
     TextArea query,insertQuery;
 
-    @Override
-    public void start(Stage stage) throws IOException {
+    //@Override
+
+    public skillEditorDemo(){
+        stage = new Stage();
         query = new TextArea("What is the course on Tuesday 11 ?");
         query.setPrefSize(88,18);
 
@@ -108,7 +110,7 @@ public class skillEditorDemo extends Application {
         label0.setTranslateY(-10);
 
         save.setOnAction(e ->{
-            addSkill(path,insertQuery.getText());
+            //addSkill(path,insertQuery.getText());
         });
 
         ask.setOnAction(e ->{
@@ -125,13 +127,13 @@ public class skillEditorDemo extends Application {
                 }
             }
             String[] wordsNum = strNum.split("[\\s']");
-      //      for(int j=0; j< wordsNum.length;j++) {
-                    time = wordsNum[0];
+            //      for(int j=0; j< wordsNum.length;j++) {
+            time = wordsNum[0];
 
 
-      //      }
+            //      }
 
-            readSchedule(path,day,time);
+       //     readSchedule(path,day,time);
         });
 
         ManageS.setOnAction(e ->{
@@ -188,6 +190,8 @@ public class skillEditorDemo extends Application {
         stage.setScene(scene0);
         stage.show();
     }
+    public void start(Stage stage) throws IOException {
+    }
     private static void readSchedule(String path,String day, String time){
         try {
             File myObj = new File(path);
@@ -221,7 +225,7 @@ public class skillEditorDemo extends Application {
         catch (Exception e) {}
 
     }
-        static String path = "/Users/zijiandong/Documents/GitHub/Project_2.2_Group02/GUI/demo11/src/main/resources/com/example/demo11/schedule.txt";
+     //   static String path = "/Users/zijiandong/Documents/GitHub/Project_2.2_Group02/GUI/demo11/src/main/resources/com/example/demo11/schedule.txt";
 
     public static void main(String[] args) {
      //   readSchedule(path,"Tuesday", "11");
