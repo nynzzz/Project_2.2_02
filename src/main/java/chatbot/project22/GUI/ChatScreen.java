@@ -223,7 +223,7 @@ public class ChatScreen extends Application{
                         Text responseMessage = new Text(responseText);
                         responseMessage.setFont(Font.font(messageFont, messageFontSize));
                         responseMessage.setTextAlignment(TextAlignment.CENTER);
-                        responseMessage.setWrappingWidth(250);
+                        responseMessage.setWrappingWidth(450);
 
                         HBox responseBubble = new HBox();
                         responseBubble.getChildren().add(responseMessage);
