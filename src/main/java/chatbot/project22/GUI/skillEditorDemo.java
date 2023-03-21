@@ -1,13 +1,13 @@
 package chatbot.project22.GUI;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 
 import javafx.application.Application;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -18,12 +18,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Scanner;
-
 
 /*
 JavaFx structure: Stage-Scene-Layout-components such as button, Label, etc
@@ -32,6 +26,8 @@ U can change the Scene of the Stage
 U can change the Layout of the Scene(There're different layout such as VBox)
 U can add different buttons, text fields,labels to the Layout
  */
+
+
 public class skillEditorDemo extends Application {
     Stage stage;
     Scene scene0 ,scene1,scene2,scene3, scene4;
@@ -143,15 +139,233 @@ public class skillEditorDemo extends Application {
        //     readSchedule(path,day,time);
         });
 
-        ManageS.setOnAction(e ->{
+        ManageS.setOnAction(e -> {
+            // Create a ListView to display the names of the txt files and folders in the directory
+            ListView<String> fileList = new ListView<>();
+            fileList.setPrefWidth(200);
+
+            // Create a File object representing the directory that contains the txt files and folders
+            File directory = new File("src/main/resources/chatbot/project22/textFiles");
+
+            // Get a list of the txt files and folders in the directory
+            File[] files = directory.listFiles();
+
+            // Iterate through the list of files and add their names to the ListView
+            for (File file : files) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
+                    // Add the txt files to the ListView
+                    fileList.getItems().add(file.getName());
+                } else if (file.isDirectory()) {
+                    // Add the folders to the ListView
+                    fileList.getItems().add(file.getName() + "/");
+                }
+            }
+
+            // Set an on-click event for the items in the ListView
+            fileList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    // Get the selected file or folder name from the ListView
+                    String fileName = fileList.getSelectionModel().getSelectedItem();
+
+                    if (fileName.endsWith("/")) {
+                        // If the selected item is a folder, update the ListView to show its contents
+                        File selectedFolder = new File(directory.getPath() + "/" + fileName.substring(0, fileName.length() - 1));
+                        File[] folderContents = selectedFolder.listFiles(new FilenameFilter() {
+                            public boolean accept(File dir, String name) {
+                                return name.toLowerCase().endsWith(".txt");
+                            }
+                        });
+
+                        fileList.getItems().clear();
+                        for (File file : folderContents) {
+                            fileList.getItems().add(file.getName());
+                        }
+                    }
+                    else if(fileName.endsWith("Questions.txt") || fileName.endsWith("Statements.txt")){
+                        File selectedFile = new File(directory.getPath() + "/" + fileName);
+
+                        try {
+                            // Read the contents of the selected file
+                            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                            String content = "";
+                            String line = reader.readLine();
+                            while (line != null) {
+                                content += line + "\n";
+                                line = reader.readLine();
+                            }
+                            reader.close();
+
+                            // Create a new scene to display the contents of the selected file
+                            TextArea fileContent = new TextArea(content);
+                            Button saveButton = new Button("Save");
+
+                            // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
+                            saveButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    try {
+                                        FileWriter writer = new FileWriter(selectedFile);
+                                        writer.write(fileContent.getText());
+                                        writer.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            // Create a back button that returns to the main screen
+                            Button backButton = new Button("Back");
+                            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    stage.setScene(scene1);
+                                }
+                            });
+
+                            VBox newLayout = new VBox();
+                            newLayout.getChildren().addAll(fileContent, saveButton, backButton);
+                            Scene newScene = new Scene(newLayout, 400, 600);
+
+                            stage.setScene(newScene);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    else {
+                        // If the selected item is a txt file, open it in a new scene
+                        File selectedFile = new File(directory.getPath() + "/skillFiles/" + fileName);
+
+                        try {
+                            // Read the contents of the selected file
+                            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                            String content = "";
+                            String line = reader.readLine();
+                            while (line != null) {
+                                content += line + "\n";
+                                line = reader.readLine();
+                            }
+                            reader.close();
+
+                            // Create a new scene to display the contents of the selected file
+                            TextArea fileContent = new TextArea(content);
+                            Button saveButton = new Button("Save");
+
+                            // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
+                            saveButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    try {
+                                        FileWriter writer = new FileWriter(selectedFile);
+                                        writer.write(fileContent.getText());
+                                        writer.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            // Create a back button that returns to the main screen
+                            Button backButton = new Button("Back");
+                            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    stage.setScene(scene1);
+                                }
+                            });
+
+                            VBox newLayout = new VBox();
+                            newLayout.getChildren().addAll(fileContent, saveButton, backButton);
+                            Scene newScene = new Scene(newLayout, 400, 600);
+
+                            stage.setScene(newScene);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+            VBox layout1 = new VBox(20);
+            layout1.getChildren().addAll(fileList, back1);
+            scene1 = new Scene(layout1, 400, 600);
             stage.setScene(scene1);
         });
+
+
         test.setOnAction(e ->{
             stage.setScene(scene4);
         });
+
+
         addS.setOnAction(e ->{
+            // Create the input fields for Question, Statement, and Skill
+            Label questionLabel = new Label("Question:");
+            TextArea questionInput = new TextArea();
+            questionInput.setPrefRowCount(2);
+            VBox questionLayout = new VBox(questionLabel, questionInput);
+
+            Label statementLabel = new Label("Statement:");
+            TextArea statementInput = new TextArea();
+            statementInput.setPrefRowCount(2);
+            VBox statementLayout = new VBox(statementLabel, statementInput);
+
+            Label skillLabel = new Label("Skill:");
+            TextArea skillInput = new TextArea();
+            skillInput.setPrefRowCount(2);
+            VBox skillLayout = new VBox(skillLabel, skillInput);
+
+            TextField skillName = new TextField();
+            Label skillNameLabel = new Label("Skill name:");
+            HBox skillNameLayout = new HBox(10, skillNameLabel, skillName);
+
+            // Create back button to return to the previous scene
+            Button backButton = new Button("Back");
+            backButton.setOnAction(event -> stage.setScene(scene0));
+
+            // Create save button to save the input fields to separate text files
+            Button saveButton = new Button("Save");
+            saveButton.setOnAction(event -> {
+
+                String skill = skillName.getText();
+
+                try {
+                    // Append the contents of the input fields to separate text files
+                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
+                    questionWriter.write("\n" + questionInput.getText());
+                    questionWriter.close();
+
+                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
+                    statementWriter.write("\n" + statementInput.getText());
+                    statementWriter.close();
+
+                    // Create a file object for the skill file
+                    File skillFile = new File("src/main/resources/chatbot/project22/textFiles/skillFiles/" + skill + ".txt");
+
+                    try {
+                        // Write the skill data to the file
+                        FileWriter writer = new FileWriter(skillFile);
+                        writer.write(skillInput.getText());
+                        writer.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            // Create a layout to hold the input fields, buttons, and labels
+            VBox layout2 = new VBox(20, questionLayout, statementLayout, skillLayout, skillNameLayout, backButton, saveButton);
+            scene2 = new Scene(layout2, 400, 600);
+
+            // Set the new scene
             stage.setScene(scene2);
         });
+
+
+
         help.setOnAction(e ->{
 
         });
@@ -169,10 +383,15 @@ public class skillEditorDemo extends Application {
             stage.setScene(scene0);
         });
 
-        backStartScreen.setOnAction(e->{
+        backStartScreen.setOnAction(e -> {
             stage.close();
-            StartScreen ss = new StartScreen();
+            launchStartScreen();
         });
+
+
+
+
+
         layout0.getChildren().addAll(ManageS,addS,test,label0,backStartScreen);
         layout1.getChildren().addAll(back1);
         layout2.getChildren().addAll(back2,insertQuery,save);
@@ -188,56 +407,22 @@ public class skillEditorDemo extends Application {
         layout3.setBackground(background);
         layout4.setBackground(background);
 
-/*
-        layout0.setBackground(Background.fill(color0));
-        layout1.setBackground(Background.fill(color0));
-        layout2.setBackground(Background.fill(color0));
-        layout3.setBackground(Background.fill(color0));
-        layout4.setBackground(Background.fill(color0));
 
-*/
         FXMLLoader fxmlLoader = new FXMLLoader(skillEditorDemo.class.getResource("hello-view.fxml"));
         //    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Skill Editor");
         stage.setScene(scene0);
         stage.show();
     }
-    public void start(Stage stage) throws IOException {
-    }
-    private static void readSchedule(String path,String day, String time){
-        try {
-            File myObj = new File(path);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
 
-            if (data.contains(day)&& data.contains(time)){
-                System.out.println("Your result: ");
-                labelAnswer.setText("Your schedule: " +"\n"+ data);
-                System.out.println(data);
-            }
-
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-
-    private static void addSkill(String path,String str) {
-        Path p = Paths.get(path);
-        String s = System.lineSeparator() + str;
-
-        try(PrintWriter output = new PrintWriter(new FileWriter(path,true)))
-        {
-            output.printf("%s\r\n", str);
-        }
-        catch (Exception e) {}
+    @Override
+    public void start(Stage stage) throws Exception {
 
     }
-     //   static String path = "/Users/zijiandong/Documents/GitHub/Project_2.2_Group02/GUI/demo11/src/main/resources/com/example/demo11/schedule.txt";
+
+    private void launchStartScreen() {
+       new StartScreen();
+    }
 
     public static void main(String[] args) {
      //   readSchedule(path,"Tuesday", "11");
