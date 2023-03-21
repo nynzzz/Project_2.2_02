@@ -32,19 +32,7 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--AIML--> 
-		<dependency>
-			<groupId>com.google</groupId>
-			<artifactId>Ab</artifactId>
-			<version>0.0.4.3</version>
-		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>local-repo</id>
-			<url>file://${basedir}/lib</url>
-		</repository>
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>
