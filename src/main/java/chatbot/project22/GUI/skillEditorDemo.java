@@ -22,7 +22,7 @@ public class skillEditorDemo extends Application {
     Scene scene0 ,scene1,scene2;
     Label label0 ;
     VBox layout0,layout1,layout2;
-    Button ManageS,addS,back1,test, backStartScreen;
+    Button ManageS,addS,back1, backStartScreen;
     Color color0;
 
     public skillEditorDemo(){
@@ -41,30 +41,25 @@ public class skillEditorDemo extends Application {
 
         ManageS = new Button("Manage Existing Skills");
         addS = new Button("Add new Skills");
-        test = new Button("Test");
         back1 = new Button("Back");
         backStartScreen = new Button("Restart");
 
         ManageS.setPrefSize(180, 35);
         addS.setPrefSize(150, 35);
-        test.setPrefSize(150, 35);
         ManageS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         addS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        test.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         back1.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
         backStartScreen.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
         label0.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
 
         ManageS.setTranslateX(116);
         addS.setTranslateX(130);
-        test.setTranslateX(130);
         ManageS.setTranslateY(200);
         addS.setTranslateY(200);
-        test.setTranslateY(200);
         label0.setTranslateX(130);
-        label0.setTranslateY(-50);
+        label0.setTranslateY(-15);
         backStartScreen.setTranslateX(330);
-        backStartScreen.setTranslateY(-210);
+        backStartScreen.setTranslateY(-155);
 
         ManageS.setOnAction(e -> {
             // Create a ListView to display the names of the txt files and folders in the directory
@@ -294,7 +289,7 @@ public class skillEditorDemo extends Application {
             launchStartScreen();
         });
 
-        layout0.getChildren().addAll(ManageS,addS,test,label0,backStartScreen);
+        layout0.getChildren().addAll(ManageS,addS,label0,backStartScreen);
         layout1.getChildren().addAll(back1);
 
         color0 =  Color.rgb(240,248,255);
