@@ -12,67 +12,37 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-
 import java.io.*;
-
-/*
-JavaFx structure: Stage-Scene-Layout-components such as button, Label, etc
-Stage is the most basic one
-U can change the Scene of the Stage
-U can change the Layout of the Scene(There're different layout such as VBox)
-U can add different buttons, text fields,labels to the Layout
- */
-
 
 public class skillEditorDemo extends Application {
     Stage stage;
-    Scene scene0 ,scene1,scene2,scene3, scene4;
-    Label label0 ,labelTodo;
-    public static  Label labelAnswer;
-    VBox layout0,layout1,layout2,layout3, layout4;
-    Button ManageS,addS,help,back1,back2,back3,back4,test,ask,save, backStartScreen;
+    Scene scene0 ,scene1,scene2;
+    Label label0 ;
+    VBox layout0,layout1,layout2;
+    Button ManageS,addS,back1,test, backStartScreen;
     Color color0;
-    TextArea query,insertQuery;
-
-    //@Override
 
     public skillEditorDemo(){
         stage = new Stage();
-        query = new TextArea("What is the course on Tuesday 11 ?");
-        query.setPrefSize(88,18);
-
-        insertQuery = new TextArea("Insert your new Query here");
-        insertQuery.setPrefSize(88,18);
         this.stage = stage;
+
         layout0 = new VBox(20);
         layout1 = new VBox(20);
         layout2 = new VBox(20);
-        layout3 = new VBox(20);
-        layout4 = new VBox(20);
+
         scene0 = new Scene(layout0, 400, 600);
         scene1 = new Scene(layout1, 400, 600);
         scene2 = new Scene(layout2, 400, 600);
-        scene3 = new Scene(layout3, 400, 600);
-        scene4 = new Scene(layout4, 400, 600);
+
         label0 = new Label("Skill Editor");
-        labelTodo = new Label("Needs to be done");
-        labelAnswer = new Label("");
 
         ManageS = new Button("Manage Existing Skills");
         addS = new Button("Add new Skills");
-        help = new Button("Help");
         test = new Button("Test");
-        ask = new Button("ask");
-        save = new Button("save");
-
         back1 = new Button("Back");
-        back2 = new Button("Back");
-        back3 = new Button("Back");
-        back4 = new Button("Back");
         backStartScreen = new Button("Restart");
 
         ManageS.setPrefSize(180, 35);
@@ -80,21 +50,10 @@ public class skillEditorDemo extends Application {
         test.setPrefSize(150, 35);
         ManageS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         addS.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        help.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         test.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        ask.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        save.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-
-
         back1.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        back2.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        back3.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-        back4.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
         backStartScreen.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 12));
-
         label0.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
-        labelAnswer.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 16));
-
 
         ManageS.setTranslateX(116);
         addS.setTranslateX(130);
@@ -102,42 +61,10 @@ public class skillEditorDemo extends Application {
         ManageS.setTranslateY(200);
         addS.setTranslateY(200);
         test.setTranslateY(200);
-        ask.setTranslateX(130);
-
-
-
         label0.setTranslateX(130);
         label0.setTranslateY(-50);
-
         backStartScreen.setTranslateX(330);
         backStartScreen.setTranslateY(-210);
-
-        save.setOnAction(e ->{
-            //addSkill(path,insertQuery.getText());
-        });
-
-        ask.setOnAction(e ->{
-            String str = query.getText();
-            String strNum = str.replaceAll("[^0-9]", "");
-            System.out.println(strNum);
-            System.out.println(str);
-            String day = "";
-            String time = "";
-            String[] words = str.split("[\\s']");
-            for(int i=0; i< words.length;i++){
-                if(words[i].equals("Monday")||words[i].equals("Tuesday")||words[i].equals("Wednesday")||words[i].equals("Thursday")||words[i].equals("Friday")||words[i].equals("Saturday")||words[i].equals("Sumday")){
-                    day = words[i];
-                }
-            }
-            String[] wordsNum = strNum.split("[\\s']");
-            //      for(int j=0; j< wordsNum.length;j++) {
-            time = wordsNum[0];
-
-
-            //      }
-
-       //     readSchedule(path,day,time);
-        });
 
         ManageS.setOnAction(e -> {
             // Create a ListView to display the names of the txt files and folders in the directory
@@ -293,12 +220,6 @@ public class skillEditorDemo extends Application {
             stage.setScene(scene1);
         });
 
-
-        test.setOnAction(e ->{
-            stage.setScene(scene4);
-        });
-
-
         addS.setOnAction(e ->{
             // Create the input fields for Question, Statement, and Skill
             Label questionLabel = new Label("Question:");
@@ -364,22 +285,7 @@ public class skillEditorDemo extends Application {
             stage.setScene(scene2);
         });
 
-
-
-        help.setOnAction(e ->{
-
-        });
-
         back1.setOnAction(e ->{
-            stage.setScene(scene0);
-        });
-        back2.setOnAction(e ->{
-            stage.setScene(scene0);
-        });
-        back3.setOnAction(e ->{
-            stage.setScene(scene0);
-        });
-        back4.setOnAction(e ->{
             stage.setScene(scene0);
         });
 
@@ -388,15 +294,8 @@ public class skillEditorDemo extends Application {
             launchStartScreen();
         });
 
-
-
-
-
         layout0.getChildren().addAll(ManageS,addS,test,label0,backStartScreen);
         layout1.getChildren().addAll(back1);
-        layout2.getChildren().addAll(back2,insertQuery,save);
-        layout3.getChildren().addAll(back3);
-        layout4.getChildren().addAll(back4,query,ask,labelAnswer);
 
         color0 =  Color.rgb(240,248,255);
         BackgroundFill backgroundFill = new BackgroundFill(color0, CornerRadii.EMPTY, Insets.EMPTY);
@@ -404,9 +303,6 @@ public class skillEditorDemo extends Application {
         layout0.setBackground(background);
         layout1.setBackground(background);
         layout2.setBackground(background);
-        layout3.setBackground(background);
-        layout4.setBackground(background);
-
 
         FXMLLoader fxmlLoader = new FXMLLoader(skillEditorDemo.class.getResource("hello-view.fxml"));
         //    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
@@ -417,19 +313,14 @@ public class skillEditorDemo extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
     }
 
     private void launchStartScreen() {
        new StartScreen();
     }
-
     public static void main(String[] args) {
      //   readSchedule(path,"Tuesday", "11");
         //addSkill();
         launch();
-
     }
-
-
 }
