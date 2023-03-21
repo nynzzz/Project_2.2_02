@@ -36,6 +36,10 @@ public class Bot {
      */
     public String generateResponse(String input) {
         if (userCommand.newSkill) {
+            if (input.equalsIgnoreCase("stop")) {
+                this.userCommand.newSkill = false;
+                return "stopped creating a new skill";
+            }
             this.userCommand.newSkillInformation.add(input);
             return newSkillSteps();
         }
@@ -48,17 +52,26 @@ public class Bot {
             return handleStatement(input);
     }
 
+    /**
+     * This method checks if the input from the user is one of the multiple special cases with a special function
+     * @param input is the input sentence from the user
+     * @return the response of the computer related to the special case
+     */
     public String specialResponse(String input) {
         if (input.equalsIgnoreCase("hey") || input.equalsIgnoreCase("hello"))
             return "hello, ask a question";
         else if (input.equalsIgnoreCase("create a new skill")){
             this.stepCounter = 1;
             this.userCommand.newSkill = true;
-            return "Follow these 4 steps to create a new skill\n1) What is the topic of your skill?";
+            return "Follow these 4 steps to create a new skill, type stop whenever you want to stop adding the skill\n1) What is the topic of your skill?";
         }
         return "";
     }
 
+    /**
+     * This method goes over all the steps to add a new skill
+     * @return the instruction for the next step to add a new skill
+     */
     public String newSkillSteps() {
         String s = "";
         if (this.stepCounter == 4) {
