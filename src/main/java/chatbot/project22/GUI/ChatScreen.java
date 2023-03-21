@@ -186,17 +186,8 @@ public class ChatScreen extends Application{
         });
 
         refresh.setOnAction(event -> {
-            t.restart();
-            t.setStartNumber(-1);
-            t.cancel();
-            time.set(-1);
-            count2.setText("");
-            messageArea = new VBox();
-//            messageText=null;
-//            message = null;
-            //scrollPane = null;
-            txt.clear();
-
+            stage.close();
+            ChatScreen cs = new ChatScreen();
         });
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
