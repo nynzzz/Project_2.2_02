@@ -15,9 +15,9 @@ public class Bot {
     // Path to the directory in which all the skill Files will be stored
     public static final String SKILL_FILE_PATH = "src/main/resources/chatbot/project22/textFiles/skillFiles/";
 
+    // private fields needed for when the user is creating new skills inside the chatbot
     private final TextFileEditor textFileEditor;
     private UserCommand userCommand;
-
     private int stepCounter;
 
     /**
@@ -64,6 +64,11 @@ public class Bot {
             this.stepCounter = 1;
             this.userCommand.newSkill = true;
             return "Follow these 4 steps to create a new skill, type stop whenever you want to stop adding the skill\n1) What is the topic of your skill?";
+        } else if (input.equalsIgnoreCase("show all questions")) {
+            return StringAttributes.listToString(textFileEditor.readFile(QUESTION_FILE_PATH));
+        }
+        else if (input.equalsIgnoreCase("show all statements")) {
+            return StringAttributes.listToString(textFileEditor.readFile(STATEMENT_FILE_PATH));
         }
         return "";
     }
@@ -108,7 +113,7 @@ public class Bot {
         String name = "";
         String template = "";
         for (String question: questions) {
-            ArrayList<String> questionSplit = StringAttributes.splitStringToWords(question, ":");
+            ArrayList<String> questionSplit = splitAtFirst(question, ':');
             if (StringAttributes.stringsEqual(this.userCommand, questionSplit.get(1).strip())) {
                 name = questionSplit.get(0);
                 template = questionSplit.get(1).strip();
@@ -121,13 +126,12 @@ public class Bot {
         ArrayList<String> actions = textFileEditor.readFile(SKILL_FILE_PATH + name + ".txt");
         ArrayList<String> slotValues = this.userCommand.getSlotValues();
         ArrayList<String> slots = StringAttributes.getAllSlots(template);
-        String answer = createAnswer(actions, slots, slotValues);
-        return answer;
+        return createAnswer(actions, slots, slotValues);
     }
 
     /**
      * This method is used to generate the answer if the input from the user was not a question
-     * @return the answet the computer will give
+     * @return the answer the computer will give
      */
     public String handleStatement(String input) {
         if (!userCommand.changingAction) {
@@ -136,7 +140,7 @@ public class Bot {
             String name = "";
             String template = "";
             for (String statement : statements) {
-                ArrayList<String> statementSplit = new ArrayList<>(StringAttributes.splitStringToWords(statement, ":"));
+                ArrayList<String> statementSplit = splitAtFirst(statement, ':');
                 if (StringAttributes.stringsEqual(this.userCommand, statementSplit.get(1).strip())) {
                     name = statementSplit.get(0);
                     template = statementSplit.get(1).strip();
@@ -189,16 +193,15 @@ public class Bot {
      */
     public String createAnswer(ArrayList<String> actions, ArrayList<String> slots, ArrayList<String> slotValues) {
         String response = actions.remove(0);
-        String combined = "";
+        StringBuilder combined = new StringBuilder();
         for (int i = 0; i < slots.size(); i++){
             response = response.replace(slots.get(i), slotValues.get(i));
-            combined += slots.get(i) + " " + slotValues.get(i) + " ";
+            combined.append(slots.get(i)).append(" ").append(slotValues.get(i)).append(" ");
         }
-        combined = combined.strip();
+        combined = new StringBuilder(combined.toString().strip());
         for (String action: actions) {
-            ArrayList<String> split = new ArrayList<>(Arrays.stream(action.split(":")).toList());
-            System.out.println(split.get(0) + "-" + combined);
-            if (split.get(0).equalsIgnoreCase(combined)){
+            ArrayList<String> split = splitAtFirst(action, ':');
+            if (split.get(0).equalsIgnoreCase(combined.toString())){
                 return response.replace("<*>", split.get(1).strip());
             }
         }
@@ -224,11 +227,24 @@ public class Bot {
      * @return the combined string
      */
     public String combineSlotsAndValues(ArrayList<String> slots, ArrayList<String> slotValues) {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < slots.size() - 1; i++) {
-            output += slots.get(i) + " " + slotValues.get(i) + " ";
+            output.append(slots.get(i)).append(" ").append(slotValues.get(i)).append(" ");
         }
-        return output.strip();
+        return output.toString().strip();
     }
 
+    /**
+     * This method splits a string at the first occurrence of a certain character
+     * @param string is the string that will get split
+     * @param character is the character the split will happen at
+     * @return a list containing the two string after the split
+     */
+    public ArrayList<String> splitAtFirst(String string, char character) {
+        ArrayList<String> output = new ArrayList<>();
+        int index = string.indexOf(character);
+        output.add(string.substring(0, index));
+        output.add(string.substring(index + 1));
+        return output;
+    }
 }

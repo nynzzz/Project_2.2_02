@@ -1,2 +1,4 @@
 The train to <CITY> leaves at <*>
 <CITY> heerlen: 11
+<CITY> sittard: 11:30
+<CITY> eindhoven: 24:49
