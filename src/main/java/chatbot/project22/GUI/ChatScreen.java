@@ -186,17 +186,8 @@ public class ChatScreen extends Application{
         });
 
         refresh.setOnAction(event -> {
-            t.restart();
-            t.setStartNumber(-1);
-            t.cancel();
-            time.set(-1);
-            count2.setText("");
-            messageArea = new VBox();
-//            messageText=null;
-//            message = null;
-            //scrollPane = null;
-            txt.clear();
-
+            stage.close();
+            ChatScreen cs = new ChatScreen();
         });
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -232,7 +223,7 @@ public class ChatScreen extends Application{
                         Text responseMessage = new Text(responseText);
                         responseMessage.setFont(Font.font(messageFont, messageFontSize));
                         responseMessage.setTextAlignment(TextAlignment.CENTER);
-                        responseMessage.setWrappingWidth(250);
+                        responseMessage.setWrappingWidth(450);
 
                         HBox responseBubble = new HBox();
                         responseBubble.getChildren().add(responseMessage);

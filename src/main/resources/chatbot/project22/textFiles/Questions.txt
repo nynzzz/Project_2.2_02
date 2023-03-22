@@ -1,5 +1,6 @@
-Food: what do I eat on <DAY>
-Drink: What do I drink on <DAY>
-Schedule: What class do I have on <DAY> at <TIME>
-SpeedLimit: What is the speed limit on the <ROAD>
-Train: when does the train to <CITY> leave
+Food: what do I eat on <DAY>?
+Drink: What do I drink on <DAY>?
+Schedule: What class do I have on <DAY> at <TIME>?
+SpeedLimit: What is the speed limit on the <ROAD>?
+Train: when does the train to <CITY> leave?
+Age: How old was I in <YEAR>?

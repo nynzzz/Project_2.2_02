@@ -4,3 +4,5 @@ On <DAY> at <TIME> you will have <*>.
 <DAY> tuesday <TIME> 9: HCI
 <DAY> tuesday <TIME> 11: calculus
 <DAY> tuesday <TIME> 15: mathematical modelling
+<DAY> wednesday <TIME> 9: a project meeting
+<DAY> friday <TIME> 9: calculus

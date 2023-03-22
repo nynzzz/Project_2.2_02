@@ -44,8 +44,8 @@ public class UserCommand {
         this.isQuestion = isQuestion;
         this.original = input;
         this.command = input;
-        if (isQuestion)
-            this.command = input.substring(0, input.length()- 1);
+//        if (isQuestion)
+//            this.command = input.substring(0, input.length()- 1);
         this.changingAction = false;
         this.newSkillInformation = new ArrayList<>();
     }

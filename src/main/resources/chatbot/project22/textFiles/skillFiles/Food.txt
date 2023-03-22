@@ -5,4 +5,4 @@ On <DAY> you will eat <*>.
 <DAY> saturday: chinese
 <DAY> sunday: pancakes with butter
 <DAY> tuesday: bread
-<DAY> monday: pizza
+<DAY> monday: durum

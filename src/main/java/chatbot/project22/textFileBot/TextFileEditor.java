@@ -54,6 +54,11 @@ public class TextFileEditor {
         }
     }
 
+    /**
+     * This method overwrites the information in a file with new content
+     * @param fileName is the path to the file the information will be stored in
+     * @param content is the information that will get stored in the file
+     */
     public void rewriteFile(String fileName, String content) {
         try {
             FileWriter fileWriter = new FileWriter(fileName);
@@ -65,6 +70,12 @@ public class TextFileEditor {
         }
     }
 
+    /**
+     * This method creates a new skill file and adds the response line to it
+     * @param path is the path of the file that will be made
+     * @param answer is the sentence that will get stored in the file
+     * @return true if the file was made, else false
+     */
     public boolean createNewSkillFile(String path, String answer) {
         File newFile = new File(path);
         try {
