@@ -3,3 +3,4 @@ Drink: On <DAY> I will drink <*>
 Schedule: On <DAY> at <TIME> I will have <*>
 SpeedLimit: On the <ROAD> the speed limit is <*>
 Train: The train to <CITY> leaves at <*>
+Age: In <YEAR> I was <*> years old

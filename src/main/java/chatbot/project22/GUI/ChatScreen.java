@@ -186,17 +186,8 @@ public class ChatScreen extends Application{
         });
 
         refresh.setOnAction(event -> {
-            t.restart();
-            t.setStartNumber(-1);
-            t.cancel();
-            time.set(-1);
-            count2.setText("");
-            messageArea = new VBox();
-//            messageText=null;
-//            message = null;
-            //scrollPane = null;
-            txt.clear();
-
+            stage.close();
+            ChatScreen cs = new ChatScreen();
         });
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -207,7 +198,7 @@ public class ChatScreen extends Application{
                     if (!messageText.isEmpty()) {
                         Text message = new Text(messageText);
                         message.setFont(Font.font(messageFont, messageFontSize));
-                        message.setTextAlignment(TextAlignment.LEFT);
+                        message.setTextAlignment(TextAlignment.CENTER);
                         message.setWrappingWidth(450);
 
                         HBox chatBubble = new HBox();
@@ -227,12 +218,12 @@ public class ChatScreen extends Application{
                         VBox messageBox = new VBox(senderBox, messageContainer);
                         messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
                         messageBox.setPadding(new Insets(5, 5, 5, 130));
-                        messageBox.setAlignment(Pos.CENTER_RIGHT);
+
                         String responseText = textFileBot.generateResponse(messageText);
                         Text responseMessage = new Text(responseText);
                         responseMessage.setFont(Font.font(messageFont, messageFontSize));
-                        responseMessage.setTextAlignment(TextAlignment.LEFT);
-                        responseMessage.setWrappingWidth(250);
+                        responseMessage.setTextAlignment(TextAlignment.CENTER);
+                        responseMessage.setWrappingWidth(450);
 
                         HBox responseBubble = new HBox();
                         responseBubble.getChildren().add(responseMessage);
