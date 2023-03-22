@@ -198,7 +198,7 @@ public class ChatScreen extends Application{
                     if (!messageText.isEmpty()) {
                         Text message = new Text(messageText);
                         message.setFont(Font.font(messageFont, messageFontSize));
-                        message.setTextAlignment(TextAlignment.CENTER);
+                        message.setTextAlignment(TextAlignment.LEFT);
                         message.setWrappingWidth(450);
 
                         HBox chatBubble = new HBox();
@@ -222,7 +222,7 @@ public class ChatScreen extends Application{
                         String responseText = textFileBot.generateResponse(messageText);
                         Text responseMessage = new Text(responseText);
                         responseMessage.setFont(Font.font(messageFont, messageFontSize));
-                        responseMessage.setTextAlignment(TextAlignment.CENTER);
+                        responseMessage.setTextAlignment(TextAlignment.LEFT);
                         responseMessage.setWrappingWidth(450);
 
                         HBox responseBubble = new HBox();
