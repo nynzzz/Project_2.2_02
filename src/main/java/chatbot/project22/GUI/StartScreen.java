@@ -94,29 +94,6 @@ public class StartScreen extends Application{
         layout.setBackground(background);
         layout.getChildren().addAll(label0,b,skillEditor);
         Scene s = new Scene(layout, 400, 600);
-        /*
-        InputStream stream = null;
-        try {
-            stream = new FileInputStream(ChatScreen.class.getResource("welcom.jpeg").getFile());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Image image = new Image(stream);
-        ImageView imageView = new ImageView(image);
-
-        //Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
-*/
-/*
-        //Creating a Group object
-        Group root = new Group();
-        root.getChildren().add(label0);
-        root.getChildren().add(b);
-        root.getChildren().add(skillEditor);
-*/
-        //Creating a scene object
-      //  Scene scene=new Scene(root,400,600);
-        //Setting title to the Stage
 
         primaryStage.setTitle("Welcome!");
         primaryStage.setScene(s);
