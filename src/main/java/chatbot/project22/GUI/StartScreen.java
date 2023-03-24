@@ -4,12 +4,9 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -20,15 +17,10 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
-
 
 public class StartScreen extends Application{
     Label label0 = new Label("Hi there!\n" +
-            "Click here to start");
+            "Click start to chat");
 
     public void start(Stage primaryStage) {
 
@@ -67,7 +59,7 @@ public class StartScreen extends Application{
         skillEditor.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent e) {
-                skillEditorDemo se= new skillEditorDemo();
+                skillEditorTxt se= new skillEditorTxt();
                 primaryStage.close();
 
             }

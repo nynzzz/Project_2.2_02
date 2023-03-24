@@ -17,7 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import java.io.*;
 
-public class skillEditorDemo extends Application {
+public class skillEditorTxt extends Application {
     Stage stage;
     Scene scene0 ,scene1,scene2;
     Label label0 ;
@@ -25,7 +25,7 @@ public class skillEditorDemo extends Application {
     Button ManageS,addS,back1, backStartScreen;
     Color color0;
 
-    public skillEditorDemo(){
+    public skillEditorTxt(){
         stage = new Stage();
         this.stage = stage;
 
@@ -299,7 +299,7 @@ public class skillEditorDemo extends Application {
         layout1.setBackground(background);
         layout2.setBackground(background);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(skillEditorDemo.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(skillEditorTxt.class.getResource("hello-view.fxml"));
         //    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Skill Editor");
         stage.setScene(scene0);
