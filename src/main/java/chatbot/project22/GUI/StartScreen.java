@@ -5,8 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -18,31 +17,26 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
-public class StartScreen extends Application{
-    Label label0 = new Label("Hi there!\n" +
-            "Click start to chat");
+public class StartScreen extends Application {
+    Label label0 = new Label("Hi there!\n" + "Click start to chat");
 
     public void start(Stage primaryStage) {
 
-        }
+    }
 
-    public static void main(String[] args){
-        //  Start a = new Start();
+    public static void main(String[] args) {
         launch();
     }
 
-    public StartScreen(){
+    public StartScreen() {
         Stage primaryStage = new Stage();
-
 
         VBox layout = new VBox(20);
         Button b = new Button("Start");
-
         b.setStyle("-fx-font-size:20");
         b.setFont(new Font(20));
-
         b.setTranslateX(147);
-        b.setTranslateY(200);
+        b.setTranslateY(150);
         b.setPrefHeight(40);
         b.setPrefWidth(120);
 
@@ -50,33 +44,74 @@ public class StartScreen extends Application{
         Button skillEditor = new Button("Skill Editor");
         skillEditor.setStyle("-fx-font-size:20");
         skillEditor.setFont(new Font(20));
-
         skillEditor.setTranslateX(147);
-        skillEditor.setTranslateY(200);
+        skillEditor.setTranslateY(150);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
-        skillEditor.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent e) {
-                skillEditorTxt se= new skillEditorTxt();
-                primaryStage.close();
+        // Choose the bot label
+        Label botLabel = new Label("Choose the bot:");
+        botLabel.setStyle("-fx-font-size:20");
+        botLabel.setFont(new Font(20));
+        botLabel.setTranslateX(147);
+        botLabel.setTranslateY(200);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
 
-            }
-        });
+        // txtBot radio button
+        RadioButton txtBotRadioButton = new RadioButton("txtBot");
+        txtBotRadioButton.setStyle("-fx-font-size:20");
+        txtBotRadioButton.setFont(new Font(20));
+        txtBotRadioButton.setTranslateX(147);
+        txtBotRadioButton.setTranslateY(200);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
 
+        // yanlBot radio button
+        RadioButton yanlBotRadioButton = new RadioButton("yamlBot");
+        yanlBotRadioButton.setStyle("-fx-font-size:20");
+        yanlBotRadioButton.setFont(new Font(20));
+        yanlBotRadioButton.setTranslateX(147);
+        yanlBotRadioButton.setTranslateY(200);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
+
+        ToggleGroup botToggleGroup = new ToggleGroup();
+        txtBotRadioButton.setToggleGroup(botToggleGroup);
+        yanlBotRadioButton.setToggleGroup(botToggleGroup);
+
+        // Event handler for the Start button
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 primaryStage.close();
-                ChatScreen chat= new ChatScreen();
-
-
+                ChatScreen chat = new ChatScreen();
             }
         });
 
-        Color color0 =  Color.rgb(121,160,228);
-        Color colorBack =  Color.rgb(240,248,255);
+        // Event handler for the Skill Editor button
+        skillEditor.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                if (txtBotRadioButton.isSelected()) {
+                    skillEditorTxt se = new skillEditorTxt();
+                } else if (yanlBotRadioButton.isSelected()) {
+                    skillEditorYAML se = new skillEditorYAML();
+                }
+                else{
+                    // Create a popup to show that a bot needs to be chosen first
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Changes saved");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please choose a bot first!");
+                    alert.showAndWait();
+                }
+                primaryStage.close();
+            }
+        });
+
+        Color color0 = Color.rgb(121, 160, 228);
+        Color colorBack = Color.rgb(240, 248, 255);
         BackgroundFill backgroundFill = new BackgroundFill(colorBack, CornerRadii.EMPTY, Insets.EMPTY);
         Background background = new Background(backgroundFill);
         label0.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 50));
@@ -84,15 +119,11 @@ public class StartScreen extends Application{
         label0.setTranslateX(5);
         label0.setTranslateY(55);
         layout.setBackground(background);
-        layout.getChildren().addAll(label0,b,skillEditor);
+        layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton, yanlBotRadioButton);
         Scene s = new Scene(layout, 400, 600);
 
         primaryStage.setTitle("Welcome!");
         primaryStage.setScene(s);
-
-
         primaryStage.show();
-
     }
-
 }

@@ -1,11 +1,12 @@
 package chatbot.project22.GUI;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-import javafx.application.Application;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,11 +14,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+
 import java.io.*;
 
-public class skillEditorTxt extends Application {
+public class skillEditorYAML extends Application {
     Stage stage;
     Scene scene0 ,scene1,scene2;
     Label label0 ;
@@ -25,7 +25,7 @@ public class skillEditorTxt extends Application {
     Button ManageS,addS,back1, backStartScreen;
     Color color0;
 
-    public skillEditorTxt(){
+    public skillEditorYAML(){
         stage = new Stage();
         this.stage = stage;
 
@@ -67,14 +67,15 @@ public class skillEditorTxt extends Application {
             fileList.setPrefWidth(200);
 
             // Create a File object representing the directory that contains the txt files and folders
-            File directory = new File("src/main/resources/chatbot/project22/textFiles");
+//            TODO: add directory path
+            File directory = new File("directory to files");
 
             // Get a list of the txt files and folders in the directory
             File[] files = directory.listFiles();
 
             // Iterate through the list of files and add their names to the ListView
             for (File file : files) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".yaml")) {
                     // Add the txt files to the ListView
                     fileList.getItems().add(file.getName());
                 } else if (file.isDirectory()) {
@@ -95,7 +96,7 @@ public class skillEditorTxt extends Application {
                         File selectedFolder = new File(directory.getPath() + "/" + fileName.substring(0, fileName.length() - 1));
                         File[] folderContents = selectedFolder.listFiles(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
-                                return name.toLowerCase().endsWith(".txt");
+                                return name.toLowerCase().endsWith(".yaml");
                             }
                         });
 
@@ -233,32 +234,18 @@ public class skillEditorTxt extends Application {
 
         addS.setOnAction(e ->{
             // Create the input fields for Question, Statement, and Skill
-            Label questionLabel = new Label("Question: ");
-            Label questionExample = new Label("Example: \n " +
-                    "Food: what do I eat on <DAY>?");
-            TextArea questionInput = new TextArea();
-            questionInput.setPrefRowCount(2);
-            VBox questionLayout = new VBox(questionLabel, questionExample, questionInput);
-
-            Label statementLabel = new Label("Statement:");
-            Label statementExample = new Label("Example: \n" +
-                    " Food: On <DAY> I will eat <*>");
-            TextArea statementInput = new TextArea();
-            statementInput.setPrefRowCount(2);
-            VBox statementLayout = new VBox(statementLabel, statementExample, statementInput);
-
-            Label skillLabel = new Label("Skill:");
-            Label skillExample = new Label("Example: \n " +
-                    "On <DAY> you will eat <*>.\n" +
-                    "<DAY> wednesday: spaghetti");
-            TextArea skillInput = new TextArea();
-            skillInput.setPrefRowCount(5);
-            VBox skillLayout = new VBox(skillLabel, skillExample, skillInput);
-
-            TextField skillName = new TextField();
-            Label skillNameLabel = new Label("Skill name:");
-            Label skillNameExample = new Label("Example: Food");
-            HBox skillNameLayout = new HBox(10, skillNameLabel, skillName, skillNameExample);
+            Label SkillLabel = new Label("New Skill:");
+            Label SkillExample = new Label("Example: \n " +
+                    "name: No Lecture on Saturday \n" +
+                    "description: this rule is triggered when is saturday and is type schedule \n" +
+                    "priority: 1 \n" +
+                    "condition: " + "DAY.equals(\"Saturday\")"  + "&& SCHEDULE !=null \n" +
+                    "System.out.println(\"No Lecture on Saturday\");");
+            Label emptylabel = new Label("    ");
+            Label emptylabel2 = new Label("    ");
+            TextArea SkillInput = new TextArea();
+            SkillInput.setPrefRowCount(5);
+            VBox questionLayout = new VBox(SkillLabel, emptylabel, SkillExample, emptylabel2, SkillInput);
 
             // Create back button to return to the previous scene
             Button backButton = new Button("Back");
@@ -268,37 +255,21 @@ public class skillEditorTxt extends Application {
             Button saveButton = new Button("Save");
             saveButton.setOnAction(event -> {
 
-                String skill = skillName.getText();
 
                 try {
+                    //TODO: add path to the yaml file with skills
                     // Append the contents of the input fields to separate text files
-                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
-                    questionWriter.write("\n" + questionInput.getText());
+                    FileWriter questionWriter = new FileWriter("filepath", true);
+                    questionWriter.write("\n" + SkillInput.getText());
                     questionWriter.close();
 
-                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
-                    statementWriter.write("\n" + statementInput.getText());
-                    statementWriter.close();
+                    // Create a popup to show that changes were saved
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Changes saved");
+                    alert.setHeaderText(null);
+                    alert.setContentText("New rule has been saved.");
+                    alert.showAndWait();
 
-                    // Create a file object for the skill file
-                    File skillFile = new File("src/main/resources/chatbot/project22/textFiles/skillFiles/" + skill + ".txt");
-
-                    try {
-                        // Write the skill data to the file
-                        FileWriter writer = new FileWriter(skillFile);
-                        writer.write(skillInput.getText());
-                        writer.close();
-
-                        // Create a popup to show that changes were saved
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Changes saved");
-                        alert.setHeaderText(null);
-                        alert.setContentText("New rule has been saved.");
-                        alert.showAndWait();
-
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -306,7 +277,7 @@ public class skillEditorTxt extends Application {
 
 
             // Create a layout to hold the input fields, buttons, and labels
-            VBox layout2 = new VBox(20, questionLayout, statementLayout, skillLayout, skillNameLayout, backButton, saveButton);
+            VBox layout2 = new VBox(20, questionLayout, backButton, saveButton);
             scene2 = new Scene(layout2, 400, 600);
 
             // Set the new scene
@@ -332,7 +303,7 @@ public class skillEditorTxt extends Application {
         layout1.setBackground(background);
         layout2.setBackground(background);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(skillEditorTxt.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(skillEditorYAML.class.getResource("hello-view.fxml"));
         //    Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Skill Editor");
         stage.setScene(scene0);
