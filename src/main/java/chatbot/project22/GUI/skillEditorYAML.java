@@ -17,13 +17,14 @@ import javafx.stage.Stage;
 
 import java.io.*;
 
-public class skillEditorYAML extends Application {
-    Stage stage;
-    Scene scene0 ,scene1,scene2;
+public  class skillEditorYAML extends Application {
+    static Stage stage;
+    static Scene scene0 ,scene1,scene2;
     Label label0 ;
     VBox layout0,layout1,layout2;
     Button ManageS,addS,back1, backStartScreen;
     Color color0;
+
 
     public skillEditorYAML(){
         stage = new Stage();
@@ -233,55 +234,13 @@ public class skillEditorYAML extends Application {
         });
 
         addS.setOnAction(e ->{
-            // Create the input fields for Question, Statement, and Skill
-            Label SkillLabel = new Label("New Skill:");
-            Label SkillExample = new Label("Example: \n " +
-                    "name: No Lecture on Saturday \n" +
-                    "description: this rule is triggered when is saturday and is type schedule \n" +
-                    "priority: 1 \n" +
-                    "condition: " + "DAY.equals(\"Saturday\")"  + "&& SCHEDULE !=null \n" +
-                    "System.out.println(\"No Lecture on Saturday\");");
-            Label emptylabel = new Label("    ");
-            Label emptylabel2 = new Label("    ");
-            TextArea SkillInput = new TextArea();
-            SkillInput.setPrefRowCount(5);
-            VBox questionLayout = new VBox(SkillLabel, emptylabel, SkillExample, emptylabel2, SkillInput);
-
-            // Create back button to return to the previous scene
-            Button backButton = new Button("Back");
-            backButton.setOnAction(event -> stage.setScene(scene0));
-
-            // Create save button to save the input fields to separate text files
-            Button saveButton = new Button("Save");
-            saveButton.setOnAction(event -> {
-
-
-                try {
-                    //TODO: add path to the yaml file with skills
-                    // Append the contents of the input fields to separate text files
-                    FileWriter questionWriter = new FileWriter("filepath", true);
-                    questionWriter.write("\n" + SkillInput.getText());
-                    questionWriter.close();
-
-                    // Create a popup to show that changes were saved
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Changes saved");
-                    alert.setHeaderText(null);
-                    alert.setContentText("New rule has been saved.");
-                    alert.showAndWait();
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            });
-
-
-            // Create a layout to hold the input fields, buttons, and labels
-            VBox layout2 = new VBox(20, questionLayout, backButton, saveButton);
-            scene2 = new Scene(layout2, 400, 600);
+        //    scene2 = new Scene(layout2, 400, 600);
 
             // Set the new scene
-            stage.setScene(scene2);
+         //   stage.setScene(scene2);
+
+            Scene addSkillScene = new seYamlAddScene().skillEditorYamlAdd();
+            stage.setScene(addSkillScene);
         });
 
         back1.setOnAction(e ->{
@@ -309,6 +268,9 @@ public class skillEditorYAML extends Application {
         stage.setScene(scene0);
         stage.show();
     }
+
+
+
 
     @Override
     public void start(Stage stage) throws Exception {
