@@ -97,9 +97,12 @@ public class seYamlAddScene extends Application{
         stage = new Stage();
         stage.setTitle("Chat DACS 2023");
         main = new VBox(20);
-        main.getChildren().add(mainArea);
+        main.getChildren().addAll(mainArea,SkillExample);
         main.setAlignment(Pos.CENTER);
 
+        mainArea.setTranslateY(50);
+        SkillExample.setTranslateX(-55);
+        SkillExample.setTranslateY(60);
 
         rule = new VBox(20);
         rule.getChildren().add(ruleArea);
@@ -168,7 +171,7 @@ public class seYamlAddScene extends Application{
         actionArea.setTranslateY(150);
 
         main.setTranslateX(200);  
-        main.setTranslateY(300); 
+        main.setTranslateY(200);
 
     
 
