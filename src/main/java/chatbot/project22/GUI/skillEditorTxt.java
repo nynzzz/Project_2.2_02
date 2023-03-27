@@ -8,6 +8,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -44,7 +46,13 @@ public class skillEditorTxt extends Application {
         ManageS = new Button("Manage Existing Skills");
         addS = new Button("Add new Skills");
         back1 = new Button("Back");
-        backStartScreen = new Button("Restart");
+        backStartScreen = new Button("");
+        Image menuIcon = new Image("blue_re-pict-house-base.png_64.png");
+        ImageView menuView = new ImageView(menuIcon);
+        menuView.setFitHeight(20);
+        menuView.setFitWidth(20);
+        menuView.setPreserveRatio(true);
+        backStartScreen.setGraphic(menuView);
 
         ManageS.setPrefSize(180, 35);
         addS.setPrefSize(150, 35);
