@@ -1,5 +1,6 @@
 package chatbot.project22.GUI;
 
+import chatbot.project22.FaceDetection.FaceDetection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -269,6 +270,12 @@ public class skillEditorTxt extends Application {
             saveButton.setOnAction(event -> {
 
                 String skill = skillName.getText();
+
+                //face detection
+                //loading opencv libraries
+                nu.pattern.OpenCV.loadShared();
+                FaceDetection faceDetection=new FaceDetection();
+                faceDetection.startCamera();
 
                 try {
                     // Append the contents of the input fields to separate text files
