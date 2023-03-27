@@ -24,7 +24,7 @@ public class FaceDetection extends JFrame {
     //Mat class object to store images as matrices
     private Mat frameMat = new Mat();
 
-    final private Timer timer;
+//    final private Timer timer;
     public boolean faceDetected= false;
 
     public FaceDetection(){
@@ -43,16 +43,16 @@ public class FaceDetection extends JFrame {
         setVisible(true);
 
         // Create a timer with a 2-second delay
-        timer = new Timer(2000, e -> {
-            // not showing the window
-            setVisible(false);
-            //closing the frame
-            dispose();
-            //closing the face detection
-            faceDetected=true;
-            //closing the camera
-            videoCapture.release();
-        });
+//        timer = new Timer(2000, e -> {
+//            // not showing the window
+//            setVisible(false);
+//            //closing the frame
+//            dispose();
+//            //closing the face detection
+//            faceDetected=true;
+//            //closing the camera
+//            videoCapture.release();
+//        });
     }
 
     private static void run() {
@@ -99,7 +99,7 @@ public class FaceDetection extends JFrame {
             //when a face is detected
             if (faceDetections.toArray().length>0){
                 // Start the timer to delay the close operation
-                timer.start();
+//                timer.start();
 
             }
             for (Rect rect: faceDetections.toArray()){
