@@ -62,175 +62,66 @@ public class skillEditorYAML extends Application {
         backStartScreen.setTranslateY(-155);
 
         ManageS.setOnAction(e -> {
-            // Create a ListView to display the names of the txt files and folders in the directory
-            ListView<String> fileList = new ListView<>();
-            fileList.setPrefWidth(200);
+            File selectedFile = new File("src/main/resources/rules.yaml");
 
-            // Create a File object representing the directory that contains the txt files and folders
-//            TODO: add directory path
-            File directory = new File("directory to files");
-
-            // Get a list of the txt files and folders in the directory
-            File[] files = directory.listFiles();
-
-            // Iterate through the list of files and add their names to the ListView
-            for (File file : files) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".yaml")) {
-                    // Add the txt files to the ListView
-                    fileList.getItems().add(file.getName());
-                } else if (file.isDirectory()) {
-                    // Add the folders to the ListView
-                    fileList.getItems().add(file.getName() + "/");
+            try {
+                // Read the contents of the selected file
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                String content = "";
+                String line = reader.readLine();
+                while (line != null) {
+                    content += line + "\n";
+                    line = reader.readLine();
                 }
+                reader.close();
+
+                // Create a new scene to display the contents of the selected file
+                TextArea fileContent = new TextArea(content);
+                fileContent.setPrefRowCount(45);
+                Button saveButton = new Button("Save");
+
+                // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
+                saveButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            FileWriter writer = new FileWriter(selectedFile);
+                            writer.write(fileContent.getText());
+                            writer.flush();
+                            writer.close();
+
+                            // Create a popup to show that changes were saved
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Changes saved");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Your changes have been saved.");
+                            alert.showAndWait();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                // Create a back button that returns to the main screen
+                Button backButton = new Button("Back");
+                backButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        stage.setScene(scene0);
+                    }
+                });
+
+                VBox newLayout = new VBox();
+                newLayout.getChildren().addAll(fileContent, saveButton, backButton);
+                Scene newScene = new Scene(newLayout, 400, 600);
+
+                stage.setScene(newScene);
+            } catch (IOException ee) {
+                ee.printStackTrace();
             }
-
-            // Set an on-click event for the items in the ListView
-            fileList.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    // Get the selected file or folder name from the ListView
-                    String fileName = fileList.getSelectionModel().getSelectedItem();
-
-                    if (fileName.endsWith("/")) {
-                        // If the selected item is a folder, update the ListView to show its contents
-                        File selectedFolder = new File(directory.getPath() + "/" + fileName.substring(0, fileName.length() - 1));
-                        File[] folderContents = selectedFolder.listFiles(new FilenameFilter() {
-                            public boolean accept(File dir, String name) {
-                                return name.toLowerCase().endsWith(".yaml");
-                            }
-                        });
-
-                        fileList.getItems().clear();
-                        for (File file : folderContents) {
-                            fileList.getItems().add(file.getName());
-                        }
-                    }
-                    else if(fileName.endsWith("Questions.txt") || fileName.endsWith("Statements.txt")){
-                        File selectedFile = new File(directory.getPath() + "/" + fileName);
-
-                        try {
-                            // Read the contents of the selected file
-                            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                            String content = "";
-                            String line = reader.readLine();
-                            while (line != null) {
-                                content += line + "\n";
-                                line = reader.readLine();
-                            }
-                            reader.close();
-
-                            // Create a new scene to display the contents of the selected file
-                            TextArea fileContent = new TextArea(content);
-                            Button saveButton = new Button("Save");
-
-                            // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
-                            saveButton.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    try {
-                                        FileWriter writer = new FileWriter(selectedFile);
-                                        writer.write(fileContent.getText());
-                                        writer.close();
-
-                                        // Create a popup to show that changes were saved
-                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Changes saved");
-                                        alert.setHeaderText(null);
-                                        alert.setContentText("Your changes have been saved.");
-                                        alert.showAndWait();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-
-                            // Create a back button that returns to the main screen
-                            Button backButton = new Button("Back");
-                            backButton.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    stage.setScene(scene1);
-                                }
-                            });
-
-                            VBox newLayout = new VBox();
-                            newLayout.getChildren().addAll(fileContent, saveButton, backButton);
-                            Scene newScene = new Scene(newLayout, 400, 600);
-
-                            stage.setScene(newScene);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    else {
-                        // If the selected item is a txt file, open it in a new scene
-                        File selectedFile = new File(directory.getPath() + "/skillFiles/" + fileName);
-
-                        try {
-                            // Read the contents of the selected file
-                            BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                            String content = "";
-                            String line = reader.readLine();
-                            while (line != null) {
-                                content += line + "\n";
-                                line = reader.readLine();
-                            }
-                            reader.close();
-
-                            // Create a new scene to display the contents of the selected file
-                            TextArea fileContent = new TextArea(content);
-                            Button saveButton = new Button("Save");
-
-                            // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
-                            saveButton.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    try {
-                                        FileWriter writer = new FileWriter(selectedFile);
-                                        writer.write(fileContent.getText());
-                                        writer.close();
-
-                                        // Create a popup to show that changes were saved
-                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Changes saved");
-                                        alert.setHeaderText(null);
-                                        alert.setContentText("Your changes have been saved.");
-                                        alert.showAndWait();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-
-                            // Create a back button that returns to the main screen
-                            Button backButton = new Button("Back");
-                            backButton.setOnAction(new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    stage.setScene(scene1);
-                                }
-                            });
-
-                            VBox newLayout = new VBox();
-                            newLayout.getChildren().addAll(fileContent, saveButton, backButton);
-                            Scene newScene = new Scene(newLayout, 400, 600);
-
-                            stage.setScene(newScene);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-
-            VBox layout1 = new VBox(20);
-            layout1.getChildren().addAll(fileList, back1);
-            scene1 = new Scene(layout1, 400, 600);
-            stage.setScene(scene1);
         });
+
+
 
         addS.setOnAction(e ->{
             // Create the input fields for Question, Statement, and Skill
@@ -257,9 +148,8 @@ public class skillEditorYAML extends Application {
 
 
                 try {
-                    //TODO: add path to the yaml file with skills
                     // Append the contents of the input fields to separate text files
-                    FileWriter questionWriter = new FileWriter("filepath", true);
+                    FileWriter questionWriter = new FileWriter("src/main/resources/rules.yaml", true);
                     questionWriter.write("\n" + SkillInput.getText());
                     questionWriter.close();
 
