@@ -85,8 +85,20 @@ public class StartScreen extends Application {
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                primaryStage.close();
-                ChatScreen chat = new ChatScreen();
+                if (txtBotRadioButton.isSelected()) {
+                    ChatScreen chat = new ChatScreen();
+                    primaryStage.close();
+                } else if (yanlBotRadioButton.isSelected()) {
+                    //todo: add yamlbot
+                    ChatScreen chat = new ChatScreen();
+                    primaryStage.close();
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("command needed");
+                    alert.setContentText("Please choose a bot first!");
+                    alert.showAndWait();
+                }
             }
         });
 
@@ -107,7 +119,7 @@ public class StartScreen extends Application {
                     alert.setContentText("Please choose a bot first!");
                     alert.showAndWait();
                 }
-                primaryStage.close();
+               // primaryStage.close();
             }
         });
 
