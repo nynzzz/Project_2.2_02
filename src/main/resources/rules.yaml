@@ -1,0 +1,14 @@
+---
+name: No Lecture on saturday
+description: this rules is triggered when is saturday and is type schedule
+priority: 1
+condition: "DAY.equals(\" Saturday \") && SCHEDULE != null"
+actions:
+  - "System.out.println(\"There are no lectures on Saturday\");"
+---
+name:    
+description: this rules is triggered when is Monday 
+priority: 2
+condition: "DAY.equals(\" Monday \") && SCHEDULE != null &&  TIME.equals(\" 9 \")"
+actions:
+  - "System.out.println(\"We start the week with math\");"
