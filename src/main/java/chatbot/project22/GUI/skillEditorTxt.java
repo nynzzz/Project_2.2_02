@@ -1,6 +1,7 @@
 package chatbot.project22.GUI;
 
 import chatbot.project22.FaceDetection.FaceDetection;
+import chatbot.project22.textFileBot.Bot;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -121,6 +122,7 @@ public class skillEditorTxt extends Application {
 
                             // Create a new scene to display the contents of the selected file
                             TextArea fileContent = new TextArea(content);
+                            fileContent.setPrefRowCount(30);
                             Button saveButton = new Button("Save");
 
                             // Set a save button in the new scene that writes the contents of the TextArea to the selected txt file
@@ -236,21 +238,21 @@ public class skillEditorTxt extends Application {
             // Create the input fields for Question, Statement, and Skill
             Label questionLabel = new Label("Question: ");
             Label questionExample = new Label("Example: \n " +
-                    "Food: what do I eat on <DAY>?");
+                    "What do I eat on <DAY>?");
             TextArea questionInput = new TextArea();
             questionInput.setPrefRowCount(2);
             VBox questionLayout = new VBox(questionLabel, questionExample, questionInput);
 
             Label statementLabel = new Label("Statement:");
             Label statementExample = new Label("Example: \n" +
-                    " Food: On <DAY> I will eat <*>");
+                    "On <DAY> I will eat <*>");
             TextArea statementInput = new TextArea();
             statementInput.setPrefRowCount(2);
             VBox statementLayout = new VBox(statementLabel, statementExample, statementInput);
 
             Label skillLabel = new Label("Skill:");
             Label skillExample = new Label("Example: \n " +
-                    "On <DAY> you will eat <*>.\n" +
+                    "On <DAY> you will eat <*>. (<*> will be the answer to the question)\n" +
                     "<DAY> wednesday: spaghetti");
             TextArea skillInput = new TextArea();
             skillInput.setPrefRowCount(5);
@@ -277,38 +279,41 @@ public class skillEditorTxt extends Application {
                 FaceDetection faceDetection=new FaceDetection();
                 faceDetection.startCamera();
 
-                try {
-                    // Append the contents of the input fields to separate text files
-                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
-                    questionWriter.write("\n" + questionInput.getText());
-                    questionWriter.close();
+                Bot bot = new Bot();
+                bot.addNewSkill(skillName.getText(), questionInput.getText(), statementInput.getText(), skillInput.getText());
+//                try {
+//                    // Append the contents of the input fields to separate text files
+//                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
+//                    questionWriter.write("\n" + questionInput.getText());
+//                    questionWriter.close();
+//
+//                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
+//                    statementWriter.write("\n" + statementInput.getText());
+//                    statementWriter.close();
+//
+//                    // Create a file object for the skill file
+//                    File skillFile = new File("src/main/resources/chatbot/project22/textFiles/skillFiles/" + skill + ".txt");
+//
+//                    try {
+//                        // Write the skill data to the file
+//                        FileWriter writer = new FileWriter(skillFile);
+//                        writer.write(skillInput.getText());
+//                        writer.close();
+//
+//                        // Create a popup to show that changes were saved
+//                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                        alert.setTitle("Changes saved");
+//                        alert.setHeaderText(null);
+//                        alert.setContentText("New rule has been saved.");
+//                        alert.showAndWait();
+//
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                }
 
-                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
-                    statementWriter.write("\n" + statementInput.getText());
-                    statementWriter.close();
-
-                    // Create a file object for the skill file
-                    File skillFile = new File("src/main/resources/chatbot/project22/textFiles/skillFiles/" + skill + ".txt");
-
-                    try {
-                        // Write the skill data to the file
-                        FileWriter writer = new FileWriter(skillFile);
-                        writer.write(skillInput.getText());
-                        writer.close();
-
-                        // Create a popup to show that changes were saved
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Changes saved");
-                        alert.setHeaderText(null);
-                        alert.setContentText("New rule has been saved.");
-                        alert.showAndWait();
-
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
             });
 
 

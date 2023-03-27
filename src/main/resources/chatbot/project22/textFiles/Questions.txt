@@ -1,6 +1,18 @@
 Food: what do I eat on <DAY>?
 Drink: What do I drink on <DAY>?
-Schedule: What class do I have on <DAY> at <TIME>?
 SpeedLimit: What is the speed limit on the <ROAD>?
 Train: when does the train to <CITY> leave?
 Age: How old was I in <YEAR>?
+route: How do I get from <LOCATION> to <LOCATION> at <TIME>?
+route: How do I get from <LOCATION> to <LOCATION>?
+route: How do I get from <LOCATION> at <TIME>?
+route: How do I get to <LOCATION> at <TIME>?
+route: How do I get from <LOCATION>?
+route: How do I get to <LOCATION>?
+route: How do I get at <TIME>?
+plane: when did the plane leave at <DAY> from <AIRPORT>?
+plane: when did the plane leave from <AIRPORT>?
+plane: when did the plane leave at <DAY>?
+schedule: what class do I have on <DAY> at <TIME>?
+schedule: what class do I have at <TIME>?
+schedule: what class do I have on <DAY>?
