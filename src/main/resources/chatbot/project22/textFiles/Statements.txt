@@ -1,6 +1,18 @@
 Food: On <DAY> I will eat <*>
 Drink: On <DAY> I will drink <*>
-Schedule: On <DAY> at <TIME> I will have <*>
 SpeedLimit: On the <ROAD> the speed limit is <*>
 Train: The train to <CITY> leaves at <*>
 Age: In <YEAR> I was <*> years old
+route: You go from <LOCATION> to <LOCATION> at <TIME> like this: <*>
+route: You go from <LOCATION> to <LOCATION> like this: <*>
+route: You go from <LOCATION> at <TIME> like this: <*>
+route: You go to <LOCATION> at <TIME> like this: <*>
+route: You go from <LOCATION> like this: <*>
+route: You go to <LOCATION> like this: <*>
+route: You go at <TIME> like this: <*>
+plane: at <DAY> from <AIRPORT> the plane left at <*>
+plane: from <AIRPORT> the plane left at <*>
+plane: at <DAY> the plane left at <*>
+schedule: at <TIME> on <DAY> I will have <*>
+schedule: at <TIME> I will have <*>
+schedule: on <DAY> I will have <*>
