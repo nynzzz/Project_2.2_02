@@ -14,6 +14,7 @@ public class StringAttributes {
      */
     public static boolean stringsEqual(UserCommand input, String template){
         String question = input.command.toLowerCase();
+        String copyQuestion = question;
         template = template.toLowerCase();
         while (template.contains("<")) {
             int beginBracketIndex = firstSlot(template);
@@ -22,6 +23,7 @@ public class StringAttributes {
             template = template.substring(endBracketIndex + 1);
             if (question.contains(pattern)){
                 question = question.replace(pattern, "*");
+                copyQuestion = copyQuestion.replace(pattern, "");
             }
             else {
                 return false;
@@ -100,7 +102,7 @@ public class StringAttributes {
      * @param input is the arraylist that will be transformed
      * @return the newly created string
      */
-    public static String listToString(ArrayList<String> input) {
+    public static String listToEnteredString(ArrayList<String> input) {
         StringBuilder output = new StringBuilder();
         for (int i = 0; i < input.size(); i++) {
             output.append(input.get(i));
@@ -109,4 +111,73 @@ public class StringAttributes {
         }
         return output.toString();
     }
+
+    public static boolean isSlot(String string) {
+        return (string.charAt(0) == '<' && string.charAt(string.length() - 1) == '>');
+    }
+
+    public static String ListToString(ArrayList<String> input) {
+        String output = "";
+        for (String string: input) {
+            output += string + " ";
+        }
+        return output.strip();
+    }
+
+    public static String getAllOptions(String input, String topic) {
+        boolean question = false;
+        if (input.charAt(input.length() - 1) == '?') {
+            input = input.substring(0, input.length() - 1);
+            question = true;
+        }
+        ArrayList<String> split = splitStringToWords(input, " ");
+        ArrayList<String> text = new ArrayList<>();
+        ArrayList<String> combinations = new ArrayList<>();
+        for (int i = 0; i < split.size(); i++) {
+            if (isSlot(split.get(i)) && !split.get(i).equals("<*>")){
+                combinations.add(text.remove(text.size() - 1) + " " +split.get(i));
+                text.add("*");
+            }
+            else {
+                text.add(split.get(i));
+            }
+        }
+        String sentence = ListToString(text);
+        ArrayList<String> options = recursiveOptions(0,combinations, sentence, topic, question);
+        options.sort((s1, s2) -> s2.length() - s1.length());
+        return listToEnteredString(options);
+    }
+
+    public static ArrayList<String> recursiveOptions(int start, ArrayList<String> combinations, String sentence, String topic, boolean question) {
+        ArrayList<String> output = new ArrayList<>();
+        for (int i = start; i < combinations.size(); i++) {
+            String temp = insertPart(sentence, combinations.get(i));
+            String finished = finish(temp, topic, question);
+            output.add(finished);
+            if (start + 1 != combinations.size()) {
+                output.addAll(recursiveOptions(i + 1,combinations, temp, topic,question));
+            }
+        }
+        return output;
+    }
+
+    public static String insertPart(String sentence, String part) {
+        return  sentence.replaceFirst("\\*",part);
+    }
+
+    public static String finish(String sentence, String topic, boolean question) {
+        sentence = sentence.replaceAll("\\*","").strip();
+        sentence= sentence.replaceAll("\\s+"," ");
+        for (int i = 0; i <sentence.length(); i++) {
+            if (sentence.charAt(i) == '>' && sentence.charAt(i-1) == '<') {
+                sentence = sentence.replaceAll("<>", "<*>");
+                break;
+            }
+        }
+        if (question)
+            return topic + ": " + sentence +"?";
+        else
+            return topic + ": " + sentence +"";
+    }
+
 }

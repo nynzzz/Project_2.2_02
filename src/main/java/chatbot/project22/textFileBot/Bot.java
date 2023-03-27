@@ -1,8 +1,7 @@
 package chatbot.project22.textFileBot;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class Bot {
 
@@ -44,7 +43,7 @@ public class Bot {
             return newSkillSteps();
         }
         String s = specialResponse(input);
-        if (!Objects.equals(s, ""))
+        if (!s.equals(""))
             return s;
         if (StringAttributes.isQuestion(input))
             return handleQuestion(input);
@@ -65,10 +64,10 @@ public class Bot {
             this.userCommand.newSkill = true;
             return "Follow these 4 steps to create a new skill, type stop whenever you want to stop adding the skill\n1) What is the topic of your skill?";
         } else if (input.equalsIgnoreCase("show all questions")) {
-            return StringAttributes.listToString(textFileEditor.readFile(QUESTION_FILE_PATH));
+            return StringAttributes.listToEnteredString(textFileEditor.readFile(QUESTION_FILE_PATH));
         }
         else if (input.equalsIgnoreCase("show all statements")) {
-            return StringAttributes.listToString(textFileEditor.readFile(STATEMENT_FILE_PATH));
+            return StringAttributes.listToEnteredString(textFileEditor.readFile(STATEMENT_FILE_PATH));
         }
         return "";
     }
@@ -81,12 +80,7 @@ public class Bot {
         String s = "";
         if (this.stepCounter == 4) {
             // store new information
-            String topic = this.userCommand.newSkillInformation.get(0);
-            String question = topic + ": " + this.userCommand.newSkillInformation.get(1);
-            String statement = topic + ": " + this.userCommand.newSkillInformation.get(3);
-            textFileEditor.addLineToFile(QUESTION_FILE_PATH, question);
-            textFileEditor.addLineToFile(STATEMENT_FILE_PATH, statement);
-            textFileEditor.createNewSkillFile(SKILL_FILE_PATH + topic + ".txt", this.userCommand.newSkillInformation.get(2));
+            addNewSkill(this.userCommand.newSkillInformation.get(0), this.userCommand.newSkillInformation.get(1), this.userCommand.newSkillInformation.get(3), this.userCommand.newSkillInformation.get(2));
             this.userCommand.newSkill = false;
             return "new skill has been saved";
         }
@@ -103,6 +97,12 @@ public class Bot {
         return s;
     }
 
+    public void addNewSkill(String topic, String question, String statement, String content) {
+        this.textFileEditor.addLineToFile(QUESTION_FILE_PATH, StringAttributes.getAllOptions(question, topic.toLowerCase()));
+        this.textFileEditor.addLineToFile(STATEMENT_FILE_PATH, StringAttributes.getAllOptions(statement, topic.toLowerCase()));
+        this.textFileEditor.createNewSkillFile(SKILL_FILE_PATH + topic + ".txt", content);
+    }
+
     /**
      * This method is used to generate the answer if the input from the user was a question
      * @return the answer the computer will give
@@ -115,6 +115,7 @@ public class Bot {
         for (String question: questions) {
             ArrayList<String> questionSplit = splitAtFirst(question, ':');
             if (StringAttributes.stringsEqual(this.userCommand, questionSplit.get(1).strip())) {
+//                System.out.println(question);
                 name = questionSplit.get(0);
                 template = questionSplit.get(1).strip();
                 break;
@@ -142,8 +143,10 @@ public class Bot {
             for (String statement : statements) {
                 ArrayList<String> statementSplit = splitAtFirst(statement, ':');
                 if (StringAttributes.stringsEqual(this.userCommand, statementSplit.get(1).strip())) {
+                    System.out.println(statement);
                     name = statementSplit.get(0);
                     template = statementSplit.get(1).strip();
+                    break;
                 }
             }
             if (name.isEmpty()) {
@@ -171,7 +174,7 @@ public class Bot {
                 ArrayList<String> actions = textFileEditor.readFile(SKILL_FILE_PATH + userCommand.tempSkillName + ".txt");
                 actions.remove(userCommand.actionIndex);
                 actions.add(userCommand.tempAction);
-                textFileEditor.rewriteFile(SKILL_FILE_PATH + userCommand.tempSkillName + ".txt", StringAttributes.listToString(actions));
+                textFileEditor.rewriteFile(SKILL_FILE_PATH + userCommand.tempSkillName + ".txt", StringAttributes.listToEnteredString(actions));
                 userCommand.changingAction = false;
                 return "new information has been stored";
             }
@@ -193,19 +196,48 @@ public class Bot {
      */
     public String createAnswer(ArrayList<String> actions, ArrayList<String> slots, ArrayList<String> slotValues) {
         String response = actions.remove(0);
-        StringBuilder combined = new StringBuilder();
+        ArrayList<String> together = new ArrayList<>();
         for (int i = 0; i < slots.size(); i++){
-            response = response.replace(slots.get(i), slotValues.get(i));
-            combined.append(slots.get(i)).append(" ").append(slotValues.get(i)).append(" ");
+            response = response.replaceFirst(slots.get(i), slotValues.get(i));
+            together.add(slots.get(i) + " " + slotValues.get(i));
         }
-        combined = new StringBuilder(combined.toString().strip());
+        String bestAction = "";
+        int max = 0;
         for (String action: actions) {
-            ArrayList<String> split = splitAtFirst(action, ':');
-            if (split.get(0).equalsIgnoreCase(combined.toString())){
-                return response.replace("<*>", split.get(1).strip());
+            int count = 0;
+            String template = action;
+            for (String string : together) {
+                if (template.contains(string)) {
+                    count++;
+                    template = template.replaceFirst(string, "");
+                }
+                if(count > max) {
+                    bestAction = template;
+                    max = count;
+                }
+            }
+        }
+        if (max > 0) {
+            if (!bestAction.contains("<")) {
+                int index = bestAction.indexOf(':');
+                String answer = bestAction.substring(index + 1);
+                response = response.replace("<*>", answer.strip());
+                return removeRubbish(response);
             }
         }
         return "I dont know the answer to that question, please change the variables";
+    }
+
+    public String removeRubbish(String response) {
+        while (response.contains("<")) {
+            int index = StringAttributes.firstSlot(response);
+            int index2 = StringAttributes.endSlot(response);
+            String a = response.substring(0, index).strip();
+            String b = response.substring(index2 + 1);
+            response = a.substring(0, a.lastIndexOf(" ")) + b;
+            System.out.println(b);
+        }
+        return response;
     }
 
     /**

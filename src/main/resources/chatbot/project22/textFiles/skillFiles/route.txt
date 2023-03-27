@@ -1,0 +1,3 @@
+<*>
+<LOCATION> maastricht: take the train
+<LOCATION> maastricht <TIME> 9: you fly
