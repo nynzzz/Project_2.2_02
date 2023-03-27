@@ -1,24 +1,33 @@
 package chatbot.project22.GUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.swing.event.ChangeListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class seYamlAddScene extends Application{
+public class Screen extends Application{
 
     private Stage stage;
-    private Button load = new Button("Load Rules");
+    private Button load = new Button("Lood Rules");
     private Button add = new Button("Add Rules");
     private Button delete = new Button("Delete Rules");
     private Button generate = new Button("Generate Rules");
@@ -34,75 +43,19 @@ public class seYamlAddScene extends Application{
     private VBox rule;
 
 
-    private Label name = new Label("Name");
-    private Label description = new Label("Description");
-    private Label condition = new Label("Condition");
-    private Label action = new Label("Action");
+    private Label name = new Label("Name"); 
+    private Label description = new Label("Description"); 
+    private Label condition = new Label("Condition"); 
+    private Label action = new Label("Action"); 
 
-    public Scene skillEditorYamlAdd(){
-//        ------------------Egor-------------Start----
-
-        // Create the input fields for Question, Statement, and Skill
-        Label SkillLabel = new Label("New Skill:");
-        Label SkillExample = new Label("Example: \n " +
-                "name: No Lecture on Saturday \n" +
-                "description: this rule is triggered when is saturday and is type schedule \n" +
-                "priority: 1 \n" +
-                "condition: " + "DAY.equals(\"Saturday\")"  + "&& SCHEDULE !=null \n" +
-                "System.out.println(\"No Lecture on Saturday\");");
-        Label emptylabel = new Label("    ");
-        Label emptylabel2 = new Label("    ");
-        TextArea SkillInput = new TextArea();
-        SkillInput.setPrefRowCount(5);
-        VBox questionLayout = new VBox(SkillLabel, emptylabel, SkillExample, emptylabel2, SkillInput);
-
-        // Create back button to return to the previous scene
-        Button backButton = new Button("Back");
-        backButton.setOnAction(event -> {
-            skillEditorYAML.stage.setScene(skillEditorYAML.scene0);
-        });
-
-        // Create save button to save the input fields to separate text files
-        Button saveButton = new Button("Save");
-        saveButton.setOnAction(event -> {
-
-
-            try {
-                //TODO: add path to the yaml file with skills
-                // Append the contents of the input fields to separate text files
-                FileWriter questionWriter = new FileWriter("filepath", true);
-                questionWriter.write("\n" + SkillInput.getText());
-                questionWriter.close();
-
-                // Create a popup to show that changes were saved
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Changes saved");
-                alert.setHeaderText(null);
-                alert.setContentText("New rule has been saved.");
-                alert.showAndWait();
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
-        // Create a layout to hold the input fields, buttons, and labels
-        VBox layout2 = new VBox(20, questionLayout, backButton, saveButton);
-
-        // -------------------------------Egor---------end------------------------
-
-
-
-
+    public Screen(){
 
         stage = new Stage();
         stage.setTitle("Chat DACS 2023");
         main = new VBox(20);
-        main.getChildren().addAll(mainArea,SkillExample);
+        main.getChildren().add(mainArea);
         main.setAlignment(Pos.CENTER);
 
-        mainArea.setTranslateY(50);
-        SkillExample.setTranslateX(-55);
-        SkillExample.setTranslateY(60);
 
         rule = new VBox(20);
         rule.getChildren().add(ruleArea);
@@ -171,19 +124,18 @@ public class seYamlAddScene extends Application{
         actionArea.setTranslateY(150);
 
         main.setTranslateX(200);  
-        main.setTranslateY(200);
+        main.setTranslateY(300); 
 
     
 
 
-        button.getChildren().addAll(load, add, delete, generate,backButton);
+        button.getChildren().addAll(load, add, delete, generate);
         button.setAlignment(Pos.TOP_RIGHT);
 
         load.setTranslateX(650); 
         add.setTranslateX(650); 
         delete.setTranslateX(650);   
         generate.setTranslateX(650);
-        backButton.setTranslateX(650);
         //refresh.setTranslateX(610);
         //backStartScreen.setTranslateX(610);
 
@@ -213,12 +165,14 @@ public class seYamlAddScene extends Application{
         parent.getChildren().add(actionArea);
         //parent.getChildren().add(all);
         parent.getChildren().add(button);
-        Scene scene1 = new Scene(parent, 800, 600);
-       // stage.setScene(scene1);
 
-        //stage.show();
-        return scene1;
+        Scene scene1 = new Scene(parent, 800, 600);
+        stage.setScene(scene1);
+
+        stage.show();
     }
+
+
 
     @Override
     public void start(Stage arg0) throws Exception {
@@ -226,9 +180,9 @@ public class seYamlAddScene extends Application{
         //throw new UnsupportedOperationException("Unimplemented method 'start'");
     }
 
-  /*
+    
     public static void main(String[] args){
         launch();
     }
-   */
+    
 }
