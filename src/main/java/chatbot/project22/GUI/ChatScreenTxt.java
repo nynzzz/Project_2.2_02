@@ -21,10 +21,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-import javax.swing.event.ChangeListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ChatScreen extends Application{
+public class ChatScreenTxt extends Application{
 
     private final Stage stage;
     private final VBox box = new VBox();
@@ -42,7 +41,7 @@ public class ChatScreen extends Application{
 
     private Bot textFileBot;
 
-    public ChatScreen() {
+    public ChatScreenTxt() {
         this.textFileBot = new Bot();
 
         box.getStyleClass().add("chatbox");
@@ -187,7 +186,7 @@ public class ChatScreen extends Application{
 
         refresh.setOnAction(event -> {
             stage.close();
-            ChatScreen cs = new ChatScreen();
+            ChatScreenTxt cs = new ChatScreenTxt();
         });
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -277,7 +276,7 @@ public class ChatScreen extends Application{
         parent.getChildren().add(v);
         Scene scene1 = new Scene(parent, 700, 400);
         scene1.setFill(colorBack);
-        scene1.getStylesheets().add(ChatScreen.class.getResource("chat.css").toExternalForm());
+        scene1.getStylesheets().add(ChatScreenTxt.class.getResource("chat.css").toExternalForm());
         stage.setScene(scene1);
 
         stage.show();

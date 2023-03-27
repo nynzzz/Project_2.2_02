@@ -275,21 +275,28 @@ public class skillEditorTxt extends Application {
 
                 //face detection
                 //loading opencv libraries
-                nu.pattern.OpenCV.loadShared();
-                FaceDetection faceDetection=new FaceDetection();
-                faceDetection.startCamera();
+//                nu.pattern.OpenCV.loadShared();
+//                FaceDetection faceDetection=new FaceDetection();
+//                faceDetection.startCamera();
 
                 Bot bot = new Bot();
-                bot.addNewSkill(skillName.getText(), questionInput.getText(), statementInput.getText(), skillInput.getText());
-//                try {
-//                    // Append the contents of the input fields to separate text files
-//                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
-//                    questionWriter.write("\n" + questionInput.getText());
-//                    questionWriter.close();
-//
-//                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
-//                    statementWriter.write("\n" + statementInput.getText());
-//                    statementWriter.close();
+//                System.out.println("Statement: " + statementInput.getText());
+                String stat = statementInput.getText();
+                String quest = questionInput.getText();
+                bot.addNewSkill(skillName.getText(), quest, stat, skillInput.getText());
+                try {
+                    // Append the contents of the input fields to separate text files
+                    FileWriter questionWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Questions.txt", true);
+                    questionWriter.write(questionInput.getText());
+                    questionWriter.close();
+
+                    FileWriter statementWriter = new FileWriter("src/main/resources/chatbot/project22/textFiles/Statements.txt", true);
+                    statementWriter.write(statementInput.getText());
+                    statementWriter.close();
+
+                } catch (IOException ex) {
+//                        ex.printStackTrace();
+                    }
 //
 //                    // Create a file object for the skill file
 //                    File skillFile = new File("src/main/resources/chatbot/project22/textFiles/skillFiles/" + skill + ".txt");
@@ -313,6 +320,12 @@ public class skillEditorTxt extends Application {
 //                } catch (IOException ex) {
 //                    ex.printStackTrace();
 //                }
+//                 Create a popup to show that changes were saved
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Changes saved");
+                        alert.setHeaderText(null);
+                        alert.setContentText("New rule has been saved.");
+                        alert.showAndWait();
 
             });
 
