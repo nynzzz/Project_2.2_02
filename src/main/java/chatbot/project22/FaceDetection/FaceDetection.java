@@ -13,8 +13,9 @@ import java.awt.*;
 
 public class FaceDetection extends JFrame {
 
+
     //camera screen --> Camera will be shown in the JLabel component
-    private JLabel cameraScreen;
+    final private JLabel cameraScreen;
 
 
     //VideoCapture class object to start the camera
@@ -23,6 +24,8 @@ public class FaceDetection extends JFrame {
     //Mat class object to store images as matrices
     private Mat frameMat = new Mat();
 
+    final private Timer timer;
+    public boolean faceDetected= false;
 
     public FaceDetection(){
         //design ui
@@ -38,6 +41,29 @@ public class FaceDetection extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+
+        // Create a timer with a 2-second delay
+        timer = new Timer(2000, e -> {
+            // not showing the window
+            setVisible(false);
+            //closing the frame
+            dispose();
+            //closing the face detection
+            faceDetected=true;
+
+        });
+    }
+
+    private static void run() {
+        FaceDetection faceDetection = new FaceDetection();
+        //start camera in thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                faceDetection.startCamera();
+            }
+        }).start();
+
     }
 
     //creating the camera
@@ -46,7 +72,7 @@ public class FaceDetection extends JFrame {
         frameMat=new Mat();
         byte[] imageData;
         ImageIcon icon;
-        while (true){
+        while (!faceDetected){
 
             //read image (video frames) from the video stream
             // stores the read to matrix
@@ -68,6 +94,13 @@ public class FaceDetection extends JFrame {
             cascadeFaceClassifier.detectMultiScale(grayMat,faceDetections);
 
             System.out.println(String.format("Detected faces: %d",faceDetections.toArray().length));
+
+            //when a face is detected
+            if (faceDetections.toArray().length>0){
+                // Start the timer to delay the close operation
+                timer.start();
+
+            }
             for (Rect rect: faceDetections.toArray()){
                 //painting rectangles on the detected faces
                 Imgproc.rectangle(frameMat,new org.opencv.core.Point(rect.x, rect.y),new Point(rect.x+ rect.width, rect.y+rect.height),new Scalar(0,0,255),3);
@@ -114,20 +147,7 @@ public class FaceDetection extends JFrame {
     public static void main(String[] args) {
         //loading opencv libraries
         nu.pattern.OpenCV.loadShared();
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                FaceDetection faceDetection=new FaceDetection();
-                //start camera in thread
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        faceDetection.startCamera();
-                    }
-                }).start();
-
-            }
-        });
+        EventQueue.invokeLater(FaceDetection::run);
 
 
     }
