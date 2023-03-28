@@ -31,6 +31,7 @@ public class skillEditorTxt extends Application {
 
     public skillEditorTxt(){
         stage = new Stage();
+        stage.setResizable(false);
         this.stage = stage;
 
         layout0 = new VBox(20);

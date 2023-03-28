@@ -30,6 +30,7 @@ public class StartScreen extends Application {
 
     public StartScreen() {
         Stage primaryStage = new Stage();
+        primaryStage.setResizable(false);
 
         VBox layout = new VBox(20);
         Button b = new Button("Start");
