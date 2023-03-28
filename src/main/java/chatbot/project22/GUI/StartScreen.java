@@ -30,6 +30,7 @@ public class StartScreen extends Application {
 
     public StartScreen() {
         Stage primaryStage = new Stage();
+        primaryStage.setResizable(false);
 
         VBox layout = new VBox(20);
         Button b = new Button("Start");
@@ -68,7 +69,6 @@ public class StartScreen extends Application {
         skillEditor.setPrefWidth(120);
 
         // yanlBot radio button
-
         RadioButton yanlBotRadioButton = new RadioButton("yamlBot");
         yanlBotRadioButton.setStyle("-fx-font-size:20");
         yanlBotRadioButton.setFont(new Font(20));
@@ -85,17 +85,18 @@ public class StartScreen extends Application {
         b.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+
                 if (txtBotRadioButton.isSelected()) {
-                    ChatScreen chat = new ChatScreen();
+                    ChatScreenTxt se = new ChatScreenTxt();
                     primaryStage.close();
                 } else if (yanlBotRadioButton.isSelected()) {
-                    //todo: add yamlbot
-                    ChatScreen chat = new ChatScreen();
-                    primaryStage.close();
+                   //TODO: chat screen for yaml
                 }
-                else {
+                else{
+                    // Create a popup to show that a bot needs to be chosen first
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("command needed");
+                    alert.setTitle("Changes saved");
+                    alert.setHeaderText(null);
                     alert.setContentText("Please choose a bot first!");
                     alert.showAndWait();
                 }
@@ -108,8 +109,12 @@ public class StartScreen extends Application {
             public void handle(ActionEvent e) {
                 if (txtBotRadioButton.isSelected()) {
                     skillEditorTxt se = new skillEditorTxt();
+                    primaryStage.close();
+
                 } else if (yanlBotRadioButton.isSelected()) {
                     skillEditorYAML se = new skillEditorYAML();
+                    primaryStage.close();
+
                 }
                 else{
                     // Create a popup to show that a bot needs to be chosen first
@@ -119,7 +124,6 @@ public class StartScreen extends Application {
                     alert.setContentText("Please choose a bot first!");
                     alert.showAndWait();
                 }
-               // primaryStage.close();
             }
         });
 

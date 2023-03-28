@@ -23,10 +23,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-import javax.swing.event.ChangeListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ChatScreen extends Application{
+public class ChatScreenTxt extends Application{
 
     private final Stage stage;
     private final VBox box = new VBox();
@@ -44,7 +43,7 @@ public class ChatScreen extends Application{
 
     private Bot textFileBot;
 
-    public ChatScreen() {
+    public ChatScreenTxt() {
         this.textFileBot = new Bot();
 
         box.getStyleClass().add("chatbox");
@@ -55,6 +54,7 @@ public class ChatScreen extends Application{
         txt.setTranslateY(370);
         txt.setTranslateX(0);
         txt.setPrefWidth(610);
+        stage.setResizable(false);
 
         messageArea = new VBox();
         // messageArea.setFillWidth(true);
@@ -78,7 +78,7 @@ public class ChatScreen extends Application{
             if (!messageText.isEmpty()) {
                 Text message = new Text(messageText);
                 message.setFont(Font.font(messageFont, messageFontSize));
-                message.setTextAlignment(TextAlignment.CENTER);
+                message.setTextAlignment(TextAlignment.RIGHT);
                 message.setWrappingWidth(450);
 
                 HBox chatBubble = new HBox();
@@ -102,7 +102,7 @@ public class ChatScreen extends Application{
                 String responseText = textFileBot.generateResponse(messageText);
                 Text responseMessage = new Text(responseText);
                 responseMessage.setFont(Font.font(messageFont, messageFontSize));
-                responseMessage.setTextAlignment(TextAlignment.CENTER);
+                responseMessage.setTextAlignment(TextAlignment.LEFT);
                 responseMessage.setWrappingWidth(450);
         
                 HBox responseBubble = new HBox();
@@ -139,7 +139,6 @@ public class ChatScreen extends Application{
         root.setSpacing(10);
         root.setPadding(new Insets(10));
         root.getChildren().addAll(send,backStartScreen);
-
 
         Image menuIcon = new Image("blue_re-pict-house-base.png_64.png");
         ImageView menuView = new ImageView(menuIcon);
@@ -197,7 +196,7 @@ public class ChatScreen extends Application{
 
         refresh.setOnAction(event -> {
             stage.close();
-            ChatScreen cs = new ChatScreen();
+            ChatScreenTxt cs = new ChatScreenTxt();
         });
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -208,7 +207,7 @@ public class ChatScreen extends Application{
                     if (!messageText.isEmpty()) {
                         Text message = new Text(messageText);
                         message.setFont(Font.font(messageFont, messageFontSize));
-                        message.setTextAlignment(TextAlignment.LEFT);
+                        message.setTextAlignment(TextAlignment.RIGHT);
                         message.setWrappingWidth(450);
 
                         HBox chatBubble = new HBox();
@@ -270,7 +269,6 @@ public class ChatScreen extends Application{
         refresh.setTranslateX(610);
         backStartScreen.setTranslateX(610);
         backStartScreen.setTranslateY(-180);
-
         //Background color
         Color colorBack =  Color.rgb(240,248,255);
         BackgroundFill backgroundFill = new BackgroundFill(colorBack, CornerRadii.EMPTY, Insets.EMPTY);
@@ -288,7 +286,7 @@ public class ChatScreen extends Application{
         parent.getChildren().add(v);
         Scene scene1 = new Scene(parent, 700, 400);
         scene1.setFill(colorBack);
-        scene1.getStylesheets().add(ChatScreen.class.getResource("chat.css").toExternalForm());
+        scene1.getStylesheets().add(ChatScreenTxt.class.getResource("chat.css").toExternalForm());
         stage.setScene(scene1);
 
         stage.show();

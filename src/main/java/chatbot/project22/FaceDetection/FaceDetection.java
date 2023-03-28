@@ -8,7 +8,7 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
-import java.awt.*;
+
 
 
 public class FaceDetection extends JFrame {
@@ -46,38 +46,28 @@ public class FaceDetection extends JFrame {
         timer = new Timer(2000, e -> {
             // not showing the window
             setVisible(false);
-            //closing the frame
-            dispose();
+//            //closing the frame
+//            dispose();
             //closing the face detection
-            faceDetected=true;
+            faceDetected = true;
             //closing the camera
             videoCapture.release();
         });
     }
 
-    private static void run() {
-        FaceDetection faceDetection = new FaceDetection();
-        //start camera in thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                faceDetection.startCamera();
-            }
-        }).start();
-
-    }
 
     //creating the camera
-    public void startCamera(){
-        videoCapture=new VideoCapture(0);
-        frameMat=new Mat();
+    public static void startCamera(){
+        FaceDetection faceDetection=new FaceDetection();
+        faceDetection.videoCapture=new VideoCapture(0);
+        faceDetection.frameMat=new Mat();
         byte[] imageData;
         ImageIcon icon;
-        while (!faceDetected){
+        while (!faceDetection.faceDetected){
 
             //read image (video frames) from the video stream
             // stores the read to matrix
-            videoCapture.read(frameMat);
+            faceDetection.videoCapture.read(faceDetection.frameMat);
 
             //using pre-trained face detection classifier
             CascadeClassifier cascadeFaceClassifier=new CascadeClassifier("xmls/lbpcascade_frontalface.xml");
@@ -88,23 +78,23 @@ public class FaceDetection extends JFrame {
             // Convert the frame to grayscale
             //the Viola-Jones algorithm for face detection works better on grayscale images.
             Mat grayMat = new Mat();
-            Imgproc.cvtColor(frameMat, grayMat, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.cvtColor(faceDetection.frameMat, grayMat, Imgproc.COLOR_BGR2GRAY);
 
             //detect faces in the frame
             MatOfRect faceDetections= new MatOfRect(); //faces that were detected
             cascadeFaceClassifier.detectMultiScale(grayMat,faceDetections);
 
-            System.out.println(String.format("Detected faces: %d",faceDetections.toArray().length));
+            System.out.printf("Detected faces: %d%n",faceDetections.toArray().length);
 
             //when a face is detected
             if (faceDetections.toArray().length>0){
                 // Start the timer to delay the close operation
-                timer.start();
+                faceDetection.timer.start();
 
             }
             for (Rect rect: faceDetections.toArray()){
                 //painting rectangles on the detected faces
-                Imgproc.rectangle(frameMat,new org.opencv.core.Point(rect.x, rect.y),new Point(rect.x+ rect.width, rect.y+rect.height),new Scalar(0,0,255),3);
+                Imgproc.rectangle(faceDetection.frameMat,new org.opencv.core.Point(rect.x, rect.y),new Point(rect.x+ rect.width, rect.y+rect.height),new Scalar(0,0,255),3);
 
                 //detecting eyes for each face
                 //the eye detection is applied to the region of interest (each detected face)
@@ -113,14 +103,9 @@ public class FaceDetection extends JFrame {
                 MatOfRect eyeDetections = new MatOfRect();
                 cascadeEyesClassifier.detectMultiScale(faceROI,eyeDetections);
 
-                for (Rect eye : eyeDetections.toArray()){
-                    Point center= new Point(rect.x+eye.width/2, rect.y+eye.height/2);
-                    int radius =(int)Math.round((eye.width+eye.height)*0.25);
-                    //Imgproc.circle(frameMat,center,radius,new Scalar(0, 255, 0),3);
-                }
                 for (Rect eyeRect: eyeDetections.toArray()){
                     //painting rectangles on the detected eyes
-                    Imgproc.rectangle(frameMat, new Point(rect.x+eyeRect.x, rect.y+eyeRect.y),
+                    Imgproc.rectangle(faceDetection.frameMat, new Point(rect.x+eyeRect.x, rect.y+eyeRect.y),
                             new Point(rect.x+eyeRect.x+eyeRect.width, rect.y+eyeRect.y+eyeRect.height),
                             new Scalar(0,255,0),3);
                 }
@@ -131,11 +116,11 @@ public class FaceDetection extends JFrame {
 
             //convert matrix to byte
             final MatOfByte buffer=new MatOfByte();
-            Imgcodecs.imencode(".jpg",frameMat,buffer);
+            Imgcodecs.imencode(".jpg",faceDetection.frameMat,buffer);
             imageData=buffer.toArray();
             //add to JLabel
             icon = new ImageIcon(imageData);
-            cameraScreen.setIcon(icon);
+            faceDetection.cameraScreen.setIcon(icon);
             //capture and save to file
             // Wait for 30 milliseconds before capturing the next frame
             try {
@@ -148,8 +133,8 @@ public class FaceDetection extends JFrame {
     public static void main(String[] args) {
         //loading opencv libraries
         nu.pattern.OpenCV.loadShared();
-        EventQueue.invokeLater(FaceDetection::run);
-
+        //EventQueue.invokeLater(FaceDetection::run);
+        startCamera();
 
     }
 }
