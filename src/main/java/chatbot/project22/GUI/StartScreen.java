@@ -87,6 +87,7 @@ public class StartScreen extends Application {
 
                 if (txtBotRadioButton.isSelected()) {
                     ChatScreenTxt se = new ChatScreenTxt();
+                    primaryStage.close();
                 } else if (yanlBotRadioButton.isSelected()) {
                    //TODO: chat screen for yaml
                 }
@@ -107,8 +108,12 @@ public class StartScreen extends Application {
             public void handle(ActionEvent e) {
                 if (txtBotRadioButton.isSelected()) {
                     skillEditorTxt se = new skillEditorTxt();
+                    primaryStage.close();
+
                 } else if (yanlBotRadioButton.isSelected()) {
                     skillEditorYAML se = new skillEditorYAML();
+                    primaryStage.close();
+
                 }
                 else{
                     // Create a popup to show that a bot needs to be chosen first
