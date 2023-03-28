@@ -283,7 +283,7 @@ public class skillEditorTxt extends Application {
                 String skill = skillName.getText();
 
                 //face detection
-                //loading opencv libraries
+//                loading opencv libraries
                 nu.pattern.OpenCV.loadShared();
                 FaceDetection.startCamera();
 

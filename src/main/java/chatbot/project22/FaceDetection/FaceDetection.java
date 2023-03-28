@@ -46,8 +46,8 @@ public class FaceDetection extends JFrame {
         timer = new Timer(2000, e -> {
             // not showing the window
             setVisible(false);
-            //closing the frame
-            dispose();
+//            //closing the frame
+//            dispose();
             //closing the face detection
             faceDetected = true;
             //closing the camera
