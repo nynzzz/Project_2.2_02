@@ -36,7 +36,7 @@ public class Bot {
     public String generateResponse(String input) {
         if (userCommand.newSkill) {
             if (input.equalsIgnoreCase("stop")) {
-                this.userCommand.newSkill = false;
+                this.userCommand = new UserCommand();
                 return "stopped creating a new skill";
             }
             this.userCommand.newSkillInformation.add(input);

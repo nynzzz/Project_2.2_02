@@ -54,6 +54,7 @@ public class ChatScreenTxt extends Application{
         txt.setTranslateY(370);
         txt.setTranslateX(0);
         txt.setPrefWidth(610);
+        stage.setResizable(false);
 
         messageArea = new VBox();
         // messageArea.setFillWidth(true);

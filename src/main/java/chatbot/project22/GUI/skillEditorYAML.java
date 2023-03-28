@@ -30,6 +30,7 @@ public class skillEditorYAML extends Application {
     public skillEditorYAML(){
         stage = new Stage();
         this.stage = stage;
+        stage.setResizable(false);
 
         layout0 = new VBox(20);
         layout1 = new VBox(20);
