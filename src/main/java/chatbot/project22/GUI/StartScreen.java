@@ -69,7 +69,7 @@ public class StartScreen extends Application {
         skillEditor.setPrefWidth(120);
 
         // yanlBot radio button
-        RadioButton yanlBotRadioButton = new RadioButton("yamlBot");
+        RadioButton yanlBotRadioButton = new RadioButton("Easy Rules");
         yanlBotRadioButton.setStyle("-fx-font-size:20");
         yanlBotRadioButton.setFont(new Font(20));
         yanlBotRadioButton.setTranslateX(147);
