@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -36,7 +38,7 @@ public class ChatScreenTxt extends Application{
     private Button start = new Button("Start");
     private Button stop = new Button("Stop");
     private Button refresh = new Button("Refresh");
-    private Button backStartScreen = new Button("Restart");
+    private Button backStartScreen = new Button("");
 
 
     private Bot textFileBot;
@@ -75,7 +77,7 @@ public class ChatScreenTxt extends Application{
             if (!messageText.isEmpty()) {
                 Text message = new Text(messageText);
                 message.setFont(Font.font(messageFont, messageFontSize));
-                message.setTextAlignment(TextAlignment.CENTER);
+                message.setTextAlignment(TextAlignment.RIGHT);
                 message.setWrappingWidth(450);
 
                 HBox chatBubble = new HBox();
@@ -99,7 +101,7 @@ public class ChatScreenTxt extends Application{
                 String responseText = textFileBot.generateResponse(messageText);
                 Text responseMessage = new Text(responseText);
                 responseMessage.setFont(Font.font(messageFont, messageFontSize));
-                responseMessage.setTextAlignment(TextAlignment.CENTER);
+                responseMessage.setTextAlignment(TextAlignment.LEFT);
                 responseMessage.setWrappingWidth(450);
         
                 HBox responseBubble = new HBox();
@@ -136,6 +138,13 @@ public class ChatScreenTxt extends Application{
         root.setSpacing(10);
         root.setPadding(new Insets(10));
         root.getChildren().addAll(send,backStartScreen);
+
+        Image menuIcon = new Image("blue_re-pict-house-base.png_64.png");
+        ImageView menuView = new ImageView(menuIcon);
+        menuView.setFitHeight(20);
+        menuView.setFitWidth(20);
+        menuView.setPreserveRatio(true);
+        backStartScreen.setGraphic(menuView);
 
         backStartScreen.setOnAction(e->{
             stage.close();
@@ -197,7 +206,7 @@ public class ChatScreenTxt extends Application{
                     if (!messageText.isEmpty()) {
                         Text message = new Text(messageText);
                         message.setFont(Font.font(messageFont, messageFontSize));
-                        message.setTextAlignment(TextAlignment.LEFT);
+                        message.setTextAlignment(TextAlignment.RIGHT);
                         message.setWrappingWidth(450);
 
                         HBox chatBubble = new HBox();
@@ -258,7 +267,7 @@ public class ChatScreenTxt extends Application{
         stop.setTranslateX(610);
         refresh.setTranslateX(610);
         backStartScreen.setTranslateX(610);
-
+        backStartScreen.setTranslateY(-180);
         //Background color
         Color colorBack =  Color.rgb(240,248,255);
         BackgroundFill backgroundFill = new BackgroundFill(colorBack, CornerRadii.EMPTY, Insets.EMPTY);
