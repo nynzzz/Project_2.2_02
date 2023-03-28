@@ -22,7 +22,7 @@ public class StringAttributes {
             String pattern = template.substring(0, beginBracketIndex);
             template = template.substring(endBracketIndex + 1);
             if (question.contains(pattern)){
-                question = question.replace(pattern, "*");
+                question = question.replaceFirst(pattern, "*");
                 copyQuestion = copyQuestion.replace(pattern, "");
             }
             else {
