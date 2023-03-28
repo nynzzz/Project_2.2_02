@@ -284,9 +284,8 @@ public class skillEditorTxt extends Application {
 
                 //face detection
                 //loading opencv libraries
-//                nu.pattern.OpenCV.loadShared();
-//                FaceDetection faceDetection=new FaceDetection();
-//                faceDetection.startCamera();
+                nu.pattern.OpenCV.loadShared();
+                FaceDetection.startCamera();
 
                 Bot bot = new Bot();
 //                System.out.println("Statement: " + statementInput.getText());
