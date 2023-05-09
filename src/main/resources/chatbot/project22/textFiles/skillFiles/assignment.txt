@@ -1,0 +1,6 @@
+On <DAY> at <TIME> you will have <*>.
+<DAY> monday <TIME> 9:30: Linear Programming - Graded exercises
+<DAY> monday <TIME> 23:59: Introduction to Image & Video Processing - project
+<DAY> tuesday <TIME> 18: Natural Language Processing - Lab
+<DAY> wednesday <TIME> 9: Project 2-2 - Agenda
+<DAY> Thursday <TIME> 23:59: Project 2-2 - Minutes
