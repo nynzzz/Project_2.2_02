@@ -37,7 +37,7 @@ public class StartScreen extends Application {
         b.setStyle("-fx-font-size:20");
         b.setFont(new Font(20));
         b.setTranslateX(147);
-        b.setTranslateY(150);
+        b.setTranslateY(75);
         b.setPrefHeight(40);
         b.setPrefWidth(120);
 
@@ -46,7 +46,7 @@ public class StartScreen extends Application {
         skillEditor.setStyle("-fx-font-size:20");
         skillEditor.setFont(new Font(20));
         skillEditor.setTranslateX(147);
-        skillEditor.setTranslateY(150);
+        skillEditor.setTranslateY(75);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
@@ -55,7 +55,7 @@ public class StartScreen extends Application {
         botLabel.setStyle("-fx-font-size:20");
         botLabel.setFont(new Font(20));
         botLabel.setTranslateX(147);
-        botLabel.setTranslateY(200);
+        botLabel.setTranslateY(100);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
@@ -64,16 +64,16 @@ public class StartScreen extends Application {
         txtBotRadioButton.setStyle("-fx-font-size:20");
         txtBotRadioButton.setFont(new Font(20));
         txtBotRadioButton.setTranslateX(147);
-        txtBotRadioButton.setTranslateY(200);
+        txtBotRadioButton.setTranslateY(100);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
         // yanlBot radio button
-        RadioButton yanlBotRadioButton = new RadioButton("Easy Rules");
+        RadioButton yanlBotRadioButton = new RadioButton("yamlBot");
         yanlBotRadioButton.setStyle("-fx-font-size:20");
         yanlBotRadioButton.setFont(new Font(20));
         yanlBotRadioButton.setTranslateX(147);
-        yanlBotRadioButton.setTranslateY(200);
+        yanlBotRadioButton.setTranslateY(100);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
@@ -82,7 +82,7 @@ public class StartScreen extends Application {
         cfg.setStyle("-fx-font-size:20");
         cfg.setFont(new Font(20));
         cfg.setTranslateX(147);
-        cfg.setTranslateY(200);
+        cfg.setTranslateY(100);
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
@@ -158,7 +158,7 @@ public class StartScreen extends Application {
         label0.setTranslateY(55);
         layout.setBackground(background);
         layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton, yanlBotRadioButton, cfg);
-        Scene s = new Scene(layout, 500, 600);
+        Scene s = new Scene(layout, 400, 600);
 
         primaryStage.setTitle("Welcome!");
         primaryStage.setScene(s);
