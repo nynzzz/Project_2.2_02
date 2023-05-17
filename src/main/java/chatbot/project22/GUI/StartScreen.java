@@ -89,6 +89,7 @@ public class StartScreen extends Application {
         ToggleGroup botToggleGroup = new ToggleGroup();
         txtBotRadioButton.setToggleGroup(botToggleGroup);
         yanlBotRadioButton.setToggleGroup(botToggleGroup);
+        cfg.setToggleGroup(botToggleGroup);
 
         // Event handler for the Start button
         b.setOnAction(new EventHandler<ActionEvent>() {
@@ -103,7 +104,7 @@ public class StartScreen extends Application {
                 } 
 
                 else if (cfg.isSelected()){
-
+                //todo: add cfg here
                 }
 
                 else{
