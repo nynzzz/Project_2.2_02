@@ -77,6 +77,15 @@ public class StartScreen extends Application {
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
+        // CFG algorithm button
+        RadioButton cfg = new RadioButton("CFG Bot");
+        cfg.setStyle("-fx-font-size:20");
+        cfg.setFont(new Font(20));
+        cfg.setTranslateX(147);
+        cfg.setTranslateY(200);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
+
         ToggleGroup botToggleGroup = new ToggleGroup();
         txtBotRadioButton.setToggleGroup(botToggleGroup);
         yanlBotRadioButton.setToggleGroup(botToggleGroup);
@@ -91,7 +100,12 @@ public class StartScreen extends Application {
                     primaryStage.close();
                 } else if (yanlBotRadioButton.isSelected()) {
                    //TODO: chat screen for yaml
+                } 
+
+                else if (cfg.isSelected()){
+
                 }
+
                 else{
                     // Create a popup to show that a bot needs to be chosen first
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -116,6 +130,13 @@ public class StartScreen extends Application {
                     primaryStage.close();
 
                 }
+
+                else if (cfg.isSelected()) {
+                    
+                    primaryStage.close();
+
+                }
+
                 else{
                     // Create a popup to show that a bot needs to be chosen first
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -136,8 +157,8 @@ public class StartScreen extends Application {
         label0.setTranslateX(5);
         label0.setTranslateY(55);
         layout.setBackground(background);
-        layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton, yanlBotRadioButton);
-        Scene s = new Scene(layout, 400, 600);
+        layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton, yanlBotRadioButton, cfg);
+        Scene s = new Scene(layout, 500, 600);
 
         primaryStage.setTitle("Welcome!");
         primaryStage.setScene(s);
