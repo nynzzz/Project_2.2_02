@@ -1,4 +1,4 @@
-package CYKParser;
+package chatbot.project22.CYKParser;
 
 import java.util.*;
 
