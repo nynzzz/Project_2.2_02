@@ -34,6 +34,8 @@ public class TextFileEditor {
      * @param sentence is the sentence that will get added to the file
      */
     public void addLineToFile(String fileName, String sentence) {
+        if (sentence.isEmpty())
+            return;
         try {
             FileReader fileReader = new FileReader(fileName);
             BufferedReader bufferedReader = new BufferedReader(fileReader);

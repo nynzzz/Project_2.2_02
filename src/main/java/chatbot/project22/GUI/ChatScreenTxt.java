@@ -129,8 +129,6 @@ public class ChatScreenTxt extends Application{
             }
         });
 
-
-
         HBox messageInputBox = new HBox(txt, send);
         messageInputBox.setSpacing(10);
         messageInputBox.setAlignment(Pos.CENTER);
@@ -140,7 +138,7 @@ public class ChatScreenTxt extends Application{
         root.setPadding(new Insets(10));
         root.getChildren().addAll(send,backStartScreen);
 
-        Image menuIcon = new Image("blue_re-pict-house-base.png_64.png");
+        Image menuIcon = new Image(ChatScreenTxt.class.getResource("home.jpeg").toExternalForm());
         ImageView menuView = new ImageView(menuIcon);
         menuView.setFitHeight(20);
         menuView.setFitWidth(20);

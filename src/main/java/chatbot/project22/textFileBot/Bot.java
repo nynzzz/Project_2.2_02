@@ -115,7 +115,7 @@ public class Bot {
         for (String question: questions) {
             ArrayList<String> questionSplit = splitAtFirst(question, ':');
             if (StringAttributes.stringsEqual(this.userCommand, questionSplit.get(1).strip())) {
-//                System.out.println(question);
+                System.out.println(question);
                 name = questionSplit.get(0);
                 template = questionSplit.get(1).strip();
                 break;
@@ -225,6 +225,8 @@ public class Bot {
                 return removeRubbish(response);
             }
         }
+        if (!response.contains("<*>"))
+            return response;
         return "I dont know the answer to that question, please change the variables";
     }
 

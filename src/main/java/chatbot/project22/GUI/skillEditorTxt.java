@@ -48,7 +48,7 @@ public class skillEditorTxt extends Application {
         addS = new Button("Add new Skills");
         back1 = new Button("Back");
         backStartScreen = new Button("");
-        Image menuIcon = new Image("blue_re-pict-house-base.png_64.png");
+        Image menuIcon = new Image(skillEditorTxt.class.getResource("home.jpeg").toExternalForm());
         ImageView menuView = new ImageView(menuIcon);
         menuView.setFitHeight(20);
         menuView.setFitWidth(20);

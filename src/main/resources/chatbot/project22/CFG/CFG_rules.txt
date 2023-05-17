@@ -1,0 +1,11 @@
+Rule -> <s> -> <action>
+Rule -> <action> -> <weather>
+Rule -> <weather> -> How is the weather <location> | <pro> <verb> <location> | What is the weather?
+Rule -> <location> -> in <city> <time> | in <city>
+Rule -> <city> -> New York | Berlin
+Rule -> <time> -> tomorrow | today
+Rule -> <pro> -> I | she | he | my mother
+Rule -> <verb> -> am | is | are
+Action -> <weather> -> * <city> New York <time> tomorrow : It will be sunny.
+Action -> <weather> -> * <city> Berlin : It is rainy.
+Action -> <weather> -> * <pro> my mother <verb> is <location> in <city> New York <time> today : It is stormy today.

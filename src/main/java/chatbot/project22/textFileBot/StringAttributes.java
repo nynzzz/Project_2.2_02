@@ -22,7 +22,7 @@ public class StringAttributes {
             String pattern = template.substring(0, beginBracketIndex);
             template = template.substring(endBracketIndex + 1);
             if (question.contains(pattern)){
-                question = question.replace(pattern, "*");
+                question = question.replaceFirst(pattern, "*");
                 copyQuestion = copyQuestion.replace(pattern, "");
             }
             else {
@@ -125,10 +125,15 @@ public class StringAttributes {
     }
 
     public static String getAllOptions(String input, String topic) {
+        if (input.isEmpty())
+            return "";
         boolean question = false;
         if (input.charAt(input.length() - 1) == '?') {
             input = input.substring(0, input.length() - 1);
             question = true;
+        }
+        if (!input.contains("<")) {
+            return topic.strip() + ": " + input.strip();
         }
         ArrayList<String> split = splitStringToWords(input, " ");
         ArrayList<String> text = new ArrayList<>();

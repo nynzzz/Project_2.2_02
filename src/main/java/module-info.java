@@ -1,4 +1,4 @@
-module chatbot.project22 {
+module chatbot.project {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
