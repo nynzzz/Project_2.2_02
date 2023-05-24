@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import chatbot.project22.FaceDetection.FaceDetection;
-
 import chatbot.project22.FaceRecognition.FaceRecognitionSystem;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -50,15 +49,14 @@ public class SignUp extends Application {
 
             //Save the entered username and password
             save(u.getText());
-
             FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
             try {
                 faceRecognitionSystem.create_data(u.getText());
             } catch (IOException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-            StartScreen s = new  StartScreen();
+            StartScreen s = new StartScreen();
             s.start(primaryStage);
             primaryStage.close();            
             
@@ -72,7 +70,7 @@ public class SignUp extends Application {
 
         VBox v = new VBox(10);
         v.setPadding(new Insets(10));
-        v.getChildren().addAll(user,u,password,pass,signup);
+        v.getChildren().addAll(user,u,signup);
 
         Scene scene = new Scene(v, 400, 600);
         primaryStage.setTitle("Signup Screen");
@@ -85,8 +83,6 @@ public class SignUp extends Application {
         try (BufferedWriter b = new BufferedWriter(new FileWriter("src/main/java/chatbot/project22/GUI/infor.txt", true))) {
             b.write("Username: " + u);
             b.newLine();
-//            b.write("Password: " + pass);
-//            b.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
