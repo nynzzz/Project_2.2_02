@@ -5,6 +5,7 @@ module chatbot.project {
     requires java.sql;
     requires opencv;
     requires easy.rules.core;
+    requires jython.slim;
     opens chatbot.project22.GUI to javafx.fxml;
     exports chatbot.project22.GUI;
 }
