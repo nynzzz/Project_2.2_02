@@ -74,7 +74,7 @@ public class SignUp extends Application {
     }
 
     public void save(String u, String pass) {
-        try (BufferedWriter b = new BufferedWriter(new FileWriter("src/main/java/chatbot/project22/GUI/infor.txt"))) {
+        try (BufferedWriter b = new BufferedWriter(new FileWriter("src/main/java/chatbot/project22/GUI/infor.txt", true))) {
             b.write("Username: " + u);
             b.newLine();
             b.write("Password: " + pass);
