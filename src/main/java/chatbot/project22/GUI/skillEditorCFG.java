@@ -103,12 +103,12 @@ public class skillEditorCFG extends Application {
         });
 
         back1.setOnAction(e ->{
-            //stage.setScene(scene0);
+            stage.setScene(scene0);
         });
 
         backStartScreen.setOnAction(e -> {
-            //stage.close();
-            //launchStartScreen();
+            stage.close();
+            launchStartScreen();
         });
 
         layout0.getChildren().addAll(ManageS,addS,label0,backStartScreen);
