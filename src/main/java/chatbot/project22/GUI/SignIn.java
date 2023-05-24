@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import chatbot.project22.FaceDetection.FaceDetection;
-
 import chatbot.project22.FaceRecognition.FaceRecognitionSystem;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -21,7 +20,7 @@ import javafx.scene.control.TextField;
 public class SignIn extends Application {
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         
         Label user = new Label("Username: ");
         user.setStyle("-fx-font-size:20");
@@ -48,6 +47,12 @@ public class SignIn extends Application {
         
         Label l = new Label();
 
+        FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
+        //final String n = faceRecognitionSystem.search();
+        String n = faceRecognitionSystem.name;
+
+        String n1 = ("["+"'"+u.getText()+"'"+"]");
+
 
         Button signin = new Button("Sign in");
         
@@ -57,19 +62,15 @@ public class SignIn extends Application {
             boolean same = same(u.getText());
 
             if (same) {
-                FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
-                try {
-                    faceRecognitionSystem.search();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                if(n == n1){
                 StartScreen s = new StartScreen();
                 s.start(primaryStage); 
                 primaryStage.close();
+                }
             }
             else
             
-            l.setText("Enter correct username or password");
+            l.setText("Enter correct username");
             l.setStyle("-fx-font-size:20");
             l.setStyle("-fx-text-fill: red;");
             l.setFont(new Font(20));
@@ -87,7 +88,7 @@ public class SignIn extends Application {
 
         VBox v = new VBox(20);
         v.setPadding(new Insets(10));
-        v.getChildren().addAll(user,u,password,pass,signin,l);
+        v.getChildren().addAll(user,u,signin,l);
 
         Scene scene = new Scene(v, 400, 600);
         primaryStage.setTitle("Signin Screen");
@@ -103,9 +104,7 @@ public class SignIn extends Application {
             while ((infor = b.readLine()) != null) {
                 if (infor.startsWith("Username: ") && infor.substring(10).trim().equals(u)) {
                     infor = b.readLine();
-
-                        return true;
-
+                    return true;
                 }
             }
         } catch (IOException e) {
