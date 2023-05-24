@@ -45,6 +45,8 @@ public class SignIn extends Application {
         pass.setTranslateY(100);
         pass.setPromptText("Enter Password");
         
+        Label l = new Label();
+
 
         Button signin = new Button("Sign in");
         
@@ -59,8 +61,14 @@ public class SignIn extends Application {
                 primaryStage.close();
             }
             else
-            //primaryStage.close();
-            System.out.println("Enter correct username or password");      
+            
+            l.setText("Enter correct username or password");
+            l.setStyle("-fx-font-size:20");
+            l.setStyle("-fx-text-fill: red;");
+            l.setFont(new Font(20));
+            l.setTranslateX(0);
+            l.setTranslateY(250);
+      
         });
 
 
@@ -72,7 +80,7 @@ public class SignIn extends Application {
 
         VBox v = new VBox(20);
         v.setPadding(new Insets(10));
-        v.getChildren().addAll(user,u,password,pass,signin);
+        v.getChildren().addAll(user,u,password,pass,signin,l);
 
         Scene scene = new Scene(v, 400, 600);
         primaryStage.setTitle("Signin Screen");
