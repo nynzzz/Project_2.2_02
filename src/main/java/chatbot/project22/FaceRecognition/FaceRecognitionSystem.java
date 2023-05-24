@@ -50,6 +50,7 @@ public class FaceRecognitionSystem {
             System.out.println(output);
         }
 
+
         // Read error output
         BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
         String error;
@@ -68,12 +69,16 @@ public class FaceRecognitionSystem {
     }
 
 
+
+
     public static void main(String[] args) throws IOException {
         System.out.println("1");
         FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
-        faceRecognitionSystem.create_data("keren_better");
+//        faceRecognitionSystem.create_data("keren_better");
 //        System.out.println("2");
-        faceRecognitionSystem.search();
+        String name=faceRecognitionSystem.search();
+        System.out.println("i found that tha name foind isssssssss");
+        System.out.println(name);
 //        System.out.println("3");
     }
 }

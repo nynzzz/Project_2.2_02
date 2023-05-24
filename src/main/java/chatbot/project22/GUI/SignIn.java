@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import chatbot.project22.FaceDetection.FaceDetection;
 
+import chatbot.project22.FaceRecognition.FaceRecognitionSystem;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -53,9 +54,15 @@ public class SignIn extends Application {
         signin.setOnAction(event -> {
 
             // Check username and password            
-            boolean same = same(u.getText(), pass.getText());
+            boolean same = same(u.getText());
 
             if (same) {
+                FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
+                try {
+                    faceRecognitionSystem.search();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 StartScreen s = new StartScreen();
                 s.start(primaryStage); 
                 primaryStage.close();
@@ -90,15 +97,15 @@ public class SignIn extends Application {
         
     }
     
-    public boolean same(String u, String pass) {
+    public boolean same(String u) {
         try (BufferedReader b = new BufferedReader(new FileReader("src/main/java/chatbot/project22/GUI/infor.txt"))) {
             String infor;
             while ((infor = b.readLine()) != null) {
                 if (infor.startsWith("Username: ") && infor.substring(10).trim().equals(u)) {
                     infor = b.readLine();
-                    if (infor.startsWith("Password: ") && infor.substring(10).trim().equals(pass)) {
+
                         return true;
-                    }
+
                 }
             }
         } catch (IOException e) {

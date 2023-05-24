@@ -265,11 +265,8 @@ def search():
 
     # Find the prediction with the highest probability
     best_prediction, best_probability = max(predictions, key=lambda x: x[1])
-
+    print(best_prediction)
     return best_prediction
-
-
-
 
 def main():
     """
