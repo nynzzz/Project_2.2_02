@@ -3,6 +3,7 @@ package chatbot.project22.GUI;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 import chatbot.project22.FaceDetection.FaceDetection;
 import chatbot.project22.FaceRecognition.FaceRecognitionSystem;
@@ -47,35 +48,34 @@ public class SignIn extends Application {
         
         Label l = new Label();
 
+
+        //String n = faceRecognitionSystem.name;
+
         FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
-        //final String n = faceRecognitionSystem.search();
-        String n = faceRecognitionSystem.name;
-
-        String n1 = ("["+"'"+u.getText()+"'"+"]");
-
+        String n = faceRecognitionSystem.search();
+        System.out.println(n);
 
         Button signin = new Button("Sign in");
         
         signin.setOnAction(event -> {
-
+            String n1 = ("["+"'"+u.getText()+"'"+"]");
             // Check username and password            
             boolean same = same(u.getText());
 
-            if (same) {
-                if(n == n1){
-                StartScreen s = new StartScreen();
-                s.start(primaryStage); 
-                primaryStage.close();
-                }
+            if(n.equals(n1)){
+            StartScreen s = new StartScreen();
+            s.start(primaryStage);
+            primaryStage.close();
             }
-            else
-            
-            l.setText("Enter correct username");
-            l.setStyle("-fx-font-size:20");
-            l.setStyle("-fx-text-fill: red;");
-            l.setFont(new Font(20));
-            l.setTranslateX(0);
-            l.setTranslateY(250);
+
+            else {
+                l.setText("Enter correct username");
+                l.setStyle("-fx-font-size:20");
+                l.setStyle("-fx-text-fill: red;");
+                l.setFont(new Font(20));
+                l.setTranslateX(0);
+                l.setTranslateY(250);
+            }
       
         });
 

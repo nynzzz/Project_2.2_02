@@ -16,6 +16,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class WelcomeScreen extends Application {
     Label label0 = new Label("Welcome!!!\n" + "\nClick to Signin\n" + "or Signup!");
@@ -56,7 +58,11 @@ public class WelcomeScreen extends Application {
             public void handle(ActionEvent e) {
 
                 SignIn l = new SignIn();
-                l.start(primaryStage);
+                try {
+                    l.start(primaryStage);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
