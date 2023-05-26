@@ -104,13 +104,14 @@ public class StartScreen extends Application {
                 } 
 
                 else if (cfg.isSelected()){
-                //todo: add cfg here
+                    ChatScreenCFG se = new ChatScreenCFG();
+                    primaryStage.close();
                 }
 
                 else{
                     // Create a popup to show that a bot needs to be chosen first
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Changes saved");
+                    alert.setTitle("!!!");
                     alert.setHeaderText(null);
                     alert.setContentText("Please choose a bot first!");
                     alert.showAndWait();
@@ -133,9 +134,8 @@ public class StartScreen extends Application {
                 }
 
                 else if (cfg.isSelected()) {
-                    
+                    skillEditorCFG se = new skillEditorCFG();
                     primaryStage.close();
-
                 }
 
                 else{

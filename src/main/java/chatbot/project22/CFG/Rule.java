@@ -2,7 +2,7 @@ package chatbot.project22.CFG;
 
 import java.util.List;
 
-class Rule {
+public class Rule {
     private String nonTerminal;
     private List<String> productions;
 
