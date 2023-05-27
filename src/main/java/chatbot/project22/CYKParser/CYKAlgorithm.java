@@ -77,6 +77,8 @@ public class CYKAlgorithm {
         List<String> nonTerminals = new ArrayList<>(Arrays.asList("S", "A", "B"));
         Map<String, List<String>> productions = new HashMap<>();
         productions.put("S", Arrays.asList("AB", "BA"));
+
+
         productions.put("A", Arrays.asList("a"));
         productions.put("B", Arrays.asList("b"));
         productions.put("C", Arrays.asList("e"));
