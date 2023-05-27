@@ -7,7 +7,7 @@ public class FaceRecognitionSystem {
 
     public static void create_data(String user_name) throws IOException, InterruptedException {
         String[] command = {
-                "python",
+                "virtualPy/bin/python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "create_data",
                 user_name
@@ -42,7 +42,7 @@ public class FaceRecognitionSystem {
 
     public static String search() throws IOException {
         String[] command = {
-                "python",
+                "virtualPy/bin/python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "search"
         };
