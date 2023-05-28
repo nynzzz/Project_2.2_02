@@ -180,7 +180,7 @@ public class Parser {
         }
 
         Parser parser = new Parser(ruleList, actionMap);
-        List<String> parseResult = parser.parse("How is the weather in New York tomorrow?");
+        List<String> parseResult = parser.parse("When is the train to Berlin from Maastricht?");
         System.out.println("Parse result: " + parseResult);
         String response = parser.getMatchingActionResponse(parseResult);
         if (response != null) {

@@ -1,11 +1,14 @@
 Rule -> <s> -> <action>
-Rule -> <action> -> <weather>
+Rule -> <action> -> <weather> | <train>
+Rule -> <train> -> When is the train <direction>
+Rule -> <direction> -> to <city> from <city>
 Rule -> <weather> -> How is the weather <location> | <pro> <verb> <location> | What is the weather?
 Rule -> <location> -> in <city> <time> | in <city>
-Rule -> <city> -> New York | Berlin
+Rule -> <city> -> New York | Berlin | Maastricht
 Rule -> <time> -> tomorrow | today
 Rule -> <pro> -> I | she | he | my mother
 Rule -> <verb> -> am | is | are
+Action -> <train> -> * <direction> to <city> Berlin from <city> Maastricht : The train from Berlin to Maastricht is at 10:00.
 Action -> <weather> -> * <city> New York <time> tomorrow : It will be sunny.
 Action -> <weather> -> * <city> Berlin : It is rainy.
 Action -> <weather> -> * <pro> my mother <verb> is <location> in <city> New York <time> today : It is stormy today.
