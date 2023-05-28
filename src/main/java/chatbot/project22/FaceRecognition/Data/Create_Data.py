@@ -22,6 +22,10 @@ neural_network = cv2.dnn.readNet(configPath, modelPath)
 input_path = os.path.join(base_path, '..', 'Data', 'users_faces')
 
 
+#load the preprocessed faces and labels
+faces_file = os.path.join(base_path, '..', 'Data', 'faces_file.npy')
+labels_file = os.path.join(base_path, '..', 'Data', 'labels_file.txt')
+
 # print(f"[INFO] Trained model loaded from {model_file}")
 min_confidence = 0.5
 min_samples = 15
@@ -84,8 +88,48 @@ def detect_faces(neural_network, image, min_confidence=0.5):
     # return the face detection bounding boxes
     return face_frames
 
+def save_names_and_labels(faces, labels, faces_file, labels_file):
+    """
+    a function to keep the names and labels that already have been processed
+    Arguments:
+             faces: processed faced to add to the list
+             labels: labels to add to the list
+             faces_file: file to which we will add the processed faces
+             labels_file: file to which we will add the labels
+    """
+    try:
+        existing_faces = np.load(faces_file)
+        faces = np.concatenate((existing_faces, faces))
+    except FileNotFoundError:
+        pass  # The file doesn't exist, so we can proceed without appending
 
-def preprocess_face_dataset(input_path, neural_network, min_confidence=0.5, min_samples=15):
+    np.save(faces_file, faces, allow_pickle=False)
+
+    try:
+        existing_labels = np.loadtxt(labels_file, dtype=str)
+        labels = np.concatenate((existing_labels, labels))
+    except FileNotFoundError:
+        pass  # The file doesn't exist, so we can proceed without appending
+
+    np.savetxt(labels_file, labels, fmt='%s')
+
+
+def load_names_and_labels(faces_file, labels_file):
+    """
+    a function to keep the names and labels that already have been processed
+    Arguments:
+             faces_file: file from which we read the processed faces
+             labels_file: file to which we read the labels
+    Returns:
+            faces: processed faces
+            labels: labels of the faces
+    """
+    faces = np.load(faces_file)
+    labels = np.loadtxt(labels_file, dtype=str)
+    return faces, labels
+
+
+def preprocess_face_dataset(input_path, neural_network, faces_file, labels_file,min_confidence=0.5, min_samples=15):
 
     """
     The function iterates through the dataset of images and analyzes each image of a
@@ -120,34 +164,43 @@ def preprocess_face_dataset(input_path, neural_network, min_confidence=0.5, min_
     # person
     (names, counts) = np.unique(names, return_counts=True)
     names = names.tolist()
-    # if os.path.exists(faces_file) and os.path.exists(labels_file):
-    #     names, labels = load_names_and_labels(faces_file, labels_file)
-    # else:
+
     faces = []
     labels = []
     # iterate over each image paths
     for image_path in image_paths:
-        image = cv2.imread(image_path)  # load the image
-        name = image_path.split(os.path.sep)[-2]  # retrieve the name from the path
-        # make sure there are enough images of this person
-        if counts[names.index(name)] < min_samples:
-            # os.remove(image_path)
-            continue
-        # for each image we extract the borders of the face
-        face_frames = detect_faces(neural_network, image, min_confidence)
-        # iterate over each face_frames
-        for (x_min, y_min, x_max, y_max) in face_frames:
-            # for each image extract the region of interest --> the face detected
-            face = image[y_min:y_max, x_min:x_max]
-            face = cv2.resize(face, (47, 62))
-            face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+        try:
+            image = cv2.imread(image_path)  # load the image
 
-            faces.append(face)
-            labels.append(name)
+            # Check if the image couldn't be read)
+            if image is None:
+                print(f"Failed to read image: {image_path}")
+            else:
 
-    faces = np.array(faces)
-    labels = np.array(labels)
-    # save_names_and_labels(faces, labels, faces_file, labels_file)
+                name = image_path.split(os.path.sep)[-2]  # retrieve the name from the path
+                # make sure there are enough images of this person
+                if counts[names.index(name)] < min_samples:
+                    # os.remove(image_path)
+                    continue
+                # for each image we extract the borders of the face
+                face_frames = detect_faces(neural_network, image, min_confidence)
+                if not face_frames:
+                    print(f"No faces detected in image: {image_path}")
+                    continue
+                # iterate over each face_frames
+                for (x_min, y_min, x_max, y_max) in face_frames:
+                    # for each image extract the region of interest --> the face detected
+                    face = image[y_min:y_max, x_min:x_max]
+                    face = cv2.resize(face, (47, 62))
+                    face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
+
+                    faces.append(face)
+                    labels.append(name)
+
+        except Exception as e:
+            print(f"Error processing image: {image_path}\n{str(e)}")
+
+    save_names_and_labels(faces, labels, faces_file, labels_file)
     return faces, labels
 
 def create_data(user_name):
@@ -162,8 +215,8 @@ def create_data(user_name):
     camera = cv2.VideoCapture(0)
     time.sleep(1)
     count = 1
-    faces = []
-    labels = []
+    # faces = []
+    # labels = []
 
     # Create a new folder inside Data/users_faces with the given name
     folder_path = os.path.join(input_path, user_name)
@@ -178,14 +231,16 @@ def create_data(user_name):
         # file_name = os.path.join(folder_path, f"{user_name}_{count_str}.jpg")
         file_name = os.path.join(folder_path, "{}_{}.jpg".format(user_name, count_str))
         cv2.imwrite(file_name, frame)
-        faces.append(frame)
-        labels.append(user_name)
+        # faces.append(frame)
+        # labels.append(user_name)
         count += 1
         # time.sleep(1)
         if cv2.waitKey(1) == ord('q'):  # Press 'q' to quit
             break
     camera.release()
     cv2.destroyAllWindows()
+    preprocess_face_dataset(folder_path, neural_network, faces_file,
+                            labels_file, min_confidence=0.5, min_samples=15)
     print("[INFO] " + user_name + " was added to the data")
 
 def search():
@@ -200,7 +255,13 @@ def search():
    """
     # Compute a PCA
     print("[INFO] processing the newly added faces")
-    faces, labels = preprocess_face_dataset(input_path, neural_network, 0.5, 20)
+    if os.path.exists(faces_file) and os.path.exists(labels_file):
+        print("[INFO] loading the preprocessed data")
+        faces, labels = load_names_and_labels(faces_file, labels_file)
+    else:
+        faces, labels = preprocess_face_dataset(input_path, neural_network,faces_file,
+                                                labels_file, 0.5, 20)
+        print("[INFO] no preprocessed data")
     flat_faces = np.array([f.flatten() for f in faces])
     pca = PCA(n_components=n_components, whiten=True).fit(flat_faces)
 
@@ -272,7 +333,7 @@ def main():
     """
     check that the user provided the method he wants to use
     the way we call this method from the java file is giving at least the class path and the method name which
-    means that wehn we call it we need to have at least to arguments.
+    means that when we call it we need to have at least to arguments.
     If we are calling the create_data we also give a user_name, so we need at least three arguments.
     """
 
