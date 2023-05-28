@@ -1,11 +1,44 @@
 Rule -> <s> -> <action>
 Rule -> <action> -> <weather>
-Rule -> <weather> -> How is the weather <location> | <pro> <verb> <location> | What is the weather?
+Rule -> <weather> -> How is the weather <location> | <pro> <verb> <location> | What is the weather
 Rule -> <location> -> in <city> <time> | in <city>
-Rule -> <city> -> New York | Berlin
-Rule -> <time> -> tomorrow | today
-Rule -> <pro> -> I | she | he | my mother
-Rule -> <verb> -> am | is | are
-Action -> <weather> -> * <city> New York <time> tomorrow : It will be sunny.
+Rule -> <city> -> New York | Berlin | Brussels
+Rule -> <time> -> tomorrow | today | yesterday
+Rule -> <pro> -> I | she | he | my mother | they | my father | my best friend
+Rule -> <verb> -> am | is | are | have | has | had | was
+Rule -> <weather> -> What is the weather in <city> <time>
+Rule -> <weather> -> * <pro> <noun> is <location> in <city> <time> | * <pro> <noun> is in <city> <time>
+Rule -> <weather> -> How is the weather in <city>
+Rule -> <weather> -> How is the weather
+Rule -> <weather> -> What will be the weather like in <city> <time> 
+Rule -> <weather> -> What is the weather in <city_list> <time> 
+Rule -> <city_list> -> <city> and <city_list> | <city>
 Action -> <weather> -> * <city> Berlin : It is rainy.
 Action -> <weather> -> * <pro> my mother <verb> is <location> in <city> New York <time> today : It is stormy today.
+Action -> <weather> -> * <pro> my best friend <verb> is <location> in <city> Berlin <time> today : It is ugly today.
+Action -> <weather> -> * <city> New York <time> tomorrow : It will be sunny.
+Action -> <weather> -> * <city> New York <time> today : It is rainy.
+Action -> <weather> -> * <city> New York <time> yesterday : It is stormy.
+Action -> <weather> -> * <city> Berlin <time> tomorrow : It will be cloudy.
+Action -> <weather> -> * <city> Berlin <time> today : It is sunny.
+Action -> <weather> -> * <city> Berlin <time> yesterday : It is rainy.
+Action -> <weather> -> * <city> Brussels <time> tomorrow : It will be foggy.
+Action -> <weather> -> * <city> Brussels <time> today : It is windy.
+Action -> <weather> -> * <city> Brussels <time> yesterday : It is sunny.
+Action -> <weather> -> * <location> in <city> New York <time> tomorrow : It will be sunny.
+Action -> <weather> -> * <location> in <city> New York <time> today : It is rainy.
+Action -> <weather> -> * <location> in <city> New York <time> yesterday : It is stormy.
+Action -> <weather> -> * <location> in <city> Berlin <time> tomorrow : It will be cloudy.
+Action -> <weather> -> * <location> in <city> Berlin <time> today : It is sunny.
+Action -> <weather> -> * <location> in <city> Berlin <time> yesterday : It is rainy.
+Action -> <weather> -> * <location> in <city> Brussels <time> tomorrow : It will be foggy.
+Action -> <weather> -> * <location> in <city> Brussels <time> today : It is windy.
+Action -> <weather> -> * <location> in <city> Brussels <time> yesterday : It is sunny.
+Action -> <weather> -> * <city_list> Berlin and Brussels <time> today : It is partly cloudy in Berlin and sunny in Brussels.
+
+
+
+
+
+
+
