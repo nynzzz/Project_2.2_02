@@ -1,6 +1,5 @@
 package chatbot.project22.CYKParser;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class CNFConverter {
@@ -86,12 +85,13 @@ public class CNFConverter {
             int index=0;
             for (List<String> production : nonTerminalProductions) { //consider each right side
                 List<String>  production2=replaceTerminal(production);
+                List<String>  production3=replaceTripleNonterminals(production2);
+
+
+
                 productions.get(nonTerminal).remove(production);
-                productions.get(nonTerminal).add(production2);
-
+                productions.get(nonTerminal).add(production3);
                 List<List<String>> newProduction = new ArrayList<>(nonTerminalProductions);
-
-
 
 
                 if (production.size() == 1 && !isTerminal(production.get(0))) { // e.g.: A -> B
@@ -189,6 +189,7 @@ public class CNFConverter {
                 }
             }
         }
+
 
         // Step 2: Find productive symbols
         boolean changed = true;
@@ -353,6 +354,16 @@ public class CNFConverter {
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
 
     public static void main(String[] args) {
         CNFConverter converter = new CNFConverter();

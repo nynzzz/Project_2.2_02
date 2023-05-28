@@ -68,15 +68,6 @@ public class StartScreen extends Application {
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
-        // yanlBot radio button
-        RadioButton yanlBotRadioButton = new RadioButton("yamlBot");
-        yanlBotRadioButton.setStyle("-fx-font-size:20");
-        yanlBotRadioButton.setFont(new Font(20));
-        yanlBotRadioButton.setTranslateX(147);
-        yanlBotRadioButton.setTranslateY(100);
-        skillEditor.setPrefHeight(40);
-        skillEditor.setPrefWidth(120);
-
         // CFG algorithm button
         RadioButton cfg = new RadioButton("CFG Bot");
         cfg.setStyle("-fx-font-size:20");
@@ -86,10 +77,20 @@ public class StartScreen extends Application {
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
+        // cyk radio button
+        RadioButton cykButton = new RadioButton("CYK Bot");
+        cykButton.setStyle("-fx-font-size:20");
+        cykButton.setFont(new Font(20));
+        cykButton.setTranslateX(147);
+        cykButton.setTranslateY(100);
+        skillEditor.setPrefHeight(40);
+        skillEditor.setPrefWidth(120);
+
+
         ToggleGroup botToggleGroup = new ToggleGroup();
         txtBotRadioButton.setToggleGroup(botToggleGroup);
-        yanlBotRadioButton.setToggleGroup(botToggleGroup);
         cfg.setToggleGroup(botToggleGroup);
+        cykButton.setToggleGroup(botToggleGroup);
 
         // Event handler for the Start button
         b.setOnAction(new EventHandler<ActionEvent>() {
@@ -99,8 +100,10 @@ public class StartScreen extends Application {
                 if (txtBotRadioButton.isSelected()) {
                     ChatScreenTxt se = new ChatScreenTxt();
                     primaryStage.close();
-                } else if (yanlBotRadioButton.isSelected()) {
-                   //TODO: chat screen for yaml
+                } else if (cykButton.isSelected()) {
+                   //TODO: chat screen for cyk
+                    ChatScreencyk cs = new ChatScreencyk();
+                    primaryStage.close();
                 } 
 
                 else if (cfg.isSelected()){
@@ -127,7 +130,7 @@ public class StartScreen extends Application {
                     skillEditorTxt se = new skillEditorTxt();
                     primaryStage.close();
 
-                } else if (yanlBotRadioButton.isSelected()) {
+                } else if (cykButton.isSelected()) {
                     skillEditorYAML se = new skillEditorYAML();
                     primaryStage.close();
 
@@ -158,7 +161,7 @@ public class StartScreen extends Application {
         label0.setTranslateX(5);
         label0.setTranslateY(55);
         layout.setBackground(background);
-        layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton, yanlBotRadioButton, cfg);
+        layout.getChildren().addAll(label0, b, skillEditor, botLabel, txtBotRadioButton,  cfg,cykButton);
         Scene s = new Scene(layout, 400, 600);
 
         primaryStage.setTitle("Welcome!");
