@@ -42,10 +42,15 @@ public class FaceRecognitionSystem {
 
     public static String search() throws IOException {
         String[] command = {
-                "virtualPy/bin/python",
+                "virtualPy/Scripts/python" ,
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "search"
         };
+//        String[] command = {
+//                "virtualPy/Scripts/python" ,
+//                "src/main/java/chatbot/project22/FaceRecognition/Data/LBP/local_binary_pattern.py",
+//                "search"
+//        };
         Process process = Runtime.getRuntime().exec(command);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String output;
@@ -77,13 +82,16 @@ public class FaceRecognitionSystem {
 
 
     public static void main(String[] args) throws IOException {
-        System.out.println("1");
-        FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
-//        faceRecognitionSystem.create_data("keren_better");
-//        System.out.println("2");
-        String name=faceRecognitionSystem.search();
-        System.out.println("i found that tha name foind isssssssss");
-        System.out.println(name);
+//        System.out.println("1");
+//        FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
+////        faceRecognitionSystem.create_data("keren_better");
+////        System.out.println("2");
+//        String name=faceRecognitionSystem.search();
+//        System.out.println("i found that tha name foind isssssssss");
+//        System.out.println(name);
+
+        String s = search();
+        System.out.println(s);
 //        System.out.println("3");
     }
 }
