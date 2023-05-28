@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class Parser {
+class Parser {
     private List<Rule> ruleList;
     Map<List<String>, String> actionMap;
     private Node root;
@@ -34,7 +34,7 @@ public class Parser {
 
         // Check if the current node has already been matched with a terminal token
         if (!node.getValue().isEmpty()) {
-            System.out.println("Node " + node.getSymbol() + " already matched with value: " + node.getValue());
+            // System.out.println("Node " + node.getSymbol() + " already matched with value: " + node.getValue());
             matchedProductions.add(node.getValue());
             return matchedProductions;
         }
@@ -43,7 +43,7 @@ public class Parser {
         for (Rule rule : ruleList) {
             if (rule.getNonTerminal().equals(node.getSymbol())) {
                 for (String production : rule.getProductions()) {
-                    System.out.println("Checking production: " + production);
+                    // System.out.println("Checking production: " + production);
                     List<String> tokens = Arrays.asList(production.split(" "));
                     List<String> matched = matchProduction(node, tokens, input);
                     if (!matched.isEmpty()) {
@@ -84,7 +84,7 @@ public class Parser {
                     matchedTokens.add(token);
                     inputIndex++;
                 } else {
-                    System.out.println("Failed to match token: " + token + " with input: " + input);
+                    // System.out.println("Failed to match token: " + token + " with input: " + input);
                     return new ArrayList<>();
                 }
             }
@@ -144,11 +144,11 @@ public class Parser {
     }
 
     public static void main(String[] args) {
-        List<Rule> ruleList = new ArrayList<>();
-        Map<List<String>, String> actionMap = new HashMap<>();
+    List<Rule> ruleList = new ArrayList<>();
+    Map<List<String>, String> actionMap = new HashMap<>();
 
-        // TODO: Replace with your file path
-        String filePath = "src/main/resources/chatbot/project22/CFG/CFG_rules.txt";
+    // TODO: Replace with your file path
+    String filePath = "src/main/resources/chatbot/project22/CFG/CFG_rules.txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -172,6 +172,7 @@ public class Parser {
         System.out.println("Rules:");
         for (Rule rule : ruleList) {
             System.out.println(rule.getNonTerminal() + " -> " + rule.getProductions());
+            
         }
         // print actionList
         System.out.println("Actions:");
@@ -180,14 +181,45 @@ public class Parser {
         }
 
         Parser parser = new Parser(ruleList, actionMap);
-        List<String> parseResult = parser.parse("How is the weather in New York tomorrow?");
-        System.out.println("Parse result: " + parseResult);
-        String response = parser.getMatchingActionResponse(parseResult);
-        if (response != null) {
-            System.out.println("Response: " + response);
-        } else {
-            System.out.println("Response: I have no idea :(");
+        int count = 0;
+        ArrayList<String> sentences = new ArrayList<>();
+        sentences.add("How is the weather in Berlin today?");
+        sentences.add("How is the weather in New York tomorrow?");
+        sentences.add("How is the weather in Berlin? ");
+        sentences.add("How is the weather in Berlin tomorrow?");
+        sentences.add("How is the weather in New York today? ");
+        sentences.add("How is the weather in Berlin yesterday?");
+        sentences.add("How is the weather in Brussels tomorrow?");
+        sentences.add("How is the weather in Brussels today?");
+        sentences.add("How is the weather in Brussels yesterday?");
+        sentences.add("My mother is in New York today. What is the weather?");
+        sentences.add("what is the weather in Berlin and Brussels today?");
+        sentences.add("Berlin today What weather is the in?");
+        sentences.add("My best friend is in Berlin today. What is the weather?");
+
+        
+
+        for(int i = 0; i<sentences.size(); i++){
+            List<String> parseResult = parser.parse(sentences.get(i));
+            System.out.println("Parse result: " + parseResult);
+            String response = parser.getMatchingActionResponse(parseResult);
+            if (response != null) {
+                System.out.println("Response: " + response);
+                count++;
+            } else {
+                System.out.println("Response: I have no idea :(");
+            }
         }
+        System.out.println("Accuracy: " + count + "/" + sentences.size());
+        // List<String> parseResult = parser.parse("How is the weather in Amsterdam overmorrow?");
+        // System.out.println("Parse result: " + parseResult);
+        // String response = parser.getMatchingActionResponse(parseResult);
+        // if (response != null) {
+        //     System.out.println("Response: " + response);
+
+        // } else {
+        //     System.out.println("Response: I have no idea :(");
+        // }
     }
 
 }
