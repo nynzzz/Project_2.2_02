@@ -260,12 +260,88 @@ public class CNFConverter {
         return prod;
     }
 
-    private static char putNonTerminal() {
-        Random random = new Random();
-        char letter = (char) (random.nextInt(26) + 'A');
-        return letter;
+    public static List<String> replaceTripleNonterminals(List<String> production) {
+
+        List<String> newProd = new ArrayList<>();
+
+        for (String str : production) {
+            if (str.length() > 2) {
+                String rule = str;
+                int nonTerminalsCount =0;
+                String[] split = str.split("(?!^)");
+                char[] merge = new char[2];
+                for (char c : str.toCharArray()) {
+                    if (Character.isUpperCase(c)) {
+                        merge[nonTerminalsCount] =c;
+                                nonTerminalsCount ++;
+                        if(nonTerminalsCount>=2){
+                       //     mergeTwoChar();
+                            String nonTerminal = findNonTerminal(c);
+                            if (nonTerminal != null) {
+                                char nt = nonTerminal.charAt(0);
+                                rule = removeChar(rule,merge[0]);
+                                rule = removeChar(rule,merge[1]);
+                                rule += nt;
+
+                            }else{
+                                char newNonTerminal = putNonTerminal();
+                                rule = removeChar(rule,merge[0]);
+                                rule = removeChar(rule,merge[1]);
+                                rule += newNonTerminal;
+                            }
+                            nonTerminalsCount =0;
+                        }
+
+                    }
+                }
+                //          rule = "Igot lower case";
+                newProd.add(rule);
+            } else {
+                newProd.add(str);
+            }
+        }
+
+        return newProd;
+
     }
 
+    private static String removeChar(String input, char c){
+        String newStr = "";
+        for (int i=0; i<input.length();i++){
+            char de = input.charAt(i);
+            if(de!=c){
+                newStr += de;
+            }
+        }
+        return newStr;
+    }
+
+
+    private static char putNonTerminal() {
+
+        Random random = new Random();
+
+        char letter = (char) (random.nextInt(26) + 'A');
+        if (used(letter))
+            letter=(char)(letter +'A');
+
+        return letter;
+    }
+    private static boolean used(char nonTerm){
+        List <String> production=new ArrayList<>();
+        String newNonTerm;
+        for ( String rule: production){
+            int index= rule.indexOf("->"); // we split the non terminal from the rest
+            if (index!=-1){
+                newNonTerm=rule.substring(0, index); // we take the non terminal from lhs
+                if (newNonTerm.length()==1 && Character.valueOf(newNonTerm.charAt(0)).equals(newNonTerm))
+                    // if it has 1 leght and is == to our original nonTerm, then is used and return true
+                    return true;
+            }
+        }
+
+        return false;
+    }
 
     public static boolean hasLowercase(String ch) {
         for (int i = 'a'; i <= 'z'; i++) {

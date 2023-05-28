@@ -178,10 +178,6 @@ public class CYKAlgorithm {
     }
 
 
-
-
-
-
     public static void main(String[] args) {
         List<String> nonTerminals = new ArrayList<>(Arrays.asList("S","Q","NP","WhPhrase","Verb","Noun","WeatherAdjective"));
 
