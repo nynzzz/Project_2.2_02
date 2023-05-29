@@ -43,7 +43,6 @@ public class WelcomeScreen extends Application {
         signin.setPrefHeight(40);
         signin.setPrefWidth(120);
 
-        // connect to skillEditor interface
         Button Signup = new Button("Sign up");
         Signup.setStyle("-fx-font-size:20");
         Signup.setFont(new Font(20));
@@ -52,7 +51,7 @@ public class WelcomeScreen extends Application {
         Signup.setPrefHeight(40);
         Signup.setPrefWidth(120);
 
-        // Event handler for the Start button
+       
         signin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -67,7 +66,6 @@ public class WelcomeScreen extends Application {
             }
         });
 
-        // Event handler for the Skill Editor button
         Signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
