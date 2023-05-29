@@ -7,11 +7,15 @@ public class FaceRecognitionSystem {
 
     public static void create_data(String user_name) throws IOException, InterruptedException {
         String[] command = {
-                "virtualPy/Scripts/python",
+                "python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "create_data",
                 user_name
         };
+        // Install imutils using pip
+        ProcessBuilder installProcessBuilder = new ProcessBuilder("pip", "install", "imutils");
+        Process installProcess = installProcessBuilder.start();
+        installProcess.waitFor();
 
         Process process = Runtime.getRuntime().exec(command);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -38,7 +42,7 @@ public class FaceRecognitionSystem {
 
     public static String search() throws IOException {
         String[] command = {
-                "virtualPy/Scripts/python",
+                "python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "search"
         };
