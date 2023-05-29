@@ -38,10 +38,15 @@ public class FaceRecognitionSystem {
 
     public static String search() throws IOException {
         String[] command = {
-                "virtualPy/bin/python",
+                "virtualPy/Scripts/python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "search"
         };
+//        String[] command = {
+//                "virtualPy/bin/python",
+//                "src/main/java/chatbot/project22/FaceRecognition/Data/LBP/local_binary_pattern.py",
+//                "search"
+//        };
         Process process = Runtime.getRuntime().exec(command);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String output;
