@@ -55,8 +55,6 @@ public class SignUp extends Application {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
             StartScreen s = new StartScreen();
             s.start(primaryStage);
