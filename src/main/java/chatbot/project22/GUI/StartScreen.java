@@ -68,8 +68,8 @@ public class StartScreen extends Application {
         skillEditor.setPrefHeight(40);
         skillEditor.setPrefWidth(120);
 
-        // CFG algorithm button
-        RadioButton cfg = new RadioButton("CFG Bot");
+        // RDP algorithm button
+        RadioButton cfg = new RadioButton("RDP Bot");
         cfg.setStyle("-fx-font-size:20");
         cfg.setFont(new Font(20));
         cfg.setTranslateX(147);

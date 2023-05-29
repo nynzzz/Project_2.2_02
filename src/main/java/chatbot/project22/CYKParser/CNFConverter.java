@@ -10,23 +10,7 @@ public class CNFConverter {
         productions = new HashMap<>();
         startSymbol = "";
     }
-
-
-
     public static boolean isCNF(String str){
-
-
-          /*
-    algorithm:
-    1. check length of output
-    if length >2:
-            not cnf
-    if length =2:
-                    if: all upper case -> it is cnf
-                    else -> its not cnf
-    if length = 1: cnf
-
-     */
         String[] splitStr =  str.split("(?!^)");
         if( splitStr.length >2){
             return false;
@@ -67,18 +51,12 @@ public class CNFConverter {
         for (String nonTerminal : nonTerminals) {
             List<List<String>> nonTerminalProductions = productions.get(nonTerminal);
             List<List<String>> unitProductions = new ArrayList<>();
-
         }
-
-        }
-
-
-
+    }
 
     private void removeUnitProductions() {
         List<String> nonTerminals = new ArrayList<>(productions.keySet());
      //   List<String> terminals = new ArrayList<>(productions.);
-
         for (String nonTerminal : nonTerminals) {
             List<List<String>> nonTerminalProductions = productions.get(nonTerminal); // right side of productions
             List<List<String>> unitProductions = new ArrayList<>(); // new array for saving unit productions
@@ -87,12 +65,9 @@ public class CNFConverter {
                 List<String>  production2=replaceTerminal(production);
                 List<String>  production3=replaceTripleNonterminals(production2);
 
-
-
                 productions.get(nonTerminal).remove(production);
                 productions.get(nonTerminal).add(production3);
                 List<List<String>> newProduction = new ArrayList<>(nonTerminalProductions);
-
 
                 if (production.size() == 1 && !isTerminal(production.get(0))) { // e.g.: A -> B
                     unitProductions.add(production);
@@ -361,8 +336,6 @@ public class CNFConverter {
 
     }
 
-
-
     /*
     private void convertToChomskyNormalForm() {
         List<String> nonTerminals = new ArrayList<>(productions.keySet());
@@ -431,56 +404,22 @@ public class CNFConverter {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
         CNFConverter converter = new CNFConverter();
-
         converter.setStartSymbol("S");
-
         // Add productions
         converter.addProduction("S", Arrays.asList("A", "B","C"));
         converter.addProduction("A",  Arrays.asList("bC","a"));
         converter.addProduction("B",  Arrays.asList("b","C"));// todo:
         converter.addProduction("C",  Arrays.asList("c"));
      //   converter.addProduction("S0", Arrays.asList("S"));
-
         // Set start symbol
-
         // Convert to CNF
         converter.convertToCNF();
-
         // Print productions
         converter.printProductions();
-
-
-
         System.out.println(isCNF("a"));
         System.out.println(isCNF("A"));
         System.out.println(isCNF("Abb"));
     }
-    /*
-    algorithm:
-    1. check length of output
-    if length >2:
-            not cnf
-    if length =2:
-                    if: all upper case -> it is cnf
-                    else -> its not cnf
-    if length = 1: cnf
-
-     */
-
-
-
-
-
 }

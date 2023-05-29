@@ -30,15 +30,7 @@ public class CYKAlgorithm {
         String inputString3 = "bae";
         boolean canParse1 = parseString(inputString1, nonTerminals, productions);
 
-
         String ans = getAnswer(canParse1);
-
-
-
-
-        //   boolean canParse2 = parseString(inputString2, nonTerminals, productions);
-        //       boolean canParse3 = parseString(inputString3, nonTerminals, productions);
-
         System.out.println("Can parse \"" + inputString1 + "\": " + canParse1);
         return  ans;
     }
@@ -50,7 +42,6 @@ public class CYKAlgorithm {
         else return noAns;
 
     }
-
 
     public static boolean containsChar(String inputStr, char c){
         for(int i=0; i<inputStr.length();i++){
@@ -128,11 +119,7 @@ public class CYKAlgorithm {
                                     }
                                 }
                             }
-
-
                         }
-
-
                     }
                 }
             }
@@ -177,7 +164,6 @@ public class CYKAlgorithm {
         return -1;
     }
 
-
     public static void main(String[] args) {
         List<String> nonTerminals = new ArrayList<>(Arrays.asList("S","Q","NP","WhPhrase","Verb","Noun","WeatherAdjective"));
 
@@ -188,7 +174,6 @@ public class CYKAlgorithm {
       //  productions.put("A", Arrays.asList("a"));
      //   productions.put("B", Arrays.asList("b"));
     //    productions.put("C", Arrays.asList("e"));
-
         productions.put("S", Arrays.asList("Q"));
         productions.put("Q", Arrays.asList("WhPhrase", "Verb", "NP"));
         productions.put("NP", Arrays.asList("WeatherAdjective", "Noun"));
@@ -202,17 +187,7 @@ public class CYKAlgorithm {
         String inputString2 = "bae";
         String inputString3 = "bae";
         boolean canParse1 = parseString(inputString1, nonTerminals, productions);
-
-
-
-
-
-        //   boolean canParse2 = parseString(inputString2, nonTerminals, productions);
-        //       boolean canParse3 = parseString(inputString3, nonTerminals, productions);
-
         System.out.println("Can parse \"" + inputString1 + "\": " + canParse1);
-        //    System.out.println("Can parse \"" + inputString2 + "\": " + canParse2);
-        //    System.out.println("Can parse \"" + inputString3 + "\": " + canParse3);
     }
 
 

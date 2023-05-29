@@ -38,7 +38,7 @@ public class FaceRecognitionSystem {
 
     public static String search() throws IOException {
         String[] command = {
-                "virtualPy/Scripts/python",
+                "virtualPy/bin/python",
                 "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                 "search"
         };

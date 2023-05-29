@@ -32,14 +32,14 @@ public class Parser {
 
         System.out.println("Parsing node: " + node.getSymbol() + " with input: " + input);
 
-        // Check if the current node has already been matched with a terminal token
+        // check if the current node has already been matched with a terminal token
         if (!node.getValue().isEmpty()) {
             // System.out.println("Node " + node.getSymbol() + " already matched with value: " + node.getValue());
             matchedProductions.add(node.getValue());
             return matchedProductions;
         }
 
-        // Find rules with the same non-terminal
+        //Find rules with the same non-terminal
         for (Rule rule : ruleList) {
             if (rule.getNonTerminal().equals(node.getSymbol())) {
                 for (String production : rule.getProductions()) {
@@ -84,7 +84,7 @@ public class Parser {
                     matchedTokens.add(token);
                     inputIndex++;
                 } else {
-                    // System.out.println("Failed to match token: " + token + " with input: " + input);
+                    // System.out.println("FAIL");
                     return new ArrayList<>();
                 }
             }
@@ -119,13 +119,14 @@ public class Parser {
             int keyIndex = 0;
             while (sequenceIndex < sequence.size() && keyIndex < actionKey.size()) {
                 if (actionKey.get(keyIndex).equals("*")) {
-                    if (keyIndex + 1 < actionKey.size()) {  // Check if there's a token after '*'
+                    // Check if there's a token after '*'
+                    if (keyIndex + 1 < actionKey.size()) {
                         String nextKeyToken = actionKey.get(keyIndex + 1);
                         while (sequenceIndex < sequence.size() && !sequence.get(sequenceIndex).equals(nextKeyToken)) {
                             sequenceIndex++;
                         }
-                    } else {
-                        sequenceIndex = sequence.size();  // If '*' is the last token in key, skip to the end of sequence
+                    } else { // If '*' is the last token in key, skip to the end of sequence
+                        sequenceIndex = sequence.size();
                     }
                     keyIndex++;
                 } else if (actionKey.get(keyIndex).equalsIgnoreCase(sequence.get(sequenceIndex))) {
@@ -147,7 +148,7 @@ public class Parser {
     List<Rule> ruleList = new ArrayList<>();
     Map<List<String>, String> actionMap = new HashMap<>();
 
-    // TODO: Replace with your file path
+    // Replace with your file path
     String filePath = "src/main/resources/chatbot/project22/CFG/CFG_rules.txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
