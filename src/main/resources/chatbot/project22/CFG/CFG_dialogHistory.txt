@@ -1,0 +1,5 @@
+
+User input: feafeafag
+Bot response: 
+User input: what is the weather in
+Bot response: <s> <action> <weather> What is the weather

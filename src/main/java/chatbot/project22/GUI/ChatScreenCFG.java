@@ -27,9 +27,11 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,10 +50,12 @@ public class ChatScreenCFG extends Application{
     private Button refresh = new Button("Refresh");
     private Button backStartScreen = new Button("");
 
+    String mydialogpPath = "src/main/resources/chatbot/project22/CFG/CFG_dialogHistory.txt";
 
     private Bot textFileBot;
 
-    public ChatScreenCFG() {
+    public ChatScreenCFG() throws IOException {
+        emptyChatHistory();
         this.textFileBot = new Bot();
 
         box.getStyleClass().add("chatbox");
@@ -83,6 +87,20 @@ public class ChatScreenCFG extends Application{
 
         send.setOnAction(actionEvent -> {
             String messageText = txt.getText().trim();
+
+
+            String saveText = '\n'+"User input: "+txt.getText().trim();
+            try {
+                Files.write(Paths.get(mydialogpPath), saveText.getBytes(), StandardOpenOption.APPEND);
+                //   myWriter.write("I write sth..");
+                //    myWriter.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
             if (!messageText.isEmpty()) {
                 Text message = new Text(messageText);
                 message.setFont(Font.font(messageFont, messageFontSize));
@@ -142,7 +160,20 @@ public class ChatScreenCFG extends Application{
                 responseMessage.setFont(Font.font(messageFont, messageFontSize));
                 responseMessage.setTextAlignment(TextAlignment.LEFT);
                 responseMessage.setWrappingWidth(450);
-        
+
+
+                String saveResponseText = '\n'+"Bot response: "+responseMessage.getText().trim();
+                try {
+                    Files.write(Paths.get(mydialogpPath), saveResponseText.getBytes(), StandardOpenOption.APPEND);
+                    //   myWriter.write("I write sth..");
+                    //    myWriter.close();
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
                 HBox responseBubble = new HBox();
                 responseBubble.getChildren().add(responseMessage);
                 responseBubble.setPadding(new Insets(10));
@@ -232,14 +263,31 @@ public class ChatScreenCFG extends Application{
 
         refresh.setOnAction(event -> {
             stage.close();
-            ChatScreenCFG cs = new ChatScreenCFG();
+            try {
+                ChatScreenCFG cs = new ChatScreenCFG();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
+        // save chat history:
 
         txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
             @Override
             public void handle(KeyEvent keyEvent) {
                 if (keyEvent.getCode() == KeyCode.ENTER) {
                     String messageText = txt.getText().trim();
+
+                    String saveText = '\n'+"User input: "+txt.getText().trim();
+                    try {
+                        Files.write(Paths.get(mydialogpPath), saveText.getBytes(), StandardOpenOption.APPEND);
+                     //   myWriter.write("I write sth..");
+                    //    myWriter.close();
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
                     if (!messageText.isEmpty()) {
                         Text message = new Text(messageText);
                         message.setFont(Font.font(messageFont, messageFontSize));
@@ -302,6 +350,15 @@ public class ChatScreenCFG extends Application{
                         responseMessage.setFont(Font.font(messageFont, messageFontSize));
                         responseMessage.setTextAlignment(TextAlignment.LEFT);
                         responseMessage.setWrappingWidth(450);
+
+                        String saveResponseText = '\n'+"Bot response: "+responseMessage.getText().trim();
+                        try {
+                            Files.write(Paths.get(mydialogpPath), saveResponseText.getBytes(), StandardOpenOption.APPEND);
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
 
                         HBox responseBubble = new HBox();
                         responseBubble.getChildren().add(responseMessage);
@@ -387,6 +444,21 @@ public class ChatScreenCFG extends Application{
         }
     }
 
+    public void emptyChatHistory() throws IOException {
+
+        FileWriter fwriter = new FileWriter(mydialogpPath, false);
+        BufferedWriter write = new BufferedWriter(fwriter);
+        write.write(""); // write empty string to delete everything
+        write.close();
+    }
+
+
+    // you can call this method to get current Chat History.
+    public String getChatHistory() throws IOException {
+        String content = Files.readString(Path.of(mydialogpPath));
+
+        return content;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
