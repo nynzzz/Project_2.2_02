@@ -223,5 +223,86 @@ public class Parser {
         // }
     }
 
+
+
+
+
+    //A method that asks for missing rules and actions if not all rules and actions are provided in the input.
+    public void checkMissingRulesAndActions(List<String> input) {
+        Set<String> missingRules = new HashSet<>();
+        Set<String> missingActions = new HashSet<>();
+
+        // Check missing rules
+        for (Rule rule : ruleList) {
+            boolean found = false;
+            for (String production : rule.getProductions()) {
+                List<String> tokens = Arrays.asList(production.split(" "));
+                if (containsTokens(input, tokens)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                missingRules.add(rule.getNonTerminal());
+            }
+        }
+
+        // Check missing actions
+        for (Map.Entry<List<String>, String> entry : actionMap.entrySet()) {
+            List<String> actionKey = entry.getKey();
+            if (!containsTokens(input, actionKey)) {
+                missingActions.add(String.join(" ", actionKey));
+            }
+        }
+
+        // Ask input the missing rule
+        if (!missingRules.isEmpty()) {
+            //save(input);
+            System.out.println("Please input the values for the missing rules:");
+            for (String missingRule : missingRules) {
+                System.out.println(missingRule);
+            }
+        }
+
+        // Ask input the missing action
+        if (!missingActions.isEmpty()) {
+            //save(input);
+            System.out.println("Please input the values for the missing actions:");
+            for (String missingAction : missingActions) {
+                System.out.println(missingAction);
+            }
+        }
+
+    }
+
+    private boolean containsTokens(List<String> input, List<String> tokens) {
+        int inputIndex = 0;
+        int tokenIndex = 0;
+        while (inputIndex < input.size() && tokenIndex < tokens.size()) {
+            if (tokens.get(tokenIndex).equals("*")) {
+                // Check if there's a token after '*'
+                if (tokenIndex + 1 < tokens.size()) {
+                    String nextToken = tokens.get(tokenIndex + 1);
+                    while (inputIndex < input.size() && !input.get(inputIndex).equals(nextToken)) {
+                        inputIndex++;
+                    }
+                } else { // If '*' is the last token, skip to the end of input
+                    inputIndex = input.size();
+                }
+                tokenIndex++;
+            } else if (tokens.get(tokenIndex).equalsIgnoreCase(input.get(inputIndex))) {
+                inputIndex++;
+                tokenIndex++;
+            } else {
+                return false;
+            }
+        }
+        return tokenIndex == tokens.size();
+    }
+
+
+
+
+
 }
 
