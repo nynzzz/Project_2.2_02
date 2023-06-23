@@ -111,20 +111,20 @@ public class ChatScreenCFG extends Application{
                 chatBubble.getChildren().add(message);
                 chatBubble.setPadding(new Insets(10));
                 chatBubble.getStyleClass().add("chat_bubble");
-                chatBubble.setAlignment(Pos.BASELINE_RIGHT); 
-        
+                chatBubble.setAlignment(Pos.BASELINE_RIGHT);
+
                 StackPane messageContainer = new StackPane(chatBubble);
                 messageContainer.setAlignment(Pos.BASELINE_RIGHT);
-    
-        
+
+
                 HBox senderBox = new HBox();
                 senderBox.setAlignment(Pos.BASELINE_RIGHT);
                 senderBox.setPadding(new Insets(0, 10, 0, 0));
-        
+
                 VBox messageBox = new VBox(senderBox, messageContainer);
                 messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 messageBox.setPadding(new Insets(5, 5, 5, 130));
-        
+
 //                String responseText = textFileBot.generateResponse(messageText);
                 // load rules and actions
                 List<Rule> ruleList = new ArrayList<>();
@@ -178,20 +178,20 @@ public class ChatScreenCFG extends Application{
                 responseBubble.getChildren().add(responseMessage);
                 responseBubble.setPadding(new Insets(10));
                 responseBubble.getStyleClass().add("chat_bubble2");
-        
+
                 StackPane responseContainer = new StackPane(responseBubble);
                 responseContainer.setAlignment(Pos.BASELINE_LEFT);
-        
-                
-        
+
+
+
                 HBox receiverBox = new HBox();
                 receiverBox.setPadding(new Insets(0, 0, 0, 10));
-        
+
                 VBox responseBox = new VBox(receiverBox, responseContainer);
                 responseBox.setAlignment(Pos.BASELINE_LEFT);
                 responseBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
                 responseBox.setPadding(new Insets(5, 50, 5, 5));
-        
+
                 messageArea.getChildren().addAll(messageBox, responseBox);
                 messageArea.layout();
                 txt.clear();
@@ -271,126 +271,126 @@ public class ChatScreenCFG extends Application{
         });
         // save chat history:
 
-        txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.ENTER) {
-                    String messageText = txt.getText().trim();
-
-                    String saveText = '\n'+"User input: "+txt.getText().trim();
-                    try {
-                        Files.write(Paths.get(mydialogpPath), saveText.getBytes(), StandardOpenOption.APPEND);
-                     //   myWriter.write("I write sth..");
-                    //    myWriter.close();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    if (!messageText.isEmpty()) {
-                        Text message = new Text(messageText);
-                        message.setFont(Font.font(messageFont, messageFontSize));
-                        message.setTextAlignment(TextAlignment.RIGHT);
-                        message.setWrappingWidth(450);
-
-                        HBox chatBubble = new HBox();
-                        chatBubble.getChildren().add(message);
-                        chatBubble.setPadding(new Insets(10));
-                        chatBubble.getStyleClass().add("chat_bubble");
-                        chatBubble.setAlignment(Pos.BASELINE_RIGHT);
-
-                        StackPane messageContainer = new StackPane(chatBubble);
-                        messageContainer.setAlignment(Pos.BASELINE_RIGHT);
-
-
-                        HBox senderBox = new HBox();
-                        senderBox.setAlignment(Pos.BASELINE_RIGHT);
-                        senderBox.setPadding(new Insets(0, 10, 0, 0));
-
-                        VBox messageBox = new VBox(senderBox, messageContainer);
-                        messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        messageBox.setPadding(new Insets(5, 5, 5, 130));
-
-
-                        // generate response
-//                        String responseText = textFileBot.generateResponse(messageText);
-                        // load rules and actions
-                        List<Rule> ruleList = new ArrayList<>();
-                        Map<List<String>, String> actionMap = new HashMap<>();
-
-                        // TODO: Replace with your file path
-                        String filePath = "src/main/resources/chatbot/project22/CFG/CFG_rules.txt";
-
-                        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-                            String line;
-                            actionMap = new HashMap<>();
-                            while ((line = reader.readLine()) != null) {
-                                String[] parts = line.split(" -> ");
-                                if (parts[0].equals("Rule")) {
-                                    ruleList.add(new Rule(parts[1], Arrays.asList(parts[2].split(" \\| "))));
-                                } else if (parts[0].equals("Action")) {
-                                    String[] actionParts = parts[2].split(" : ");
-                                    List<String> key = Arrays.asList(actionParts[0].split(" "));
-                                    String value = actionParts[1];
-                                    actionMap.put(key, value);
-                                }
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        Parser parser = new Parser(ruleList, actionMap);
-                        List<String> parseResult = parser.parse(messageText);
-                        String responseText = String.join(" ", parseResult);
-
-
-
-                        Text responseMessage = new Text(responseText);
-                        responseMessage.setFont(Font.font(messageFont, messageFontSize));
-                        responseMessage.setTextAlignment(TextAlignment.LEFT);
-                        responseMessage.setWrappingWidth(450);
-
-                        String saveResponseText = '\n'+"Bot response: "+responseMessage.getText().trim();
-                        try {
-                            Files.write(Paths.get(mydialogpPath), saveResponseText.getBytes(), StandardOpenOption.APPEND);
-
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-
-                        HBox responseBubble = new HBox();
-                        responseBubble.getChildren().add(responseMessage);
-                        responseBubble.setPadding(new Insets(10));
-                        responseBubble.getStyleClass().add("chat_bubble2");
-
-                        StackPane responseContainer = new StackPane(responseBubble);
-                        responseContainer.setAlignment(Pos.BASELINE_LEFT);
-
-
-
-                        HBox receiverBox = new HBox();
-                        receiverBox.setPadding(new Insets(0, 0, 0, 10));
-
-                        VBox responseBox = new VBox(receiverBox, responseContainer);
-                        responseBox.setAlignment(Pos.BASELINE_LEFT);
-                        responseBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
-                        responseBox.setPadding(new Insets(5, 50, 5, 5));
-
-                        messageArea.getChildren().addAll(messageBox, responseBox);
-                        messageArea.layout();
-                        txt.clear();
-                    }}
-
-            }
-        });
+//        txt.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//
+//            @Override
+//            public void handle(KeyEvent keyEvent) {
+//                if (keyEvent.getCode() == KeyCode.ENTER) {
+//                    String messageText = txt.getText().trim();
+//
+//                    String saveText = '\n'+"User input: "+txt.getText().trim();
+//                    try {
+//                        Files.write(Paths.get(mydialogpPath), saveText.getBytes(), StandardOpenOption.APPEND);
+//                     //   myWriter.write("I write sth..");
+//                    //    myWriter.close();
+//
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//
+//                    if (!messageText.isEmpty()) {
+//                        Text message = new Text(messageText);
+//                        message.setFont(Font.font(messageFont, messageFontSize));
+//                        message.setTextAlignment(TextAlignment.RIGHT);
+//                        message.setWrappingWidth(450);
+//
+//                        HBox chatBubble = new HBox();
+//                        chatBubble.getChildren().add(message);
+//                        chatBubble.setPadding(new Insets(10));
+//                        chatBubble.getStyleClass().add("chat_bubble");
+//                        chatBubble.setAlignment(Pos.BASELINE_RIGHT);
+//
+//                        StackPane messageContainer = new StackPane(chatBubble);
+//                        messageContainer.setAlignment(Pos.BASELINE_RIGHT);
+//
+//
+//                        HBox senderBox = new HBox();
+//                        senderBox.setAlignment(Pos.BASELINE_RIGHT);
+//                        senderBox.setPadding(new Insets(0, 10, 0, 0));
+//
+//                        VBox messageBox = new VBox(senderBox, messageContainer);
+//                        messageBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+//                        messageBox.setPadding(new Insets(5, 5, 5, 130));
+//
+//
+//                        // generate response
+////                        String responseText = textFileBot.generateResponse(messageText);
+//                        // load rules and actions
+//                        List<Rule> ruleList = new ArrayList<>();
+//                        Map<List<String>, String> actionMap = new HashMap<>();
+//
+//                        // TODO: Replace with your file path
+//                        String filePath = "src/main/resources/chatbot/project22/CFG/CFG_rules.txt";
+//
+//                        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+//                            String line;
+//                            actionMap = new HashMap<>();
+//                            while ((line = reader.readLine()) != null) {
+//                                String[] parts = line.split(" -> ");
+//                                if (parts[0].equals("Rule")) {
+//                                    ruleList.add(new Rule(parts[1], Arrays.asList(parts[2].split(" \\| "))));
+//                                } else if (parts[0].equals("Action")) {
+//                                    String[] actionParts = parts[2].split(" : ");
+//                                    List<String> key = Arrays.asList(actionParts[0].split(" "));
+//                                    String value = actionParts[1];
+//                                    actionMap.put(key, value);
+//                                }
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        Parser parser = new Parser(ruleList, actionMap);
+//                        List<String> parseResult = parser.parse(messageText);
+//                        String responseText = String.join(" ", parseResult);
+//
+//
+//
+//                        Text responseMessage = new Text(responseText);
+//                        responseMessage.setFont(Font.font(messageFont, messageFontSize));
+//                        responseMessage.setTextAlignment(TextAlignment.LEFT);
+//                        responseMessage.setWrappingWidth(450);
+//
+//                        String saveResponseText = '\n'+"Bot response: "+responseMessage.getText().trim();
+//                        try {
+//                            Files.write(Paths.get(mydialogpPath), saveResponseText.getBytes(), StandardOpenOption.APPEND);
+//
+//                        } catch (IOException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//
+//                        HBox responseBubble = new HBox();
+//                        responseBubble.getChildren().add(responseMessage);
+//                        responseBubble.setPadding(new Insets(10));
+//                        responseBubble.getStyleClass().add("chat_bubble2");
+//
+//                        StackPane responseContainer = new StackPane(responseBubble);
+//                        responseContainer.setAlignment(Pos.BASELINE_LEFT);
+//
+//
+//
+//                        HBox receiverBox = new HBox();
+//                        receiverBox.setPadding(new Insets(0, 0, 0, 10));
+//
+//                        VBox responseBox = new VBox(receiverBox, responseContainer);
+//                        responseBox.setAlignment(Pos.BASELINE_LEFT);
+//                        responseBox.setPrefWidth(Region.USE_COMPUTED_SIZE);
+//                        responseBox.setPadding(new Insets(5, 50, 5, 5));
+//
+//                        messageArea.getChildren().addAll(messageBox, responseBox);
+//                        messageArea.layout();
+//                        txt.clear();
+//                    }}
+//
+//            }
+//        });
 
         count1.textProperty().bind(t.messageProperty());
 
-        count1.setTranslateX(610); 
-        count2.setTranslateX(610); 
-        start.setTranslateX(610);   
+        count1.setTranslateX(610);
+        count2.setTranslateX(610);
+        start.setTranslateX(610);
         stop.setTranslateX(610);
         refresh.setTranslateX(610);
         backStartScreen.setTranslateX(610);

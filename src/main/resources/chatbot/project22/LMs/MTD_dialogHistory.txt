@@ -1,0 +1,13 @@
+
+User input: Hello, how is it going?
+Bot response: It's going well, how about you?
+User input: pretty good today
+Bot response: That's good.
+User input: how was your day?
+Bot response: It was good, how about you?
+User input: i was working on creating a chat-bot
+Bot response: I'm not sure if you're serious or not.
+User input: im completely serious, i created you
+Bot response: I'm not sure if you're serious or not.I was working on creating a chat constituting a chat constituting a chat constituting a chat constituting a chat constituting a chat constituting a chat constituting a chat constituting a chat constituting.
+User input: are you fine?
+Bot response: I'm fine, thanks.
