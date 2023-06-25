@@ -1,17 +1,19 @@
 import os
+import sys
 import cv2
 import time
 import joblib
 import numpy as np
 import pandas as pd
 import mediapipe as mp
+from imutils import paths
 from sklearn.decomposition import PCA
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 import sys
 from imutils import paths
-import tensorflow as tf
+# import tensorflow as tf
 import time
 import imutils
 
@@ -195,6 +197,23 @@ class LandmarksHelpers():
 class Lbp():
 
     @staticmethod
+    def load_image(image_path):
+        try:
+            image = cv2.imread(image_path)
+            if image is None:
+                return None
+            # Convert grayscale images to RGB
+            if len(image.shape) == 2:
+                image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+            # Convert single-channel images to three channels
+            elif image.shape[2] == 1:
+                image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+            return image
+        except Exception as e:
+            print(e)
+            return None
+
+    @staticmethod
     def process_image(img):
         oval = LandmarksHelpers.image_to_aligned_oval(img)
         gray_oval = cv2.cvtColor(oval, cv2.COLOR_BGR2GRAY)
@@ -328,7 +347,7 @@ class Lbp():
 
     @staticmethod
     def lbp_search():
-        lbp_name = "lbp_knn.joblib"
+        lbp_name = "src/main/java/chatbot/project22/FaceRecognition/lbp_knn.joblib"
 
         video_capture = cv2.VideoCapture(0)
         time.sleep(1)
@@ -387,8 +406,8 @@ class Lbp():
 class Mesh():
 
     @staticmethod
-    def triangle_processing(img):
-        landmarks = LandmarksHelpers.get_landmarks(img)
+    def triangle_processing(landmarks):
+        # landmarks = LandmarksHelpers.get_landmarks(img)
         triangles = [
             [127,  34, 139],
             [ 11,   0,  37],
@@ -1290,7 +1309,7 @@ class Mesh():
 
     @staticmethod
     def angle_search():
-        lm_name = "angles_knn.joblib"
+        lm_name = "src/main/java/chatbot/project22/FaceRecognition/angles_knn.joblib"
 
         video_capture = cv2.VideoCapture(0)
         time.sleep(1)
@@ -1348,12 +1367,12 @@ class Mesh():
         return best_predict
 
 
-class mesh_lbp():
+class MeshLbp():
 
     @staticmethod
     def search():
-        lbp_name = "lbp_knn.joblib"
-        lm_name = "angles_knn.joblib"
+        lbp_name = "src/main/java/chatbot/project22/FaceRecognition/lbp_knn.joblib"
+        lm_name = "src/main/java/chatbot/project22/FaceRecognition/angles_knn.joblib"
 
         video_capture = cv2.VideoCapture(0)
         time.sleep(1)
@@ -1427,6 +1446,45 @@ class mesh_lbp():
 
         return best_predict
 
+    @staticmethod
+    def train_new_data():
+        X = []
+        X2 = []
+        Y = []
+
+        dir_name = "TBD"
+
+        for name in os.listdir(dir_name):
+
+            path = os.path.join(dir_name, name)
+
+            all_images = list(paths.list_images(path))
+
+
+            for image in all_images:
+                loaded_image = Lbp.load_image(image)
+                if loaded_image is not None:
+                    try:
+                        landmarks = LandmarksHelpers.get_landmarks(loaded_image)
+                        if landmarks is not None:
+                            X.append(Lbp.process_image(loaded_image))
+                            X2.append(Mesh.triangle_processing(landmarks))
+                            Y.append(name)
+                    except:
+                        print("picture failure")
+
+            k = 5
+            knn = KNeighborsClassifier(n_neighbors=k)
+            knn2 = KNeighborsClassifier(n_neighbors=k)
+
+            # Train the classifier
+            knn.fit(X,Y)
+            knn2.fit(X2, Y)
+
+            name_1 = "src/main/java/chatbot/project22/FaceRecognition/lbp_knn.joblib"
+            name_2 = "src/main/java/chatbot/project22/FaceRecognition/angles_knn.joblib"
+            joblib.dump(knn, name_1)
+            joblib.dump(knn2, name_2)
 
 class AnnMarks():
     print("[info] ann marks")
@@ -1677,35 +1735,46 @@ class AnnMarks():
                 count += 1
                 if cv2.waitKey(1) == ord('q'):  # Press 'q' to quit
                     break
-
-            # Release the video stream
-            camera.release()
-            cv2.destroyAllWindows()
-
-            # Find the prediction with the highest probability
+                                # Find the prediction with the highest probability
             best_prediction, best_probability = max(predictions, key=lambda x: x[1])
             print(best_prediction)
             return best_prediction
         except Exception as e:
             print(f"An error occurred during training: {str(e)}")
 
+
 def main():
-    print("[info] main")
     """
     check that the user provided the method he wants to use
     the way we call this method from the java file is giving at least the class path and the method name which
     means that when we call it we need to have at least to arguments.
     If we are calling the create_data we also give a user_name, so we need at least three arguments.
     """
-    AnnMarks.search()
 
+    if len(sys.argv) < 2:
+        print("Invalid command")
+        return
+
+        # Release the video stream
+        camera.release()
+        cv2.destroyAllWindows()
+function_name = sys.argv[1]
+
+if function_name == "LBP":
+    Lbp.lbp_search()
+elif function_name == "ANN":
+    AnnMarks.search()
+elif function_name == "ANGLES":
+    Mesh.angle_search()
+elif function_name == "LBP_ANGLES":
+    MeshLbp.search()
+elif function_name == "create_data":
+    MeshLbp.train_new_data()
+else:
+    print("Invalid command")
 
 if __name__ == "__main__":
-
-    try:
-        main()
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+    main()
 
 
 

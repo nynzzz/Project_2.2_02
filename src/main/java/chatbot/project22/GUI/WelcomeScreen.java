@@ -58,10 +58,9 @@ public class WelcomeScreen extends Application {
 
 
          chooseImageFun = new ChoiceBox(FXCollections.observableArrayList(
-                "Function1", "Function2", "Function3","Function4","Function5")
+                RecognitionSystems.values())
         );
-        chooseImageFun.setValue("Function2");
-
+        chooseImageFun.setValue(RecognitionSystems.EIGEN_FACES);
 
         chooseImageFun.setTranslateX(144);
         chooseImageFun.setTranslateY(95);
@@ -69,24 +68,19 @@ public class WelcomeScreen extends Application {
         chooseImageFun.setPrefWidth(120);
 
 
-
-
-
-       
         signin.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                startImageFunction();
-
-             //   SignIn l = new SignIn();
-              //  try {
-                  //  l.start(primaryStage);
+                RecognitionSystems choice = (RecognitionSystems) chooseImageFun.getValue();
+                SignIn l = new SignIn(choice);
+                try {
+                    l.start(primaryStage);
                 StartScreen  s = new StartScreen();
                 primaryStage.close();
 
-                //    } catch (IOException ex) {
-             //       ex.printStackTrace();
-              //  }
+                    } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -95,7 +89,6 @@ public class WelcomeScreen extends Application {
             @Override
             public void handle(ActionEvent e) {
 
-                startImageFunction();
                 SignUp c = new SignUp();
                 c.start(primaryStage);
 
@@ -124,30 +117,5 @@ public class WelcomeScreen extends Application {
         primaryStage.setTitle("Welcome!");
         primaryStage.setScene(s);
         primaryStage.show();
-    }
-
-
-    public void startImageFunction(){
-
-        System.out.println("Here you begin your Img Rec method..  choice: " + chooseImageFun.getValue());
-
-        if(chooseImageFun.getValue().equals("Function1")){
-
-            //todo: initialize your image Function1
-        }
-        else if(chooseImageFun.getValue().equals("Function2")){
-            //todo 2
-        }else if(chooseImageFun.getValue().equals("Function3")){
-            //todo 3
-
-        }
-        else if(chooseImageFun.getValue().equals("Function4")){
-            //todo 4
-
-        }
-        else{
-            //todo 5
-
-        }
     }
 }

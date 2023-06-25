@@ -19,6 +19,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 
 public class SignIn extends Application {
+
+    private RecognitionSystems recognitionTechnique;
+
+    public SignIn(RecognitionSystems recognitionTechnique){
+        this.recognitionTechnique = recognitionTechnique;
+    }
     
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -52,7 +58,7 @@ public class SignIn extends Application {
         //String n = faceRecognitionSystem.name;
 
         FaceRecognitionSystem faceRecognitionSystem = new FaceRecognitionSystem();
-        String n = faceRecognitionSystem.search();
+        String n = faceRecognitionSystem.search(this.recognitionTechnique);
         System.out.println(n);
 
         Button signin = new Button("Sign in");
