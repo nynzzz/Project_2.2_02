@@ -9,11 +9,19 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+import sys
+from imutils import paths
+import tensorflow as tf
+import time
+import imutils
+
+
 
 class LandmarksHelpers():
-
+    print("[info] landmarks helpers")
     @staticmethod
     def get_landmarks(img):
+        # print("[info] get landmarks")
         # The function takes an image as input and uses the MediaPipe FaceMesh model to detect and
         # extract landmarks from the image.
 
@@ -33,6 +41,7 @@ class LandmarksHelpers():
     # it will return the position of the landmark specified with the index
     @staticmethod
     def landmark_to_coordinate(index, landmarks, image):
+        # print("[info] landmarks to coord")
         s = landmarks.landmark[index]
         return (int(image.shape[1] * s.x), int(image.shape[0] * s.y))
 
@@ -40,6 +49,7 @@ class LandmarksHelpers():
     # will return the routes to form the oval shape around the face
     @staticmethod
     def find_routes_of_oval(image_landmarks, image):
+        # print("[info] find oruts of oval")
         mp_face_mesh = mp.solutions.face_mesh
         face_oval = mp_face_mesh.FACEMESH_FACE_OVAL
 
@@ -78,6 +88,7 @@ class LandmarksHelpers():
     # shows any route between landmarks on an image
     @staticmethod
     def show_routes(img, routes):
+        # print("[info] show routes")
         for i in range(0, len(routes) - 2, 2):
             cv2.line(img, routes[i], routes[i + 1], (255, 0, 0), 2)
         cv2.imshow("Image", img)
@@ -86,6 +97,7 @@ class LandmarksHelpers():
 
     @staticmethod
     def rotate_coordinate(r_angle, coords, center):
+        # print("[info] routes to coord")
         rot_matrix = cv2.getRotationMatrix2D(center, r_angle, 1.0)
         point = np.array([[coords[0], coords[1]]], dtype=np.float32)
         rotated = cv2.transform(point.reshape(1, -1, 2), rot_matrix)
@@ -96,6 +108,7 @@ class LandmarksHelpers():
 
     @staticmethod
     def coordinates_array(landmarks, angle, image):
+        # print("coord array")
         h, w, _ = image.shape
         center = (w // 2, h // 2)
 
@@ -107,6 +120,7 @@ class LandmarksHelpers():
 
     @staticmethod
     def extract_face(img, routes):
+        # print("[info] extract face")
         # Create an empty mask with the same dimensions as the input image
         mask = np.zeros((img.shape[0], img.shape[1]))
         # filling parts of the mask that include the inside of the oval with ones
@@ -123,6 +137,7 @@ class LandmarksHelpers():
 
     @staticmethod
     def calculate_rotation_angle(landmarks,image):
+        # print("[info] calculate rotation angle")
         top = LandmarksHelpers.landmark_to_coordinate(10, landmarks,image)
         bottom = LandmarksHelpers.landmark_to_coordinate(152, landmarks,image)
         dx = top[0] - bottom[0]
@@ -133,6 +148,7 @@ class LandmarksHelpers():
     # Function to align faces based on oval landmarks
     @staticmethod
     def align_faces(img, landmarks):
+        # print("[info] align faces")
         rotation_angle = LandmarksHelpers.calculate_rotation_angle(landmarks, img)
 
         rows, cols = img.shape[:2]
@@ -144,6 +160,7 @@ class LandmarksHelpers():
 
     @staticmethod
     def image_to_aligned_oval(image):
+        # print("[info] image to align faces")
         # print("image to aligned oval")
         landmarks = LandmarksHelpers.get_landmarks(image)
 
@@ -1412,36 +1429,132 @@ class mesh_lbp():
 
 
 class AnnMarks():
+    print("[info] ann marks")
     base_path = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path of the script's directory
-    dir_name = os.path.join(base_path, 'caletch')
+    dir_name = os.path.join(base_path,'Data' ,'caletch')
     configPath = os.path.join(base_path, '..', 'Face_Detection', 'deploy.prototxt')
     modelPath = os.path.join(base_path, '..', 'Face_Detection', 'res10_300x300_ssd_iter_140000.caffemodel')
     # load the face detection model
-    neural_network = cv2.dnn.readNet(configPath, modelPath)
+    # neural_network = cv2.dnn.readNet(configPath, modelPath)
+
+    #load the preprocessed landmarks and labels
+    landmarks_file = os.path.join(base_path, '..', 'Data', 'landmarks_file.npy')
+    marks_labels_file = os.path.join(base_path, '..', 'Data', 'marks_labels_file.txt')
+
 
     @staticmethod
     def load_image(image_path):
-            try:
-                image = cv2.imread(image_path)
-                if image is None:
-                    return None
-                # Convert grayscale images to RGB
-                if len(image.shape) == 2:
-                    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-                # Convert single-channel images to three channels
-                elif image.shape[2] == 1:
-                    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-                return AnnMarks.process_image(image)
-            except Exception as e:
-                print(e)
+        # print("[info] load image")
+        try:
+            image = cv2.imread(image_path)
+            if image is None:
                 return None
+            # Convert grayscale images to RGB
+            if len(image.shape) == 2:
+                image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+            # Convert single-channel images to three channels
+            elif image.shape[2] == 1:
+                image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+            return AnnMarks.process_image(image)
+        except Exception as e:
+            print(e)
+            return None
 
     @staticmethod
     def process_image(img):
+        # print("[info] process image")
         face = LandmarksHelpers.image_to_aligned_oval(img)
         face = cv2.resize(face, (215, 215))
         face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
         return face
+
+    @staticmethod
+    def process_data(dir_name):
+        print("[info] process data")
+        faces = []
+        labels = []
+        landmarks = []
+        angles = []
+        valid_faces = []
+        valid_labels = []
+        coord_data = []
+        for name in os.listdir(dir_name):
+
+            path = os.path.join(dir_name, name)
+
+            all_images = list(paths.list_images(path))
+            print(name)
+
+            for image in all_images:
+                c = AnnMarks.load_image(image)
+                # if c.all() == [1]:
+                #     pass
+                # else:
+                if c is None:  # Skip images that couldn't be loaded
+                    continue
+                faces.append(c)
+                labels.append(name)
+            for face, label in zip(faces, labels):
+                face_landmarks = LandmarksHelpers.get_landmarks(face)
+                if face_landmarks is None:
+                    # ignore this face and label
+                    continue
+                face_angles = LandmarksHelpers.calculate_rotation_angle(face_landmarks, face)
+                landmarks.append(face_landmarks)
+                angles.append(face_angles)
+                valid_faces.append(face)
+                valid_labels.append(label)
+                coord_array = LandmarksHelpers.coordinates_array(face_landmarks, face_angles, face)
+                coord_data.append(coord_array)
+        AnnMarks.save_landmarks_and_labels(coord_data, valid_labels,AnnMarks.landmarks_file, AnnMarks.marks_labels_file)
+        return faces,labels
+
+
+    @staticmethod
+    def save_landmarks_and_labels(landmarks, labels, landmarks_file, marks_labels_file):
+        print("[info] save namlandmarks and labels")
+        """
+        a function to keep the landmarks and labels that already have been processed
+        Arguments:
+                 faces: processed faced to add to the list
+                 labels: labels to add to the list
+                 landmarks_file: file to which we will add the processed faces
+                 labels_file: file to which we will add the labels
+        """
+        try:
+            existing_landmarks = np.load(landmarks_file)
+            landmarks = np.concatenate((existing_landmarks, landmarks))
+        except FileNotFoundError:
+            # Create the directory if it doesn't exist
+            os.makedirs(os.path.dirname(landmarks_file), exist_ok=True)
+
+        np.save(landmarks_file, landmarks, allow_pickle=False)
+
+        try:
+            existing_labels = np.loadtxt(marks_labels_file, dtype=str)
+            labels = np.concatenate((existing_labels, labels))
+        except FileNotFoundError:
+            # Create the directory if it doesn't exist
+            os.makedirs(os.path.dirname(marks_labels_file), exist_ok=True)
+
+        np.savetxt(marks_labels_file, labels, fmt='%s')
+
+    @staticmethod
+    def load_landmarks_and_labels(landmarks_file, marks_labels_file):
+        print("[info] load landmarks and labels")
+        """
+        a function to keep the names and labels that already have been processed
+        Arguments:
+                 faces_file: file from which we read the processed faces
+                 labels_file: file to which we read the labels
+        Returns:
+                faces: processed faces
+                labels: labels of the faces
+        """
+        landmarks = np.load(landmarks_file)
+        labels = np.loadtxt(marks_labels_file, dtype=str)
+        return landmarks, labels
+
 
     @staticmethod
     def train_data():
@@ -1454,9 +1567,9 @@ class AnnMarks():
         valid_labels = []
         coord_data = []
 
-        for name in os.listdir(dir_name):
+        for name in os.listdir(AnnMarks.dir_name):
 
-            path = os.path.join(dir_name, name)
+            path = os.path.join(AnnMarks.dir_name, name)
 
             all_images = list(paths.list_images(path))
             print(name)
@@ -1481,31 +1594,118 @@ class AnnMarks():
             angles.append(face_angles)
             valid_faces.append(face)
             valid_labels.append(label)
-            coord_array = coordinates_array(face_landmarks, face_angles, face)
+            coord_array = LandmarksHelpers.coordinates_array(face_landmarks, face_angles, face)
             coord_data.append(coord_array)
         print("[info] separating to test and train")
         try:
             # Convert landmarks to numerical features using PCA
-            pca = PCA(n_components=128)  # Choose the number of components you want to keep
-            features = pca.fit_transform(coord_data)
+            # pca = PCA(n_components=128)  # Choose the number of components you want to keep
+            # features = pca.fit_transform(coord_data)
+            AnnMarks.save_landmarks_and_labels(coord_data, valid_labels, AnnMarks.landmarks_file, AnnMarks.marks_labels_file)
 
-            # split the data into training and testing samples
-            # using 75% of the data for training and 25% for evaluation.
-            trainX, testX, trainY, testY = train_test_split(features, valid_labels, test_size=0.25, train_size=0.75,
-                                                            stratify=valid_labels, random_state=42)
-
-            model = MLPClassifier(hidden_layer_sizes=(1024,), batch_size=100, verbose=True, early_stopping=True)
-            model.fit(trainX, trainY)
-
-            predictions = model.predict(testX)
-            print(classification_report(testY, predictions, zero_division=0))
         except ValueError as e:
             print("Error:", str(e))
 
+    @staticmethod
+    def search():
+        print("[info] training data")
+        if os.path.exists(AnnMarks.landmarks_file) and os.path.exists(AnnMarks.marks_labels_file):
+            print("[INFO] loading the preprocessed data")
+            landmarks_data, labels = AnnMarks.load_landmarks_and_labels(AnnMarks.landmarks_file, AnnMarks.marks_labels_file)
+        else:
+            AnnMarks.train_data()
+            landmarks_data, labels = AnnMarks.load_landmarks_and_labels(AnnMarks.landmarks_file, AnnMarks.marks_labels_file)
+            print("[INFO] no preprocessed data")
 
 
+        try:
+            print("[info] Convert landmarks to numerical features using PCA")
+            # pca = PCA(n_components=128)  # Choose the number of components you want to keep
+            # features = pca.fit_transform(landmarks_data)
+
+            pca = PCA(n_components=128, whiten=True).fit(landmarks_data)
+            features=pca.transform(landmarks_data)
+            print("[info] training ann")
+            model = MLPClassifier(hidden_layer_sizes=(1024,), batch_size=100, verbose=True, early_stopping=True).fit(features,labels)
+
+            camera = cv2.VideoCapture(0)
+            time.sleep(1)
+            ret, frame = camera.read()
+            cv2.imshow("Frame", frame)
+            predictions = []
+            count = 0
+            while count <= 100:
+                ret, frame = camera.read()
+                print("processing image")
+                face=AnnMarks.process_image(frame)
+                print("finding landmarks")
+                face_landmarks = LandmarksHelpers.get_landmarks(face)
+                face_angles = LandmarksHelpers.calculate_rotation_angle(face_landmarks, face)
+
+                if face_landmarks is None:
+                    # ignore this face and label
+                    print("face_landmarks is None")
+                    continue
+                print("pca landmark")
+                coord_list = LandmarksHelpers.coordinates_array(face_landmarks, face_angles, face)
+                # coord_list = coord_list[:128]  # Truncate to 128 coordinates
+                coord_array=np.array(coord_list)
+
+                pca_landmarks = pca.transform(coord_array.reshape(1,-1))
+
+                print("prob")
+                probability = model.predict_proba(pca_landmarks).max()  # Get the maximum probability score
+
+                predicted_name = model.predict(pca_landmarks)
+                # Convert the predicted label back to the corresponding name
+                predictions.append((predicted_name, probability))
+                print("Recognized face: {}, Probability: {:.2f}".format(predicted_name, probability))
+                face = imutils.resize(face, width=250)
+
+                # Draw a rectangle around the detected face
+                # cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+
+                text = "{} ({:.2f}%)".format(predicted_name, probability * 100)
+
+                # text = "{}".format(predicted_name)
+                # cv2.putText(frame, text, cv2.FONT_HERSHEY_COMPLEX, 0.9, (0, 255, 0), 2)
+                text_position = (100,100)  # Adjust the y-coordinate to position the text above the rectangle
+                cv2.putText(frame, text, text_position, cv2.FONT_HERSHEY_COMPLEX, 0.9, (0, 255, 0), 2)
+                # Display the frame with the prediction
+                cv2.imshow("Frame", frame)
+
+                count += 1
+                if cv2.waitKey(1) == ord('q'):  # Press 'q' to quit
+                    break
+
+            # Release the video stream
+            camera.release()
+            cv2.destroyAllWindows()
+
+            # Find the prediction with the highest probability
+            best_prediction, best_probability = max(predictions, key=lambda x: x[1])
+            print(best_prediction)
+            return best_prediction
+        except Exception as e:
+            print(f"An error occurred during training: {str(e)}")
+
+def main():
+    print("[info] main")
+    """
+    check that the user provided the method he wants to use
+    the way we call this method from the java file is giving at least the class path and the method name which
+    means that when we call it we need to have at least to arguments.
+    If we are calling the create_data we also give a user_name, so we need at least three arguments.
+    """
+    AnnMarks.search()
 
 
+if __name__ == "__main__":
+
+    try:
+        main()
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
 
 
