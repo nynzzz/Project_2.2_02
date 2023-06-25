@@ -1,4 +1,7 @@
+import os
 import cv2
+import time
+import joblib
 import numpy as np
 import pandas as pd
 import mediapipe as mp
@@ -7,7 +10,7 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
-class Landmarks_helpers():
+class LandmarksHelpers():
 
     @staticmethod
     def get_landmarks(img):
@@ -66,8 +69,8 @@ class Landmarks_helpers():
         routes = []
 
         for source_idx, target_idx in routes_idx:
-            routes.append(landmark_to_coordinate(source_idx, image_landmarks, image))
-            routes.append(landmark_to_coordinate(target_idx, image_landmarks, image))
+            routes.append(LandmarksHelpers.landmark_to_coordinate(source_idx, image_landmarks, image))
+            routes.append(LandmarksHelpers.landmark_to_coordinate(target_idx, image_landmarks, image))
 
         return routes
 
@@ -98,7 +101,7 @@ class Landmarks_helpers():
 
         output_array = []
         for i in range(0, len(landmarks.landmark)):
-            coords = rotate_coordinate(angle, landmark_to_coordinate(i, landmarks, image), center)
+            coords = LandmarksHelpers.rotate_coordinate(angle, LandmarksHelpers.landmark_to_coordinate(i, landmarks, image), center)
             output_array.extend(coords)
         return output_array
 
@@ -118,10 +121,19 @@ class Landmarks_helpers():
 
         return extracted_face
 
+    @staticmethod
+    def calculate_rotation_angle(landmarks,image):
+        top = LandmarksHelpers.landmark_to_coordinate(10, landmarks,image)
+        bottom = LandmarksHelpers.landmark_to_coordinate(152, landmarks,image)
+        dx = top[0] - bottom[0]
+        dy = top[1] - bottom[1]
+        angle = np.degrees(np.arctan2(dy, dx)) - 270
+        return angle
+
     # Function to align faces based on oval landmarks
     @staticmethod
     def align_faces(img, landmarks):
-        rotation_angle = calculate_rotation_angle(landmarks, img)
+        rotation_angle = LandmarksHelpers.calculate_rotation_angle(landmarks, img)
 
         rows, cols = img.shape[:2]
         rotation_matrix = cv2.getRotationMatrix2D((cols // 2, rows // 2), rotation_angle, 1)
@@ -133,45 +145,45 @@ class Landmarks_helpers():
     @staticmethod
     def image_to_aligned_oval(image):
         # print("image to aligned oval")
-        landmarks = get_landmarks(image)
+        landmarks = LandmarksHelpers.get_landmarks(image)
 
-        routes = find_routes_of_oval(landmarks, image)
+        routes = LandmarksHelpers.find_routes_of_oval(landmarks, image)
         # print("oval")
-        oval = extract_face(image, routes)
+        oval = LandmarksHelpers.extract_face(image, routes)
         # print("align")
-        aligned_oval = align_faces(oval, landmarks)
+        aligned_oval = LandmarksHelpers.align_faces(oval, landmarks)
 
-        c10 = landmark_to_coordinate(10, landmarks, image)
-        c454 = landmark_to_coordinate(454, landmarks, image)
-        c152 = landmark_to_coordinate(152, landmarks, image)
-        c234 = landmark_to_coordinate(234, landmarks, image)
+        c10 = LandmarksHelpers.landmark_to_coordinate(10, landmarks, image)
+        c454 = LandmarksHelpers.landmark_to_coordinate(454, landmarks, image)
+        c152 = LandmarksHelpers.landmark_to_coordinate(152, landmarks, image)
+        c234 = LandmarksHelpers.landmark_to_coordinate(234, landmarks, image)
 
-        a = calculate_rotation_angle(landmarks, image)
+        a = LandmarksHelpers.calculate_rotation_angle(landmarks, image)
 
         h,w,_ = image.shape
         center = (w//2, h//2)
 
-        r10 = rotate_coordinate(a, c10, center)
-        r454 = rotate_coordinate(a, c454, center)
-        r152 = rotate_coordinate(a, c152, center)
-        r234 = rotate_coordinate(a, c234, center)
+        r10 = LandmarksHelpers.rotate_coordinate(a, c10, center)
+        r454 = LandmarksHelpers.rotate_coordinate(a, c454, center)
+        r152 = LandmarksHelpers.rotate_coordinate(a, c152, center)
+        r234 = LandmarksHelpers.rotate_coordinate(a, c234, center)
 
 
         aligned_oval = aligned_oval[r10[1]:r152[1], r234[0]:r454[0]]
 
-        aligned_oval = cv2.cvtColor(aligned_oval, cv2.COLOR_BGR2RGB)
+        # aligned_oval = cv2.cvtColor(aligned_oval, cv2.COLOR_BGR2RGB)
         return aligned_oval
 
 
-class lbp():
+class Lbp():
 
     @staticmethod
     def process_image(img):
-        oval = image_to_aligned_oval(img)
+        oval = LandmarksHelpers.image_to_aligned_oval(img)
         gray_oval = cv2.cvtColor(oval, cv2.COLOR_BGR2GRAY)
-        cropped_lbp = lbp_image(gray_oval)
-        image_list = cut_image(cropped_lbp, 7)
-        array = create_array(image_list)
+        cropped_lbp = Lbp.lbp_image(gray_oval)
+        image_list = Lbp.cut_image(cropped_lbp, 7)
+        array = Lbp.create_array(image_list)
         return array
 
 
@@ -231,7 +243,7 @@ class lbp():
                                    img[i + 1, j], img[i + 1, j - 1], img[i, j - 1]]
 
                 treshold = img[i, j]
-                array[i, j] = find_lbp_value(binary_list, treshold)
+                array[i, j] = Lbp.find_lbp_value(binary_list, treshold)
 
         return array
 
@@ -274,7 +286,7 @@ class lbp():
             img = img_list[i]
             adjusted = img.flatten()
             dst = np.histogram(adjusted, bins=255, density=True)
-            weight = get_weight(i)
+            weight = Lbp.get_weight(i)
             if (weight != 0):
                 array = dst[0] * weight
                 end_hist = np.concatenate((end_hist, array))
@@ -297,12 +309,69 @@ class lbp():
         else:
             return 1
 
+    @staticmethod
+    def lbp_search():
+        lbp_name = "lbp_knn.joblib"
 
-class mesh():
+        video_capture = cv2.VideoCapture(0)
+        time.sleep(1)
+
+        lbp_knn = joblib.load(lbp_name)
+
+        predictions = []
+        count = 0
+
+        while count < 50:
+
+            ret, frame = video_capture.read()
+
+            frame_copy = frame.copy()
+
+            frame_landmarks = LandmarksHelpers.get_landmarks(frame)
+
+            if frame_landmarks is not None:
+                c10 = LandmarksHelpers.landmark_to_coordinate(10, frame_landmarks, frame)
+                c454 = LandmarksHelpers.landmark_to_coordinate(454, frame_landmarks, frame)
+                c152 = LandmarksHelpers.landmark_to_coordinate(152, frame_landmarks, frame)
+                c234 = LandmarksHelpers.landmark_to_coordinate(234, frame_landmarks, frame)
+
+                top_left = [c234[0], c10[1]]
+                bottom_right = [c454[0], c152[1]]
+
+                cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
+
+                lbp_array_data = Lbp.process_image(frame_copy)
+
+                final_pred = lbp_knn.predict([lbp_array_data])
+
+                distances, indices = lbp_knn.kneighbors([lbp_array_data])
+                confidence = 1.0 / distances.mean()
+
+                predictions.append((final_pred, confidence))
+
+                label = ("{}, {:.2f} %".format(final_pred, confidence))
+
+                cv2.putText(frame, str(label), top_left , cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                count += 1
+
+            cv2.imshow('Face Recognition', frame)
+
+            k = cv2.waitKey(30) & 0xff
+            if k == 27:
+                break
+
+        best_predict, best_prob = max(predictions, key=lambda x: x[1])
+        print(best_predict)
+
+        video_capture.release()
+        cv2.destroyAllWindows()
+        return best_predict
+
+class Mesh():
 
     @staticmethod
     def triangle_processing(img):
-        landmarks = get_landmarks(img)
+        landmarks = LandmarksHelpers.get_landmarks(img)
         triangles = [
             [127,  34, 139],
             [ 11,   0,  37],
@@ -1158,7 +1227,7 @@ class mesh():
             [339, 448, 255],
             [255, 339, 448]
         ]
-        return angles(landmarks, triangles)
+        return Mesh.angles(landmarks, triangles)
 
     @staticmethod
     def angle_calculation(vector1, vector2):
@@ -1185,32 +1254,164 @@ class mesh():
             #   A
             vector_ab = np.subtract(coords_a, coords_b)
             vector_ac = np.subtract(coords_a, coords_c)
-            vector_angle = angle_calculation(vector_ab, vector_ac)
+            vector_angle = Mesh.angle_calculation(vector_ab, vector_ac)
             output_array.append(vector_angle)
 
             #   B
             vector_ba = np.subtract(coords_b, coords_a)
             vector_bc = np.subtract(coords_b, coords_c)
-            vector_angle = angle_calculation(vector_ba, vector_bc)
+            vector_angle = Mesh.angle_calculation(vector_ba, vector_bc)
             output_array.append(vector_angle)
 
             #   C
             vector_ca = np.subtract(coords_c, coords_a)
             vector_cb = np.subtract(coords_c, coords_b)
-            vector_angle = angle_calculation(vector_ca, vector_cb)
+            vector_angle = Mesh.angle_calculation(vector_ca, vector_cb)
             output_array.append(vector_angle)
 
         return output_array
 
+    @staticmethod
+    def angle_search():
+        lm_name = "angles_knn.joblib"
+
+        video_capture = cv2.VideoCapture(0)
+        time.sleep(1)
+
+        lm_knn = joblib.load(lm_name)
+
+        predictions = []
+        count = 0
+
+        while count < 50:
+
+            ret, frame = video_capture.read()
+
+            frame_landmarks = LandmarksHelpers.get_landmarks(frame)
+
+            if frame_landmarks is not None:
+                c10 = LandmarksHelpers.landmark_to_coordinate(10, frame_landmarks, frame)
+                c454 = LandmarksHelpers.landmark_to_coordinate(454, frame_landmarks, frame)
+                c152 = LandmarksHelpers.landmark_to_coordinate(152, frame_landmarks, frame)
+                c234 = LandmarksHelpers.landmark_to_coordinate(234, frame_landmarks, frame)
+
+                top_left = [c234[0], c10[1]]
+                bottom_right = [c454[0], c152[1]]
+
+                cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
+
+                landmark_angle_data = Mesh.triangle_processing(frame_landmarks)
+
+                y_pred_lm = lm_knn.predict([landmark_angle_data])
+
+                final_pred = y_pred_lm
+
+                distances, indices = lm_knn.kneighbors([landmark_angle_data])
+                confidence = 1.0 / distances.mean() * 100
+
+                predictions.append((final_pred, confidence))
+
+                label = ("{}, {:.2f} %".format(final_pred, confidence))
+
+                cv2.putText(frame, str(label), top_left , cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                count += 1
+
+            cv2.imshow('Face Recognition', frame)
+
+            k = cv2.waitKey(30) & 0xff
+            if k == 27:
+                break
+
+        best_predict, best_prob = max(predictions, key=lambda x: x[1])
+        print(best_predict)
+
+        video_capture.release()
+        cv2.destroyAllWindows()
+
+        return best_predict
 
 
 class mesh_lbp():
 
+    @staticmethod
+    def search():
+        lbp_name = "lbp_knn.joblib"
+        lm_name = "angles_knn.joblib"
+
+        video_capture = cv2.VideoCapture(0)
+        time.sleep(1)
+
+        lbp_knn = joblib.load(lbp_name)
+        lm_knn = joblib.load(lm_name)
+
+        predictions = []
+        count = 0
+
+        while count < 50:
+
+            ret, frame = video_capture.read()
+
+            frame_copy = frame.copy()
+
+            frame_landmarks = LandmarksHelpers.get_landmarks(frame)
 
 
+            if frame_landmarks is not None:
+                c10 = LandmarksHelpers.landmark_to_coordinate(10, frame_landmarks, frame)
+                c454 = LandmarksHelpers.landmark_to_coordinate(454, frame_landmarks, frame)
+                c152 = LandmarksHelpers.landmark_to_coordinate(152, frame_landmarks, frame)
+                c234 = LandmarksHelpers.landmark_to_coordinate(234, frame_landmarks, frame)
+
+                top_left = [c234[0], c10[1]]
+                bottom_right = [c454[0], c152[1]]
+
+                cv2.rectangle(frame, top_left, bottom_right, (0, 255, 0), 2)
+
+                landmark_angle_data = Mesh.triangle_processing(frame_landmarks)
+                lbp_array_data = Lbp.process_image(frame_copy)
+
+                y_pred_lbp = lbp_knn.predict([lbp_array_data])
+                y_pred_lm = lm_knn.predict([landmark_angle_data])
+
+                confidence = 0
+                final_pred = ""
+
+                prob1 = lbp_knn.predict_proba([lbp_array_data])
+                c1 = np.max(prob1) * 1
+                prob2 = lm_knn.predict_proba([landmark_angle_data])
+                c2 = np.max(prob2) * 1
+                if c1 >= c2:
+                    final_pred = y_pred_lbp
+                    distances, indices = lbp_knn.kneighbors([lbp_array_data])
+                    confidence = 1.0 / distances.mean()
+                else:
+                    final_pred = y_pred_lm
+                    distances, indices = lm_knn.kneighbors([landmark_angle_data])
+                    confidence = 1.0 / distances.mean() * 100
+
+                predictions.append((final_pred, confidence))
+
+                label = ("{}, {:.2f} %".format(final_pred, confidence))
+
+                cv2.putText(frame, str(label), top_left , cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+                count += 1
+
+            cv2.imshow('Face Recognition', frame)
+
+            k = cv2.waitKey(30) & 0xff
+            if k == 27:
+                break
+
+        best_predict, best_prob = max(predictions, key=lambda x: x[1])
+        print(best_predict)
+
+        video_capture.release()
+        cv2.destroyAllWindows()
+
+        return best_predict
 
 
-class ann_marks():
+class AnnMarks():
     base_path = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path of the script's directory
     dir_name = os.path.join(base_path, 'caletch')
     configPath = os.path.join(base_path, '..', 'Face_Detection', 'deploy.prototxt')
@@ -1230,14 +1431,14 @@ class ann_marks():
                 # Convert single-channel images to three channels
                 elif image.shape[2] == 1:
                     image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-                return process_image(image)
+                return AnnMarks.process_image(image)
             except Exception as e:
                 print(e)
                 return None
 
     @staticmethod
     def process_image(img):
-        face = image_to_aligned_oval(img)
+        face = LandmarksHelpers.image_to_aligned_oval(img)
         face = cv2.resize(face, (215, 215))
         face = cv2.cvtColor(face, cv2.COLOR_BGR2RGB)
         return face
@@ -1261,7 +1462,7 @@ class ann_marks():
             print(name)
 
             for image in all_images:
-                c = load_image(image)
+                c = AnnMarks.load_image(image)
                 # if c.all() == [1]:
                 #     pass
                 # else:
@@ -1271,11 +1472,11 @@ class ann_marks():
                 labels.append(name)
 
         for face, label in zip(faces, labels):
-            face_landmarks = get_landmarks(face)
+            face_landmarks = LandmarksHelpers.get_landmarks(face)
             if face_landmarks is None:
                 # ignore this face and label
                 continue
-            face_angles = calculate_rotation_angle(face_landmarks, face)
+            face_angles = LandmarksHelpers.calculate_rotation_angle(face_landmarks, face)
             landmarks.append(face_landmarks)
             angles.append(face_angles)
             valid_faces.append(face)
