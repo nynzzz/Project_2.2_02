@@ -9,7 +9,7 @@
 3. Activate the newly created virtual environment:
    1. On Unix or MacOS: `source virtualPy/bin/activate`
    2. On Windows: `virtualPy\Scripts\activate`
-4. Install the necessary Python packages within your virtual environment: `pip install imutils opencv-python scikit-learn cv2`
+4. Install the necessary Python packages within your virtual environment: `pip install imutils opencv-python scikit-learn cv2 mediapipe pandas`
    If an error occurs when installing packages, try to install them one by one.
 
 After these steps, navigate to `FaceRecognitionSystem` class and in command blocks, eg:
