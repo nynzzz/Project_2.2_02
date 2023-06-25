@@ -13,7 +13,6 @@ public class ModelCalls {
                 "src/main/java/chatbot/project22/LMs/GetPredictions.py",
                 "{\"method\": \"roberta_pred\", \"params\": {\"question\": \"" + question + "\", \"context\": \"" + context + "\"}}"
         };
-
         return callPythonMethod(command);
     }
 
@@ -138,7 +137,7 @@ public class ModelCalls {
 
 //        try {
 //            String user_input = "Hello, how are you doing today?";
-//            String chat_history = "";  // hat history if available
+//            String chat_history = "";
 //            String dialogptResult = dialogpt_medium_pred(user_input, chat_history);
 //            System.out.println("DialoGPT Medium Result: " + dialogptResult);
 //        } catch (Exception e) {

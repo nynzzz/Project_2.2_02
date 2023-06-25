@@ -1,7 +1,7 @@
 
-User input: Context: In humans, fungal infections occur when an invading fungus takes over an area of the body and is too much for the immune system to handle. Fungi can live in the air, soil, water, and plants. There are also some fungi that live naturally in the human body. Like many microbes, there are helpful fungi and harmful fungi.The name of disease is Fungal infection is an illness when you have itching  skin_rash  nodal_skin_eruptions  dischromic _patches . You must bath twice use detol or neem in bathing water keep infected area dry use clean cloths
-Bot response: New context set:  In humans, fungal infections occur when an invading fungus takes over an area of the body and is too much for the immune system to handle. Fungi can live in the air, soil, water, and plants. There are also some fungi that live naturally in the human body. Like many microbes, there are helpful fungi and harmful fungi.The name of disease is Fungal infection is an illness when you have itching  skin_rash  nodal_skin_eruptions  dischromic _patches . You must bath twice use detol or neem in bathing water keep infected area dry use clean cloths
-User input: What is treatment for Fungal infection?
-Bot response: You must bath twice use detol or neem in bathing water
-User input: how many times should i bath?
-Bot response: twice
+User input: Context: Natural language processing (NLP) is a branch of artificial intelligence (AI) that enables computers to comprehend, generate, and manipulate human language. Natural language processing has the ability to interrogate the data with natural language text or voice. This is also called “language in.” Most consumers have probably interacted with NLP without realizing it. For instance, NLP is the core technology behind virtual assistants, such as the Oracle Digital Assistant (ODA), Siri, Cortana, or Alexa. When we ask questions of these virtual assistants, NLP is what enables them to not only understand the user’s request, but to also respond in natural language. NLP applies both to written text and speech, and can be applied to all human languages. Other examples of tools powered by NLP include web search, email spam filtering, automatic translation of text or speech, document summarization, sentiment analysis, and grammar/spell checking. For example, some email programs can automatically suggest an appropriate reply to a message based on its content—these programs use NLP to read, analyze, and respond to your message.
+Bot response: Thank you for providing a context. You can now ask your question.
+User input: what is NLP?
+Bot response: Natural language processing
+User input: what are some examples of virtual assistants?
+Bot response: Oracle Digital Assistant (ODA), Siri, Cortana, or Alexa
