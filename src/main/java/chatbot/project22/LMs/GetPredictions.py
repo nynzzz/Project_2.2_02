@@ -61,7 +61,7 @@ def t5_base_cnn_sum(text):
 ## DialoGPT (the top chatbot)
 
 def dialogpt_medium(user_input, chat_history=None):
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium")
+    tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium", padding_side='left')
     model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
     user_input_ids = tokenizer.encode(user_input + tokenizer.eos_token, return_tensors='pt')
     if chat_history is not None:
