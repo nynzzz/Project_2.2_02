@@ -15,7 +15,6 @@ public class ModelCalls {
                 "{\"method\": \"roberta_pred\", \"params\": {\"question\": \"" + question + "\", \"context\": \""
                         + context + "\"}}"
         };
-
         return callPythonMethod(command);
     }
 

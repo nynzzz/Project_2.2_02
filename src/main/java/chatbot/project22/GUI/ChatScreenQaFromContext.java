@@ -269,6 +269,7 @@ public class ChatScreenQaFromContext extends Application {
             String userMessage = lines.get(i).replace("Context: ", "");
             chatHistory.append(userMessage).append(". ");
         }
+        System.out.println("CHAT HISTORY: " + chatHistory.toString());
 
         return chatHistory.toString();
     }
