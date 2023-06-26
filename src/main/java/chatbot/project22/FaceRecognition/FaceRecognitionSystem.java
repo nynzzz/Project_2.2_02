@@ -69,11 +69,11 @@ public class FaceRecognitionSystem {
                                         "src/main/java/chatbot/project22/FaceRecognition/Data/Create_Data.py",
                                         "search"
                                         };
-            case LANDMARKS_ANN ->
-                command = new String[]{ systemCommands[systemNumber],
-                                        "src/main/java/chatbot/project22/FaceRecognition/Landmarks.py",
-                                        "ANN"
-                                        };
+//            case LANDMARKS_ANN ->
+//                command = new String[]{ systemCommands[systemNumber],
+//                                        "src/main/java/chatbot/project22/FaceRecognition/Landmarks.py",
+//                                        "ANN"
+//                                        };
             case ANGLE_LANDMARKS ->
                 command = new String[]{ systemCommands[systemNumber],
                                         "src/main/java/chatbot/project22/FaceRecognition/Landmarks.py",
